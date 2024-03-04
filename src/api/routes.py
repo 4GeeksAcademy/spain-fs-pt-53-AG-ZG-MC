@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, make_response
-from api.models import db, User, Event, Signedup_events, Favorite_events
+from api.models import db, User, Event, Signedup_event, Favorite_event
 from api.utils import generate_sitemap, APIException
 from sqlalchemy import func
 from flask_cors import CORS
@@ -14,7 +14,7 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
-@api.route('/api/hello', methods=['GET'])
+@api.route('/hello', methods=['GET'])
 def handle_hello():
     try:
         response_body = {
@@ -263,7 +263,7 @@ def signup_event(event_id):
         if not isinstance(user_id, int):
             return jsonify({"message": "User ID must be an integer"}), 400
 
-        signedup_event = Signedup_events(
+        signedup_event = Signedup_event(
             user_id=user_id,
             event_id=event_id
         )
@@ -289,7 +289,7 @@ def cancel_signup_for_event(user_id, event_id):
             return jsonify({"message": "Event not found"}), 404
 
         # Verificar si el usuario está inscrito en el evento
-        signup = Signedup_events.query.filter_by(user_id=user_id, event_id=event_id).first()
+        signup = Signedup_event.query.filter_by(user_id=user_id, event_id=event_id).first()
         if not signup:
             return jsonify({"message": "User is not signed up for this event"}), 400
 
@@ -308,7 +308,7 @@ def cancel_signup_for_event(user_id, event_id):
 def get_user_events(user_id):
     try:
         # Buscar eventos inscritos por el usuario
-        user_events = Event.query.join(Signedup_events, Event.id == Signedup_events.event_id).filter(Signedup_events.user_id == user_id).all()
+        user_events = Event.query.join(Signedup_event, Event.id == Signedup_event.event_id).filter(Signedup_event.user_id == user_id).all()
 
         # Serializar los eventos encontrados
         serialized_events = [event.serialize() for event in user_events]
@@ -323,7 +323,7 @@ def get_user_events(user_id):
 def get_event_users(event_id):
     try:
         # Buscar usuarios inscritos en el evento
-        event_users = User.query.join(Signedup_events, User.id == Signedup_events.user_id).filter(Signedup_events.event_id == event_id).all()
+        event_users = User.query.join(Signedup_event, User.id == Signedup_event.user_id).filter(Signedup_event.event_id == event_id).all()
 
         # Serializar los usuarios encontrados
         serialized_users = [user.serialize() for user in event_users]
@@ -346,11 +346,11 @@ def add_event_to_favorites(user_id, event_id):
             return jsonify({"message": "Event not found"}), 404
 
         # Verificar si el evento ya está en la lista de favoritos del usuario
-        if Favorite_events.query.filter_by(user_id=user_id, event_id=event_id).first():
+        if Favorite_event.query.filter_by(user_id=user_id, event_id=event_id).first():
             return jsonify({"message": "Event already in user's favorite list"}), 400
 
         # Agregar el evento a la lista de favoritos del usuario
-        favorite_event = Favorite_events(user_id=user_id, event_id=event_id)
+        favorite_event = Favorite_event(user_id=user_id, event_id=event_id)
         favorite_event.save()
 
         return jsonify(favorite_event.serialize()), 201
@@ -365,7 +365,7 @@ def add_event_to_favorites(user_id, event_id):
 def remove_event_from_favorites(user_id, event_id):
     try:
         # Verificar si el evento favorito existe
-        favorite_event = Favorite_events.query.filter_by(user_id=user_id, event_id=event_id).first()
+        favorite_event = Favorite_event.query.filter_by(user_id=user_id, event_id=event_id).first()
         if not favorite_event:
             return jsonify({"message": "Favorite event not found"}), 404
 
@@ -378,13 +378,13 @@ def remove_event_from_favorites(user_id, event_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para obtener todos los eventos favoritos de un usuario
-@api.route('/users/<int:user_id>/favorite_events', methods=['GET'])
-def get_user_favorite_events(user_id):
+@api.route('/users/<int:user_id>/favorite_event', methods=['GET'])
+def get_user_favorite_event(user_id):
     try:
         # Obtener todos los eventos favoritos de un usuario
-        user_favorite_events = Favorite_events.query.filter_by(user_id=user_id).all()
-        favorite_events = [favorite_event.serialize() for favorite_event in user_favorite_events]
-        return jsonify(favorite_events), 200
+        user_favorite_event = Favorite_event.query.filter_by(user_id=user_id).all()
+        favorite_event = [favorite_event.serialize() for favorite_event in user_favorite_event]
+        return jsonify(favorite_event), 200
 
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
@@ -431,9 +431,9 @@ def filter_events():
 def get_recommended_events():
     try:
         # Obtenemos los eventos más populares en función del número de inscripciones
-        recommended_events = db.session.query(Event, func.count(Signedup_events.id).label('total_signups')).\
-            outerjoin(Signedup_events).group_by(Event.id).\
-            order_by(func.count(Signedup_events.id).desc()).limit(10).all()
+        recommended_events = db.session.query(Event, func.count(Signedup_event.id).label('total_signups')).\
+            outerjoin(Signedup_event).group_by(Event.id).\
+            order_by(func.count(Signedup_event.id).desc()).limit(10).all()
 
         # Convertimos los resultados en una lista de diccionarios serializados
         recommended_events_serialized = [{"event": event.serialize(), "total_signups": total} for event, total in recommended_events]

@@ -18,8 +18,8 @@ class User(db.Model):
     users_following_me = db.Column(db.Integer, nullable=False)
     
     created_events = db.relationship('Event', backref='user', lazy=True)
-    signedup_events = db.relationship('Signedup_events', backref='user', lazy=True)
-    favorite_events = db.relationship('Favorite_events', backref='user', lazy=True)
+    signedup_event = db.relationship('Signedup_event', backref='user', lazy=True)
+    favorite_event = db.relationship('Favorite_event', backref='user', lazy=True)
 
     # Campos de auditoría
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -29,12 +29,12 @@ class User(db.Model):
         regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
         return re.match(regex, email) is not None
 
-    def set_email(self, email):
+    def set_email_address(self, email):
         if not self.validate_email(email):
             raise ValueError("Invalid email address")
         self.email = email
     
-    def set_password(self, password):
+    def set_password_hash(self, password):
         # Verificar la longitud mínima de la contraseña
         if len(password) < 8:
             raise ValueError("Password must be at least 8 characters long.")
@@ -93,7 +93,7 @@ class User(db.Model):
     
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_owner = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(240), nullable=False, index=True)
     type = db.Column(db.Enum('nature', 'party', 'culture', 'relax', 'family', 'sport', name='event_type_enum'), nullable=False, index=True)
     date = db.Column(db.Date, nullable=False, index=True)
@@ -112,8 +112,8 @@ class Event(db.Model):
     pet_friendly = db.Column(db.Boolean(), nullable=False)
     kid_friendly = db.Column(db.Boolean(), nullable=False)
 
-    signedup_events = db.relationship('Signedup_events', backref='event', lazy=True)
-    favorite_events = db.relationship('Favorite_events', backref='event', lazy=True)
+    signedup_event = db.relationship('Signedup_event', backref='event', lazy=True)
+    favorite_event = db.relationship('Favorite_event', backref='event', lazy=True)
 
     # Campos de auditoría
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -300,7 +300,7 @@ class Event(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user_owner": self.user_owner,
+            "user_id": self.user_id,
             "name": self.name,
             "type": self.type,
             "date": self.date,
@@ -320,13 +320,13 @@ class Event(db.Model):
             "kid_friendly": self.kid_friendly,
         }
 
-class Signedup_events(db.Model):
+class Signedup_event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     
     def __repr__(self):
-        return f'<Signedup_events {self.user_id}>'
+        return f'<Signedup_event {self.user_id}>'
 
     def serialize(self):
         return {
@@ -335,13 +335,13 @@ class Signedup_events(db.Model):
             "event_id": self.event_id,
         }
 
-class Favorite_events(db.Model):
+class Favorite_event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Signedup_events {self.user_id}>'
+        return f'<Favorite_event {self.user_id}>'
 
     def serialize(self):
         return {
