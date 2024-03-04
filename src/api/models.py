@@ -17,7 +17,6 @@ class User(db.Model):
     followed_users = db.Column(db.Integer, nullable=False)
     users_following_me = db.Column(db.Integer, nullable=False)
     
-
     created_events = db.relationship('Event', backref='user', lazy=True)
     signedup_events = db.relationship('Signedup_events', backref='user', lazy=True)
     favorite_events = db.relationship('Favorite_events', backref='user', lazy=True)
@@ -119,6 +118,10 @@ class Event(db.Model):
     # Campos de auditoría
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    @staticmethod
+    def get_events(page, per_page):
+        return Event.query.paginate(page=page, per_page=per_page)
 
     def validate_date(self, date_str):
         try:
