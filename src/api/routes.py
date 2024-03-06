@@ -127,7 +127,17 @@ def get_user(user_id):
     try:
         user = User.query.get(user_id)
         if user:
-            return jsonify(user.serialize()), 200
+            # Serializar la información básica del usuario
+            user_info = user.serialize()
+            
+            # Obtener los eventos favoritos del usuario
+            user_favorite_events = Favorite_event.query.filter_by(user_id=user_id).all()
+            favorite_events = [favorite_event.event.serialize() for favorite_event in user_favorite_events]
+            
+            # Agregar los eventos favoritos al serializado del usuario
+            user_info['favorite_events'] = favorite_events
+
+            return jsonify(user_info), 200
         else:
             return jsonify({"message": "User not found"}), 404
 
@@ -386,7 +396,6 @@ def signup_event(event_id):
     except Exception as e:
         print("An error occurred while signing up for the event:", e)  # Imprimir el error
         return jsonify({"message": "Internal Server Error"}), 500
-
 
 # Endpoint para que un usuario cancele su inscripción a un evento
 @api.route('/users/<int:user_id>/events/<int:event_id>/signup', methods=['DELETE'])

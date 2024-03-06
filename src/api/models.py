@@ -90,6 +90,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "followed_users": self.followed_users,
             "users_following_me": self.users_following_me,
+            "favorite_event": [favorite_event.event.serialize() for favorite_event in self.favorite_event]
         }
     
 class Event(db.Model):
