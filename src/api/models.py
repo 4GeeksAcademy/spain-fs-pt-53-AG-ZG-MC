@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from datetime import datetime, timedelta
 import bcrypt
 import secrets
@@ -111,7 +111,7 @@ class Event(db.Model):
     max_age = db.Column(db.Integer, index=True)
     min_people = db.Column(db.Integer, index=True)
     max_people = db.Column(db.Integer, index=True)
-    lgbti = db.Column(db.Boolean(), index=True)
+    lgtbi = db.Column(db.Boolean(), index=True)
     pet_friendly = db.Column(db.Boolean(), nullable=False, index=True)
     kid_friendly = db.Column(db.Boolean(), nullable=False, index=True)
 
@@ -193,9 +193,9 @@ class Event(db.Model):
 
         # Filtro de duración
         if 'duration_filter' in filters:
-            duration_filters = filters['duration_filter']
+            duration_filters = filters['duration_filter'].split(",")
             duration_criteria = []
-
+            print("duration:", duration_filters)
             for duration_filter in duration_filters:
                 if duration_filter == 'short':
                     duration_criteria.append(Event.duration <= 60)
@@ -203,36 +203,36 @@ class Event(db.Model):
                     duration_criteria.append((Event.duration > 60) & (Event.duration <= 120))
                 elif duration_filter == 'long':
                     duration_criteria.append(Event.duration > 120)
-
+            print("duration criteria: ", duration_criteria)
             if duration_criteria:
                 print("Applying duration filter:", duration_criteria)
                 query = query.filter(or_(*duration_criteria))
 
         # Filtrar por edad mínima y máxima
-        if 'age_range_filter' in filters:
-            min_age = filters['age_range_filter'].get('min_age')
-            max_age = filters['age_range_filter'].get('max_age')
+        if 'age_range_filter_min' in filters or 'age_range_filter_max' in filters:
+            min_age = filters['age_range_filter_min']
+            max_age = filters['age_range_filter_max']
             if min_age is not None:
                 print("Applying min age filter:", min_age)
-                query = query.filter(Event.min_age >= min_age)
+                query = query.filter(Event.min_age >= int(min_age))
             if max_age is not None:
                 print("Applying max age filter:", max_age)
-                query = query.filter(Event.max_age <= max_age)
+                query = query.filter(Event.max_age <= int(max_age))
 
         # Filtrar por cantidad mínima y máxima de personas
-        if 'people_range_filter' in filters:
-            min_people = filters['people_range_filter'].get('min_people')
-            max_people = filters['people_range_filter'].get('max_people')
+        if 'people_range_filter_min' in filters or 'people_range_filter_max' in filters:
+            min_people = filters['people_range_filter_min']
+            max_people = filters['people_range_filter_max']
             if min_people is not None:
                 print("Applying min people filter:", min_people)
-                query = query.filter(Event.min_people >= min_people)
+                query = query.filter(Event.min_people >= int(min_people))
             if max_people is not None:
                 print("Applying max people filter:", max_people)
-                query = query.filter(Event.max_people <= max_people)
+                query = query.filter(Event.max_people <= int(max_people))
 
         # Filtrar por género
         if 'gender_filter' in filters:
-            gender_filters = filters['gender_filter']
+            gender_filters = filters['gender_filter'].split(",")
             gender_criteria = []
 
             for gender_filter in gender_filters:
@@ -251,7 +251,7 @@ class Event(db.Model):
 
         # Filtro de idioma
         if 'language_filter' in filters:
-            language_filters = filters['language_filter']
+            language_filters = filters['language_filter'].split(",")
             language_criteria = []
 
             for language_filter in language_filters:
@@ -272,7 +272,7 @@ class Event(db.Model):
 
         # Filtro de precio
         if 'price_type_filter' in filters:
-            price_type_filters = filters['price_type_filter']
+            price_type_filters = filters['price_type_filter'].split(",")
             price_type_criteria = []
 
             for price_type_filter in price_type_filters:
@@ -373,7 +373,7 @@ class Event(db.Model):
             "max_age": self.max_age,
             "min_people": self.min_people,
             "max_people": self.max_people,
-            "lgbti": self.lgbti,
+            "lgtbi": self.lgtbi,
             "pet_friendly": self.pet_friendly,
             "kid_friendly": self.kid_friendly,
         }

@@ -240,7 +240,7 @@ def create_event():
             max_age=data.get("max_age"),
             min_people=data.get("min_people"),
             max_people=data.get("max_people"),
-            lgbti=data.get("lgtbi", False),
+            lgtbi=data.get("lgtbi", False),
             pet_friendly=data.get("pet_friendly", False),
             kid_friendly=data.get("kid_friendly", False),
             user_id=data.get("user_id", 0)
@@ -539,8 +539,8 @@ def filter_events():
         # Obtener los filtros de la URL
         filters = request.args
 
-        
         # Verificar si hay filtros proporcionados
+        # retornar todos los eventos 
         if not filters:
             return jsonify({"message": "No filters provided"}), 400
         
