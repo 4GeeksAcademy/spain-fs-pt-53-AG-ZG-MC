@@ -190,22 +190,22 @@ class Event(db.Model):
                     end_of_next_week = start_of_next_week + timedelta(days=6)
                     query = query.filter(Event.date >= start_of_next_week.date(), Event.date <= end_of_next_week.date())
 
-            # Filtro de duración
-            if 'duration_filter' in filters:
-                duration_filters = filters['duration_filter']
-                duration_criteria = []
+        # Filtro de duración
+        if 'duration_filter' in filters:
+            duration_filters = filters['duration_filter']
+            duration_criteria = []
 
-                for duration_filter in duration_filters:
-                    if duration_filter == 'short':
-                        duration_criteria.append(Event.duration <= 60)
-                    elif duration_filter == 'medium':
-                        duration_criteria.append((Event.duration > 60) & (Event.duration <= 120))
-                    elif duration_filter == 'long':
-                        duration_criteria.append(Event.duration > 120)
+            for duration_filter in duration_filters:
+                if duration_filter == 'short':
+                    duration_criteria.append(Event.duration <= 60)
+                elif duration_filter == 'medium':
+                    duration_criteria.append((Event.duration > 60) & (Event.duration <= 120))
+                elif duration_filter == 'long':
+                    duration_criteria.append(Event.duration > 120)
 
-                if duration_criteria:
-                    print("Applying duration filter:", duration_criteria)
-                    query = query.filter(or_(*duration_criteria))
+            if duration_criteria:
+                print("Applying duration filter:", duration_criteria)
+                query = query.filter(or_(*duration_criteria))
 
         # Filtrar por edad mínima y máxima
         if 'age_range_filter' in filters:
