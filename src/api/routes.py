@@ -39,33 +39,87 @@ def create_user():
     try:
         data = request.get_json()
         if not data:
+            print("No data provided")
             return jsonify({"message": "No data provided"}), 400
 
         if "username" not in data or "email" not in data or "password" not in data:
+            print("Missing required fields")
             return jsonify({"message": "Missing required fields"}), 400
         
         # Validar el formato del correo electrónico utilizando expresiones regulares
         email = data["email"]
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            print("Invalid email format")
             return jsonify({"message": "Invalid email format"}), 400
+
+        # Validar la contraseña
+        password = data["password"]
+        if len(password) < 8:
+            print("Password must be at least 8 characters long.")
+            return jsonify({"message": "Password must be at least 8 characters long."}), 400
+        if not re.search(r"[A-Z]", password):
+            print("Password must contain at least one uppercase letter.")
+            return jsonify({"message": "Password must contain at least one uppercase letter."}), 400
+        if not re.search(r"\d", password):
+            print("Password must contain at least one digit.")
+            return jsonify({"message": "Password must contain at least one digit."}), 400
+        if not re.search(r"[!@#$%^&*]", password):
+            print("Password must contain at least one special character.")
+            return jsonify({"message": "Password must contain at least one special character."}), 400
+
+        print("Received data:", data)
 
         user = User(
             username=data["username"],
             email=data["email"],
-            password=User.generate_password_hash(data["password"]),
             first_name=data.get("first_name", ""),
             last_name=data.get("last_name", ""),
             followed_users=data.get("followed_users", 0),
             users_following_me=data.get("users_following_me", 0),
         )
+        user.set_password_hash(password)
         user.save()
+
+        print("User created:", user.serialize())
 
         return jsonify(user.serialize()), 201
 
     except ValueError as ve:
+        print("Error:", ve)
         return jsonify({"message": str(ve)}), 400
     except Exception as e:
+        print("Internal Server Error:", e)
         return jsonify({"message": "Internal Server Error"}), 500
+    
+# Endpoint para obtener todos los usuarios con información sobre los eventos creados por cada uno
+@api.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = User.query.all()
+        if users:
+            # Crear una lista para almacenar la información de los usuarios con sus eventos creados
+            users_with_events = []
+
+            # Iterar sobre cada usuario y crear un diccionario con su información
+            for user in users:
+                user_info = user.serialize()
+
+                # Obtener los eventos creados por este usuario
+                created_events = [event.serialize() for event in user.created_events]
+
+                # Agregar la lista de eventos creados al diccionario de información del usuario
+                user_info['created_events'] = created_events
+
+                # Agregar el diccionario de información del usuario a la lista de usuarios con eventos
+                users_with_events.append(user_info)
+
+            return jsonify(users_with_events), 200
+        else:
+            return jsonify({"message": "No users found"}), 404
+
+    except Exception as e:
+        return jsonify({"message": "Internal Server Error"}), 500
+ 
 
 # Endpoint para obtener información de un usuario específico
 @api.route('/users/<int:user_id>', methods=['GET'])
@@ -96,7 +150,18 @@ def update_user(user_id):
                     return jsonify({"message": "Invalid email format"}), 400
                 user.email = email
             if "password" in data:
-                user.password = User.generate_password_hash(data["password"])
+                # Validar y configurar la nueva contraseña
+                password = data["password"]
+                if len(password) < 8:
+                    return jsonify({"message": "Password must be at least 8 characters long."}), 400
+                if not re.search(r"[A-Z]", password):
+                    return jsonify({"message": "Password must contain at least one uppercase letter."}), 400
+                if not re.search(r"\d", password):
+                    return jsonify({"message": "Password must contain at least one digit."}), 400
+                if not re.search(r"[!@#$%^&*]", password):
+                    return jsonify({"message": "Password must contain at least one special character."}), 400
+                user.set_password_hash(password)  # Configurar la nueva contraseña
+
             if "first_name" in data:
                 user.first_name = data["first_name"]
             if "last_name" in data:
@@ -123,13 +188,16 @@ def delete_user(user_id):
     try:
         user = User.query.get(user_id)
         if user:
-            user.delete()
-
+            db.session.delete(user)  # Eliminar el objeto de la sesión
+            db.session.commit()  # Confirmar la transacción
+            print("User deleted successfully")
             return jsonify({"message": "User deleted"}), 200
         else:
+            print("User not found")
             return jsonify({"message": "User not found"}), 404
 
     except Exception as e:
+        print("Error occurred while deleting user:", e)
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para crear un nuevo evento
@@ -137,32 +205,47 @@ def delete_user(user_id):
 def create_event():
     try:
         data = request.get_json()
+        print("Received data:", data)  # Print the received data for debugging
         if not data:
             return jsonify({"message": "No data provided"}), 400
 
-        if "name" not in data or "date" not in data or "location" not in data:
+        # Verificar si se proporcionan los campos obligatorios
+        required_fields = ["name", "date", "place", "type"]
+        if not all(field in data for field in required_fields):
             return jsonify({"message": "Missing required fields"}), 400
 
-        # Validar el formato del correo electrónico si se proporciona
-        if "email" in data:
-            email = data["email"]
-            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                return jsonify({"message": "Invalid email format"}), 400
-
+        # Crear un nuevo evento con los datos proporcionados
         event = Event(
             name=data["name"],
+            type=data["type"],
             date=data["date"],
-            location=data["location"],
+            place=data["place"],
+            duration=data.get("duration", 0),
             description=data.get("description", ""),
-            user_id=data.get("user_id", 0),
+            language=data.get("language"),
+            gender=data.get("gender"),
+            price_type=data.get("price_type"),
+            price=data.get("price"),
+            min_age=data.get("min_age"),
+            max_age=data.get("max_age"),
+            min_people=data.get("min_people"),
+            max_people=data.get("max_people"),
+            lgbti=data.get("lgtbi", False),
+            pet_friendly=data.get("pet_friendly", False),
+            kid_friendly=data.get("kid_friendly", False),
+            user_id=data.get("user_id", 0)
         )
-        event.save()
 
+        # Guardar el evento en la base de datos
+        event.save()
+        print("Event saved successfully:", event)  # Print the saved event for debugging
+
+        # Devolver los datos del evento creado con el código de estado 201 (Created)
         return jsonify(event.serialize()), 201
 
-    except ValueError as ve:
-        return jsonify({"message": str(ve)}), 400
     except Exception as e:
+        # En caso de error, devolver un mensaje de error interno del servidor
+        print("An error occurred:", e)  # Print the error for debugging
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para obtener información de un evento específico
@@ -209,17 +292,41 @@ def update_event(event_id):
         data = request.get_json()
         event = Event.query.get(event_id)
         if event:
+            # Actualizar los campos del evento si están presentes en los datos recibidos
             if "name" in data:
                 event.name = data["name"]
             if "date" in data:
                 event.date = data["date"]
-            if "location" in data:
-                event.location = data["location"]
+            if "place" in data:
+                event.place = data["place"]
             if "description" in data:
                 event.description = data["description"]
-            if "user_id" in data:
-                event.user_id = data["user_id"]
+            if "duration" in data:
+                event.duration = data["duration"]
+            if "language" in data:
+                event.language = data["language"]
+            if "gender" in data:
+                event.gender = data["gender"]
+            if "price_type" in data:
+                event.price_type = data["price_type"]
+            if "price" in data:
+                event.price = data["price"]
+            if "min_age" in data:
+                event.min_age = data["min_age"]
+            if "max_age" in data:
+                event.max_age = data["max_age"]
+            if "min_people" in data:
+                event.min_people = data["min_people"]
+            if "max_people" in data:
+                event.max_people = data["max_people"]
+            if "lgtbi" in data:
+                event.lgtbi = data["lgtbi"]
+            if "pet_friendly" in data:
+                event.pet_friendly = data["pet_friendly"]
+            if "kid_friendly" in data:
+                event.kid_friendly = data["kid_friendly"]
 
+            # Guardar los cambios en la base de datos
             event.save()
 
             return jsonify(event.serialize()), 200
@@ -230,20 +337,22 @@ def update_event(event_id):
         return jsonify({"message": str(ve)}), 400
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
-
+    
 # Endpoint para eliminar un evento específico
 @api.route('/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
     try:
         event = Event.query.get(event_id)
         if event:
-            event.delete()
+            db.session.delete(event)
+            db.session.commit()
 
             return jsonify({"message": "Event deleted"}), 200
         else:
             return jsonify({"message": "Event not found"}), 404
 
     except Exception as e:
+        print("An error occurred while deleting the event:", e)
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para que un usuario se inscriba en un evento
@@ -251,6 +360,7 @@ def delete_event(event_id):
 def signup_event(event_id):
     try:
         data = request.get_json()
+        print("Received data:", data)  # Imprimir los datos recibidos
         if not data:
             return jsonify({"message": "No data provided"}), 400
 
@@ -274,7 +384,9 @@ def signup_event(event_id):
     except ValueError as ve:
         return jsonify({"message": str(ve)}), 400
     except Exception as e:
+        print("An error occurred while signing up for the event:", e)  # Imprimir el error
         return jsonify({"message": "Internal Server Error"}), 500
+
 
 # Endpoint para que un usuario cancele su inscripción a un evento
 @api.route('/users/<int:user_id>/events/<int:event_id>/signup', methods=['DELETE'])
@@ -389,38 +501,52 @@ def get_user_favorite_event(user_id):
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
 
-# Endpoint para buscar eventos por nombre, lugar, tipo, etc.
+# Endpoint para buscar eventos por tipo
 @api.route('/events/search', methods=['GET'])
 def search_events():
     try:
         # Obtener parámetros de búsqueda
         query_parameters = request.args
 
-        # Verificar si se proporciona un término de búsqueda
-        search_term = query_parameters.get('q')
-        if not search_term:
-            return jsonify({"message": "No search term provided"}), 400
+        # Verificar si se proporciona un tipo de evento
+        event_type = query_parameters.get('type')
+        if not event_type:
+            return jsonify({"message": "No event type provided"}), 400
 
-        # Realizar la búsqueda de eventos por nombre
-        search_results = Event.query.filter(Event.name.ilike(f'%{search_term}%')).all()
+        # Realizar la búsqueda de eventos por tipo
+        search_results = Event.query.filter(Event.type == event_type).all()
         events = [event.serialize() for event in search_results]
         return jsonify(events), 200
 
     except Exception as e:
             return jsonify({"message": "Internal Server Error"}), 500
 
+
+# PROBLEMA
 # Endpoint para filtrar eventos por fecha, duración, precio, etc.
 @api.route('/events/filter', methods=['GET'])
 def filter_events():
     try:
         # Obtener los filtros de la URL
         filters = request.args
+
+        
+        # Verificar si hay filtros proporcionados
+        if not filters:
+            return jsonify({"message": "No filters provided"}), 400
         
         # Filtrar eventos según los parámetros proporcionados
         filtered_events = Event.filter_events(filters)
+        
+        # Construir la respuesta JSON
+        response = {
+            "total_events": len(filtered_events),
+            "events": [event.serialize() for event in filtered_events]
+        }
+        return jsonify(response), 200
 
-        return jsonify([event.serialize() for event in filtered_events]), 200
-
+    except KeyError as ke:
+        return jsonify({"message": f"Missing or invalid filter: {ke}"}), 400
     except ValueError as ve:
         return jsonify({"message": str(ve)}), 400
     except Exception as e:

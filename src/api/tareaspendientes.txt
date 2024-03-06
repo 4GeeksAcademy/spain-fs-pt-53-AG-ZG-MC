@@ -1,0 +1,6 @@
+Arreglar base de datos y enrutado
+    - Añadir en los gets de usuarios los favoritos (para que se pueda ver los eventos favoritos de cada uno)
+    - Actualizar el diagrama de QuickDBD
+Hacer comprobaciones pertinentes de postman
+    - Solucionar el problemático
+Añadir el tokenizado

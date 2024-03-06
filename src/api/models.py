@@ -8,18 +8,19 @@ import re
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    password = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     followed_users = db.Column(db.Integer, nullable=False)
     users_following_me = db.Column(db.Integer, nullable=False)
     
-    created_events = db.relationship('Event', backref='user', lazy=True)
-    signedup_event = db.relationship('Signedup_event', backref='user', lazy=True)
-    favorite_event = db.relationship('Favorite_event', backref='user', lazy=True)
+    created_events = db.relationship('Event', back_populates='user', lazy=True)
+    signedup_event = db.relationship('Signedup_event', back_populates='user', lazy=True)
+    favorite_event = db.relationship('Favorite_event', back_populates='user', lazy=True)
 
     # Campos de auditoría
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -78,7 +79,7 @@ class User(db.Model):
         db.session.commit()
     
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User id={self.id}, username={self.username}>'
 
     def serialize(self):
         return {
@@ -92,28 +93,30 @@ class User(db.Model):
         }
     
 class Event(db.Model):
+    __tablename__ = 'event'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(240), nullable=False, index=True)
-    type = db.Column(db.Enum('nature', 'party', 'culture', 'relax', 'family', 'sport', name='event_type_enum'), nullable=False, index=True)
+    type = db.Column(db.Enum('nature', 'party', 'culture', 'relax', 'family', 'sport', name="type_enum"), nullable=False, index=True)
     date = db.Column(db.Date, nullable=False, index=True)
-    place = db.Column(db.String(240), nullable=False)
-    duration = db.Column(db.Integer, nullable=False)
+    place = db.Column(db.String(240), nullable=False, index=True)
+    duration = db.Column(db.Integer, nullable=False, index=True)
     description = db.Column(db.String(750), nullable=False)
-    language = db.Column(db.Enum('spanish', 'catalan', 'english', 'german', 'french'))
-    gender = db.Column(db.Enum('female_only', 'queer_only', 'all_genders', 'no_preferences', name='gender_selection_enum'), nullable=False)
-    price_type = db.Column(db.Enum('free', 'paid'), nullable=False)
-    price = db.Column(db.Integer)
-    min_age = db.Column(db.Integer)
-    max_age = db.Column(db.Integer)
-    min_people = db.Column(db.Integer)
-    max_people = db.Column(db.Integer)
-    lgtbi = db.Column(db.Boolean(), nullable=False)
-    pet_friendly = db.Column(db.Boolean(), nullable=False)
-    kid_friendly = db.Column(db.Boolean(), nullable=False)
+    language = db.Column(db.Enum('spanish', 'catalan', 'english', 'german', 'french', name="language_enum"), index=True)
+    gender = db.Column(db.Enum('female_only', 'queer_only', 'all_genders', 'no_preferences', name="gender_enum"), nullable=False, index=True)
+    price_type = db.Column(db.Enum('free', 'paid', name="pricetype_enum"), nullable=False, index=True)
+    price = db.Column(db.Integer, index=True)
+    min_age = db.Column(db.Integer, index=True)
+    max_age = db.Column(db.Integer, index=True)
+    min_people = db.Column(db.Integer, index=True)
+    max_people = db.Column(db.Integer, index=True)
+    lgbti = db.Column(db.Boolean(), index=True)
+    pet_friendly = db.Column(db.Boolean(), nullable=False, index=True)
+    kid_friendly = db.Column(db.Boolean(), nullable=False, index=True)
 
-    signedup_event = db.relationship('Signedup_event', backref='event', lazy=True)
-    favorite_event = db.relationship('Favorite_event', backref='event', lazy=True)
+    user = db.relationship('User', back_populates='created_events', lazy=True)
+    signedup_event = db.relationship('Signedup_event', back_populates='event', lazy=True)
+    favorite_event = db.relationship('Favorite_event', back_populates='event', lazy=True)
 
     # Campos de auditoría
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -145,34 +148,44 @@ class Event(db.Model):
     def filter_events(filters):
         query = Event.query
 
+        print("Filters received:", filters)
+
         # Aplicar filtros dinámicos
         # Filtrar por tipo de evento
         if 'event_type' in filters:
             event_types = filters['event_type']
+            print("Applying event type filter:", event_types)
             query = query.filter(Event.type.in_(event_types))
 
         # Filtro de fecha
         if 'date_filter' in filters:
             date_filter = filters['date_filter']
+            print("Applying date filter:", date_filter)
             if date_filter == 'custom':
                 # Filtrar por fechas personalizadas
                 start_date = filters['start_date']
                 end_date = filters['end_date']
+                print("Applying custom date range filter:", start_date, "-", end_date)
                 query = query.filter(Event.date >= start_date, Event.date <= end_date)
             else:
                 # Filtrar por opciones de fecha predefinidas
                 if date_filter == 'today':
+                    print("Applying today's date filter")
                     query = query.filter(Event.date == datetime.today().date())
                 elif date_filter == 'tomorrow':
+                    print("Applying tomorrow's date filter")
                     query = query.filter(Event.date == (datetime.today() + timedelta(days=1)).date())
                 elif date_filter == 'this_week':
+                    print("Applying this week's date filter")
                     end_of_week = datetime.today() + timedelta(days=(6 - datetime.today().weekday()))
                     query = query.filter(Event.date >= datetime.today().date(), Event.date <= end_of_week)
                 elif date_filter == 'this_weekend':
+                    print("Applying this weekend's date filter")
                     end_of_week = datetime.today() + timedelta(days=(6 - datetime.today().weekday()))
                     next_weekend = end_of_week + timedelta(days=(5 - end_of_week.weekday()))
                     query = query.filter(Event.date >= end_of_week.date(), Event.date <= next_weekend.date())
                 elif date_filter == 'next_week':
+                    print("Applying next week's date filter")
                     start_of_next_week = datetime.today() + timedelta(days=(7 - datetime.today().weekday()))
                     end_of_next_week = start_of_next_week + timedelta(days=6)
                     query = query.filter(Event.date >= start_of_next_week.date(), Event.date <= end_of_next_week.date())
@@ -191,6 +204,7 @@ class Event(db.Model):
                         duration_criteria.append(Event.duration > 120)
 
                 if duration_criteria:
+                    print("Applying duration filter:", duration_criteria)
                     query = query.filter(or_(*duration_criteria))
 
         # Filtrar por edad mínima y máxima
@@ -198,8 +212,10 @@ class Event(db.Model):
             min_age = filters['age_range_filter'].get('min_age')
             max_age = filters['age_range_filter'].get('max_age')
             if min_age is not None:
+                print("Applying min age filter:", min_age)
                 query = query.filter(Event.min_age >= min_age)
             if max_age is not None:
+                print("Applying max age filter:", max_age)
                 query = query.filter(Event.max_age <= max_age)
 
         # Filtrar por cantidad mínima y máxima de personas
@@ -207,8 +223,10 @@ class Event(db.Model):
             min_people = filters['people_range_filter'].get('min_people')
             max_people = filters['people_range_filter'].get('max_people')
             if min_people is not None:
+                print("Applying min people filter:", min_people)
                 query = query.filter(Event.min_people >= min_people)
             if max_people is not None:
+                print("Applying max people filter:", max_people)
                 query = query.filter(Event.max_people <= max_people)
 
         # Filtrar por género
@@ -227,6 +245,7 @@ class Event(db.Model):
                     gender_criteria.append(Event.gender == 'no_preferences')
 
             if gender_criteria:
+                print("Applying gender filter:", gender_criteria)
                 query = query.filter(or_(*gender_criteria))
 
         # Filtro de idioma
@@ -247,6 +266,7 @@ class Event(db.Model):
                     language_criteria.append(Event.language == 'french')
 
             if language_criteria:
+                print("Applying language filter:", language_criteria)
                 query = query.filter(or_(*language_criteria))
 
         # Filtro de precio
@@ -261,7 +281,44 @@ class Event(db.Model):
                     price_type_criteria.append(Event.price_type == 'paid')
 
             if price_type_criteria:
+                print("Applying price type filter:", price_type_criteria)
                 query = query.filter(or_(*price_type_criteria))
+
+        # Filtrar por amigable para la comunidad LGTBI
+        if 'lgtbi' in filters:
+            lgtbi_value = filters['lgtbi']
+            print("Applying lgtbi filter:", lgtbi_value)
+            if lgtbi_value.lower() == 'true':
+                query = query.filter(Event.lgtbi == True)
+            elif lgtbi_value.lower() == 'false':
+                query = query.filter(Event.lgtbi == False)
+            else:
+                print("Invalid value for lgtbi filter:", lgtbi_value)
+
+        # Filtrar por amigable para niños
+        if 'kid_friendly' in filters:
+            kid_friendly_value = filters['kid_friendly']
+            print("Applying kid friendly filter:", kid_friendly_value)
+            if kid_friendly_value.lower() == 'true':
+                query = query.filter(Event.kid_friendly == True)
+            elif kid_friendly_value.lower() == 'false':
+                query = query.filter(Event.kid_friendly == False)
+            else:
+                print("Invalid value for kid friendly filter:", kid_friendly_value)
+
+        # Filtrar por amigable para mascotas
+        if 'pet_friendly' in filters:
+            pet_friendly_value = filters['pet_friendly']
+            print("Applying pet friendly filter:", pet_friendly_value)
+            if pet_friendly_value.lower() == 'true':
+                query = query.filter(Event.pet_friendly == True)
+            elif pet_friendly_value.lower() == 'false':
+                query = query.filter(Event.pet_friendly == False)
+            else:
+                print("Invalid value for pet friendly filter:", pet_friendly_value)
+
+        filtered_events = query.all()
+        print("Filtered events:", filtered_events)
 
         return query.all()
 
@@ -295,7 +352,7 @@ class Event(db.Model):
         db.session.commit()
         
     def __repr__(self):
-        return f'<Event {self.name}>'
+        return f'<Event id={self.id}, name={self.name}>'
 
     def serialize(self):
         return {
@@ -315,18 +372,22 @@ class Event(db.Model):
             "max_age": self.max_age,
             "min_people": self.min_people,
             "max_people": self.max_people,
-            "lgtbi": self.lgtbi,
+            "lgbti": self.lgbti,
             "pet_friendly": self.pet_friendly,
             "kid_friendly": self.kid_friendly,
         }
 
 class Signedup_event(db.Model):
+    __tablename__ = 'signedup_event'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     
+    user = db.relationship('User', back_populates='signedup_event', lazy=True)
+    event = db.relationship('Event', back_populates='signedup_event', lazy=True)
+
     def __repr__(self):
-        return f'<Signedup_event {self.user_id}>'
+        return f'<Signedup_event id={self.id}, user_id={self.user_id}>'
 
     def serialize(self):
         return {
@@ -334,14 +395,26 @@ class Signedup_event(db.Model):
             "user_id": self.user_id,
             "event_id": self.event_id,
         }
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 class Favorite_event(db.Model):
+    __tablename__ = 'favorite_event'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
 
+    user = db.relationship('User', back_populates='favorite_event', lazy=True)
+    event = db.relationship('Event', back_populates='favorite_event', lazy=True)
+
     def __repr__(self):
-        return f'<Favorite_event {self.user_id}>'
+        return f'<Favorite_event id={self.id}, user_id{self.user_id}>'
 
     def serialize(self):
         return {
@@ -349,3 +422,11 @@ class Favorite_event(db.Model):
             "user_id": self.user_id,
             "event_id": self.event_id,
         }
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
