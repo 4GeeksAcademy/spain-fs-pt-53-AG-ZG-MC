@@ -8,7 +8,7 @@ export const Context = React.createContext(null);
 // https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
 const injectContext = PassedComponent => {
 	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
+		//this will be passed as the context value
 		const [state, setState] = useState(
 			getState({
 				getStore: () => state.store,
@@ -28,7 +28,10 @@ const injectContext = PassedComponent => {
 			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
 			 * store, instead use actions, like this:
 			 **/
+			//initialization logic goes here
+			state.actions.fetchInitialEvents(); // Call the new action to fetch events
 			state.actions.getMessage(); // <---- calling this function from the flux.js actions
+			//keep other actions as needed
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,
