@@ -5,8 +5,9 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
+from flask_jwt_extended import JWTManager, create_access_token
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -14,7 +15,6 @@ from flask_cors import CORS
 
 
 # from models import Person
-
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
@@ -64,6 +64,46 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
+# Configura la extensión Flask-JWT-Extended
+app.config["JWT_SECRET_KEY"] = "xS5j#8Fp@L2n!9G"  # ¡Cambia las palabras "super-secret" por otra cosa!
+jwt = JWTManager(app)
+
+# PREGUNTAR
+# Manejo de errores relacionados con la autenticación
+@jwt.unauthorized_loader
+def unauthorized_response():
+    return jsonify({"message": "Missing Authorization Header"}), 401
+
+@jwt.invalid_token_loader
+def invalid_token_response():
+    return jsonify({"message": "Invalid Token"}), 401
+
+@jwt.expired_token_loader
+def expired_token_response():
+    return jsonify({"message": "Expired Token"}), 401
+
+# Endpoint para generar tokens
+@app.route("/auth", methods=["POST"])
+def create_token():
+    try:
+        username = request.json.get("username", None)
+        password = request.json.get("password", None)
+
+        if not username or not password:
+            return jsonify({"msg": "Missing username or password"}), 400
+
+        # Consulta la base de datos por el nombre de usuario
+        user = User.query.filter_by(username=username).first()
+
+        if user is None or not user.check_password(password):
+            return jsonify({"msg": "Bad username or password"}), 401
+
+        # Crea un nuevo token con el id de usuario dentro
+        access_token = create_access_token(identity=user.id)
+        return jsonify({ "token": access_token, "user_id": user.id })
+
+    except Exception as e:
+        return jsonify({"msg": f"Internal server error: {str(e)}"}), 500
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

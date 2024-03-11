@@ -6,6 +6,7 @@ from api.models import db, User, Event, Signedup_event, Favorite_event
 from api.utils import generate_sitemap, APIException
 from sqlalchemy import func
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required
 import json
 import re 
 
@@ -93,6 +94,7 @@ def create_user():
     
 # Endpoint para obtener todos los usuarios con información sobre los eventos creados por cada uno
 @api.route('/users', methods=['GET'])
+@jwt_required()
 def get_all_users():
     try:
         users = User.query.all()
@@ -123,6 +125,7 @@ def get_all_users():
 
 # Endpoint para obtener información de un usuario específico
 @api.route('/users/<int:user_id>', methods=['GET'])
+@jwt_required()
 def get_user(user_id):
     try:
         user = User.query.get(user_id)
@@ -146,6 +149,7 @@ def get_user(user_id):
 
 # Endpoint para actualizar información de un usuario específico
 @api.route('/users/<int:user_id>', methods=['PUT'])
+@jwt_required()
 def update_user(user_id):
     try:
         data = request.get_json()
@@ -194,6 +198,7 @@ def update_user(user_id):
 
 # Endpoint para eliminar un usuario específico
 @api.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(user_id):
     try:
         user = User.query.get(user_id)
@@ -212,6 +217,7 @@ def delete_user(user_id):
 
 # Endpoint para crear un nuevo evento
 @api.route('/events', methods=['POST'])
+@jwt_required()
 def create_event():
     try:
         data = request.get_json()
@@ -297,6 +303,7 @@ def get_events():
 
 # Endpoint para actualizar información de un evento específico
 @api.route('/events/<int:event_id>', methods=['PUT'])
+@jwt_required()
 def update_event(event_id):
     try:
         data = request.get_json()
@@ -350,6 +357,7 @@ def update_event(event_id):
     
 # Endpoint para eliminar un evento específico
 @api.route('/events/<int:event_id>', methods=['DELETE'])
+@jwt_required()
 def delete_event(event_id):
     try:
         event = Event.query.get(event_id)
@@ -367,6 +375,7 @@ def delete_event(event_id):
 
 # Endpoint para que un usuario se inscriba en un evento
 @api.route('/events/<int:event_id>/signup', methods=['POST'])
+@jwt_required()
 def signup_event(event_id):
     try:
         data = request.get_json()
@@ -399,6 +408,7 @@ def signup_event(event_id):
 
 # Endpoint para que un usuario cancele su inscripción a un evento
 @api.route('/users/<int:user_id>/events/<int:event_id>/signup', methods=['DELETE'])
+@jwt_required()
 def cancel_signup_for_event(user_id, event_id):
     try:
         # Verificar si el usuario y el evento existen
@@ -426,6 +436,7 @@ def cancel_signup_for_event(user_id, event_id):
 
 # Endpoint para obtener todos los eventos a los que un usuario está inscrito
 @api.route('/users/<int:user_id>/events', methods=['GET'])
+@jwt_required()
 def get_user_events(user_id):
     try:
         # Buscar eventos inscritos por el usuario
@@ -441,6 +452,7 @@ def get_user_events(user_id):
 
 # Endpoint para obtener todos los usuarios inscritos en un evento específico
 @api.route('/events/<int:event_id>/users', methods=['GET'])
+@jwt_required()
 def get_event_users(event_id):
     try:
         # Buscar usuarios inscritos en el evento
@@ -456,6 +468,7 @@ def get_event_users(event_id):
     
 # Endpoint para agregar un evento a la lista de eventos favoritos de un usuario
 @api.route('/users/<int:user_id>/events/<int:event_id>/favorite', methods=['POST'])
+@jwt_required()
 def add_event_to_favorites(user_id, event_id):
     try:
         # Verificar si el usuario y el evento existen
@@ -483,6 +496,7 @@ def add_event_to_favorites(user_id, event_id):
 
 # Endpoint para eliminar un evento de la lista de eventos favoritos de un usuario
 @api.route('/users/<int:user_id>/events/<int:event_id>/favorite', methods=['DELETE'])
+@jwt_required()
 def remove_event_from_favorites(user_id, event_id):
     try:
         # Verificar si el evento favorito existe
@@ -500,6 +514,7 @@ def remove_event_from_favorites(user_id, event_id):
 
 # Endpoint para obtener todos los eventos favoritos de un usuario
 @api.route('/users/<int:user_id>/favorite_event', methods=['GET'])
+@jwt_required()
 def get_user_favorite_event(user_id):
     try:
         # Obtener todos los eventos favoritos de un usuario
@@ -530,8 +545,6 @@ def search_events():
     except Exception as e:
             return jsonify({"message": "Internal Server Error"}), 500
 
-
-# PROBLEMA
 # Endpoint para filtrar eventos por fecha, duración, precio, etc.
 @api.route('/events/filter', methods=['GET'])
 def filter_events():

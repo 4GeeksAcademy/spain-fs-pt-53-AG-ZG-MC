@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1c8eaee8563c
+Revision ID: e5543133f731
 Revises: 
-Create Date: 2024-03-06 16:07:57.293178
+Create Date: 2024-03-11 18:09:58.431019
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1c8eaee8563c'
+revision = 'e5543133f731'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,14 +45,14 @@ def upgrade():
     sa.Column('duration', sa.Integer(), nullable=False),
     sa.Column('description', sa.String(length=750), nullable=False),
     sa.Column('language', sa.Enum('spanish', 'catalan', 'english', 'german', 'french', name='language_enum'), nullable=True),
-    sa.Column('gender', sa.Enum('female_only', 'queer_only', 'all_genders', 'no_preferences', name='gender_enum'), nullable=False),
+    sa.Column('gender', sa.Enum('female_only', 'queer_only', 'all_genders', name='gender_enum'), nullable=False),
     sa.Column('price_type', sa.Enum('free', 'paid', name='pricetype_enum'), nullable=False),
     sa.Column('price', sa.Integer(), nullable=True),
     sa.Column('min_age', sa.Integer(), nullable=True),
     sa.Column('max_age', sa.Integer(), nullable=True),
     sa.Column('min_people', sa.Integer(), nullable=True),
     sa.Column('max_people', sa.Integer(), nullable=True),
-    sa.Column('lgbti', sa.Boolean(), nullable=True),
+    sa.Column('lgtbi', sa.Boolean(), nullable=True),
     sa.Column('pet_friendly', sa.Boolean(), nullable=False),
     sa.Column('kid_friendly', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -70,7 +70,7 @@ def upgrade():
         batch_op.create_index(batch_op.f('ix_event_gender'), ['gender'], unique=False)
         batch_op.create_index(batch_op.f('ix_event_kid_friendly'), ['kid_friendly'], unique=False)
         batch_op.create_index(batch_op.f('ix_event_language'), ['language'], unique=False)
-        batch_op.create_index(batch_op.f('ix_event_lgbti'), ['lgbti'], unique=False)
+        batch_op.create_index(batch_op.f('ix_event_lgtbi'), ['lgtbi'], unique=False)
         batch_op.create_index(batch_op.f('ix_event_max_age'), ['max_age'], unique=False)
         batch_op.create_index(batch_op.f('ix_event_max_people'), ['max_people'], unique=False)
         batch_op.create_index(batch_op.f('ix_event_min_age'), ['min_age'], unique=False)
@@ -116,7 +116,7 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_event_min_age'))
         batch_op.drop_index(batch_op.f('ix_event_max_people'))
         batch_op.drop_index(batch_op.f('ix_event_max_age'))
-        batch_op.drop_index(batch_op.f('ix_event_lgbti'))
+        batch_op.drop_index(batch_op.f('ix_event_lgtbi'))
         batch_op.drop_index(batch_op.f('ix_event_language'))
         batch_op.drop_index(batch_op.f('ix_event_kid_friendly'))
         batch_op.drop_index(batch_op.f('ix_event_gender'))

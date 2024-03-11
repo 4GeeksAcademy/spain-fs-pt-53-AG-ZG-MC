@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import or_, and_
+from sqlalchemy import or_
 from datetime import datetime, timedelta
+from flask_bcrypt import generate_password_hash, check_password_hash
 import bcrypt
 import secrets
 import re
@@ -17,7 +18,7 @@ class User(db.Model):
     last_name = db.Column(db.String(120), nullable=False)
     followed_users = db.Column(db.Integer, nullable=False)
     users_following_me = db.Column(db.Integer, nullable=False)
-    
+
     created_events = db.relationship('Event', back_populates='user', lazy=True)
     signedup_event = db.relationship('Signedup_event', back_populates='user', lazy=True)
     favorite_event = db.relationship('Favorite_event', back_populates='user', lazy=True)
@@ -52,25 +53,24 @@ class User(db.Model):
         if not re.search(r"[!@#$%^&*]", password):
             raise ValueError("Password must contain at least one special character.")
 
-        # Genera una sal aleatoria única
-        salt = secrets.token_hex(16)  # Genera una cadena hexadecimal de 16 bytes como sal
+        try:
+            # Aplicar el hash a la contraseña con la sal
+            hashed_password = generate_password_hash(password).decode('utf-8')
+            self.password = hashed_password
+            print("Hashed password:", hashed_password)
+        except Exception as e:
+            print("Error setting password hash:", e)
 
-        # Combina la contraseña con la sal
-        salted_password = salt + password
-
-        # Aplica el hash a la contraseña con la sal
-        hashed_password = bcrypt.hashpw(salted_password.encode('utf-8'), bcrypt.gensalt())
-
-        # Almacena la sal y el hash en la base de datos
-        self.salt = salt
-        self.password = hashed_password
-    
     def check_password(self, password):
-        # Aplica el mismo hash a la contraseña proporcionada junto con la sal almacenada
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), self.salt)
-        # Compara el hash generado con el hash almacenado en la base de datos
-        return hashed_password == self.password
-    
+        try:
+            # Verificar la contraseña concatenada con la contraseña almacenada
+            is_valid_password = check_password_hash(self.password, password)
+            print("Password is valid:", is_valid_password)
+            return is_valid_password
+        except Exception as e:
+            print("Error checking password:", e)
+            return False
+
     def save(self):
         # Actualizar la fecha de actualización al guardar
         self.updated_at = datetime.utcnow()
@@ -104,7 +104,7 @@ class Event(db.Model):
     duration = db.Column(db.Integer, nullable=False, index=True)
     description = db.Column(db.String(750), nullable=False)
     language = db.Column(db.Enum('spanish', 'catalan', 'english', 'german', 'french', name="language_enum"), index=True)
-    gender = db.Column(db.Enum('female_only', 'queer_only', 'all_genders', 'no_preferences', name="gender_enum"), nullable=False, index=True)
+    gender = db.Column(db.Enum('female_only', 'queer_only', 'all_genders', name="gender_enum"), nullable=False, index=True)
     price_type = db.Column(db.Enum('free', 'paid', name="pricetype_enum"), nullable=False, index=True)
     price = db.Column(db.Integer, index=True)
     min_age = db.Column(db.Integer, index=True)
@@ -242,8 +242,6 @@ class Event(db.Model):
                     gender_criteria.append(Event.gender == 'queer_only')
                 elif gender_filter == 'all_genders':
                     gender_criteria.append(Event.gender == 'all_genders')
-                elif gender_filter == 'no_preferences':
-                    gender_criteria.append(Event.gender == 'no_preferences')
 
             if gender_criteria:
                 print("Applying gender filter:", gender_criteria)
