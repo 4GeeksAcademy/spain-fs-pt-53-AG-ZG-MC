@@ -2,8 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from datetime import datetime, timedelta
 from flask_bcrypt import generate_password_hash, check_password_hash
-import bcrypt
-import secrets
 import re
 
 db = SQLAlchemy()
