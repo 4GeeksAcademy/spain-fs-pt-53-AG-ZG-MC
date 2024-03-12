@@ -1,2 +1,0 @@
-Arreglar base de datos y enrutado
-    - Actualizar el diagrama de QuickDBD

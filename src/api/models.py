@@ -88,6 +88,8 @@ class User(db.Model):
             "last_name": self.last_name,
             "followed_users": self.followed_users,
             "users_following_me": self.users_following_me,
+            "created_events": [event.serialize() for event in self.created_events],
+            "signedup_events": [event.serialize() for event in self.signedup_event],
             "favorite_event": [favorite_event.event.serialize() for favorite_event in self.favorite_event]
         }
     
@@ -418,6 +420,7 @@ class Favorite_event(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "event_id": self.event_id,
+            "event": self.event.serialize()
         }
     
     def save(self):

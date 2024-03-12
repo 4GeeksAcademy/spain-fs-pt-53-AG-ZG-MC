@@ -92,9 +92,9 @@ def create_user():
         print("Internal Server Error:", e)
         return jsonify({"message": "Internal Server Error"}), 500
     
-# Endpoint para obtener todos los usuarios con información sobre los eventos creados por cada uno
+# ADMI - Endpoint para obtener todos los usuarios con información sobre los eventos creados por cada uno
 @api.route('/users', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def get_all_users():
     try:
         users = User.query.all()
@@ -112,9 +112,15 @@ def get_all_users():
                 # Agregar la lista de eventos creados al diccionario de información del usuario
                 user_info['created_events'] = created_events
 
+                # Obtener los eventos a los que está inscrito este usuario
+                signedup_event = [event.serialize() for event in user.signedup_event]
+
+                # Agregar la lista de eventos inscritos al diccionario de información del usuario
+                user_info['signedup_event'] = signedup_event
+
                 # Agregar el diccionario de información del usuario a la lista de usuarios con eventos
                 users_with_events.append(user_info)
-
+              
             return jsonify(users_with_events), 200
         else:
             return jsonify({"message": "No users found"}), 404
@@ -122,7 +128,6 @@ def get_all_users():
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
  
-
 # Endpoint para obtener información de un usuario específico
 @api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -133,13 +138,6 @@ def get_user(user_id):
             # Serializar la información básica del usuario
             user_info = user.serialize()
             
-            # Obtener los eventos favoritos del usuario
-            user_favorite_events = Favorite_event.query.filter_by(user_id=user_id).all()
-            favorite_events = [favorite_event.event.serialize() for favorite_event in user_favorite_events]
-            
-            # Agregar los eventos favoritos al serializado del usuario
-            user_info['favorite_events'] = favorite_events
-
             return jsonify(user_info), 200
         else:
             return jsonify({"message": "User not found"}), 404
