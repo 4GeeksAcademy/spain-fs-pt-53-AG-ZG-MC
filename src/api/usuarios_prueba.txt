@@ -1,5 +1,3 @@
-Arreglar base de datos y enrutado
-    - Actualizar el diagrama de QuickDBD
 Tokens:
     - Estructura contraseñas:
         - Password1! -> según el número de user (no el ID), cambia el número de la contraseña
