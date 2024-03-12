@@ -59,12 +59,12 @@ const EventFilterOptions = () => {
     });
   }, [events]);
 
-  // JSX component:
+  // JSX component - ATLAS
   return (
     <div>
       <h3>Filter Options</h3>
 
-      {/* Event Type Filter */}
+      Event Type Filter
       <label htmlFor="event_type">Event Type:</label>
       <select
         id="event_type"

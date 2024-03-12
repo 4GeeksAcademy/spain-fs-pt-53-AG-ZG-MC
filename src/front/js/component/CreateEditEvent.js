@@ -15,7 +15,7 @@ const CreateEditEvent = () => {
 
   // UseEffect to fetch events when component mounts
   useEffect(() => {
-    actions.fetchInitialEvents();
+    actions.fetchEventRecommended();
   }, []);
 
   // Function to handle event creation
@@ -30,7 +30,7 @@ const CreateEditEvent = () => {
     actions.createEvent(newEvent);
   };
 
-  // JSX component:
+  // JSX component: - ATLAS
   return (
     <div>
       <h2>Create or Edit Event</h2>

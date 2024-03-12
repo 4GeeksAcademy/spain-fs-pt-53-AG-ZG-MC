@@ -9,13 +9,13 @@ import ScrollToTop from "./component/ScrollToTop";
 import Navbar from "./component/Navbar";
 import Footer from "./component/Footer";
 import EventsAll from "./pages/EventsAll";
-import EventSearch from "./pages/EventSearch";
+
 import EventView from "./pages/EventView";
-import RegistrationAndRecovery from "./pages/RegistrationAndRecovery";
-import UserProfile from "./pages/UserProfile";
+import RegistrationAndRecovery from "./pages/Registration";
+import UserProfile from "./pages/UserProfileMine";
 import CreateEditEvent from "./component/CreateEditEvent";
 import EventActions from "./component/EventActions";
-import EventCard from "./component/EventCard";
+import EventCard from "./component/EventRecommended";
 import EventDetails from "./component/EventDetails";
 import EventFilterOptions from "./component/EventFilterOptions";
 import MyEvents from "./component/MyEvents";
@@ -37,7 +37,6 @@ const Layout = () => {
                         {/* Pages */}
                         <Route path="/" exact element={<Home />} />
                         <Route path="/events" exact element={<EventsAll />} />
-                        <Route path="/search" exact element={<EventSearch />} />
                         <Route path="/event/view/:eventId" exact element={<EventView />} />
                         <Route path="/register" exact element={<RegistrationAndRecovery />} />
                         <Route path="/profile" exact element={<UserProfile />} />

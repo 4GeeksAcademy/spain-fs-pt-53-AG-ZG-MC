@@ -9,11 +9,11 @@ const EventActions = ({ eventId }) => {
 
   // State to manage user interaction
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  // UseEffect to update the signup status when component mounts
+  // useEffect to update isSignedUp based on events
   useEffect(() => {
-    // Check if the user is signed up for the event
-    const signedUpEvent = events.find((event) => event.id === eventId);
+    const signedUpEvent = events.find(event => event.id === eventId);
     setIsSignedUp(!!signedUpEvent);
   }, [events, eventId]);
 
@@ -37,17 +37,56 @@ const EventActions = ({ eventId }) => {
     actions.shareEvent(eventId);
   };
 
-  // JSX component:
+  // Function to handle adding event to favorites
+  const handleFavorite = () => {
+    // Call the action to add the event to favorites
+    //add red icon
+    actions.addToFavorites(eventId);
+    setIsFavorite(true);
+  };
+
+  // Function to handle removing event from favorites
+  const handleUnfavorite = () => {
+    // Call the action to remove the event from favorites
+    // icon set to white
+    actions.removeFromFavorites(eventId);
+    setIsFavorite(false);
+  };
+
+  // Function to see favorite events
+  const handleSeeFavoriteEvents = () => {
+    // Call the action to see favorite events
+    actions.seeFavoriteEvents();
+  };
+
+
+  // JSX component - Atlas
   return (
     <div>
       <h3>Event Actions</h3>
-      <button onClick={handleSignUp} disabled={isSignedUp}>
-        {isSignedUp ? "Already Signed Up" : "Sign Up"}
-      </button>
-      <button onClick={handleCancelAssistance} disabled={!isSignedUp}>
-        Cancel Assistance
-      </button>
-      <button onClick={handleShareEvent}>Share</button>
+      {/* Display an icon or text indicating sign-up status */}
+      {isSignedUp ? (
+        <p>You are signed up for this event</p>
+      ) : (
+        <button onClick={handleSignUp}>Sign Up</button>
+      )}
+
+      <button onClick={handleCancelAssistance}>Cancel Assistance</button>
+      <button onClick={handleShareEvent}>Share Event</button>
+
+      {/* Display a heart icon if the event is marked as a favorite */}
+      {isFavorite ? (
+        <span role="img" aria-label="Favorite">❤️</span>
+      ) : (
+        <button onClick={handleFavorite}>Favorite</button>
+      )}
+
+      {/* Button to remove event from favorites */}
+      {isFavorite && (
+        <button onClick={handleUnfavorite}>Remove from Favorites</button>
+      )}
+
+      <button onClick={handleSeeFavoriteEvents}>See Favorite Events</button>
     </div>
   );
 };

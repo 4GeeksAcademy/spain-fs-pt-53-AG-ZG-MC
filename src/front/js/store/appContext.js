@@ -29,7 +29,7 @@ const injectContext = PassedComponent => {
 			 * store, instead use actions, like this:
 			 **/
 			//initialization logic goes here
-			state.actions.fetchInitialEvents(); // Call the new action to fetch events
+			state.actions.fetchEventRecommended(); // Call the new action to fetch events
 			state.actions.getMessage(); // <---- calling this function from the flux.js actions
 			//keep other actions as needed
 		}, []);
