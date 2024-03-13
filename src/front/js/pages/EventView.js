@@ -1,18 +1,29 @@
-{/*
-Components Used:
-EventActions.js,
-EventCard.js,
-EventDetails.js,
-Footer.js,
-Header.js,
-Navbar.js,
-ScrollToTop.js
-*/}
+// EventView.js
 
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Context } from '../appContext';
+import EventDetails from '../components/EventDetails';
 
 const EventView = () => {
-  return <div>Event View Page</div>;
+  const { id } = useParams(); // Get the event ID from URL params
+  const { store, actions } = useContext(Context);
+
+  useEffect(() => {
+    // Fetch event details when component mounts
+    actions.fetchEventDetails(id);
+  }, [id, actions]);
+
+  return (
+    <div>
+      <h1>Event Details</h1>
+      {store.eventDetails ? (
+        <EventDetails event={store.eventDetails} />
+      ) : (
+        <p>Loading event details...</p>
+      )}
+    </div>
+  );
 };
 
 export default EventView;

@@ -1,6 +1,7 @@
 {/* eventos favoritos, creados, a los que asisto */ }
-
 import React, { useState, useEffect } from 'react';
+import getState from './flux';
+
 // Import API functions
 //import { fetchUserCreatedEvents, fetchUserFavoriteEvents, fetchUserSignedUpEvents } from './api'; 
 
@@ -8,27 +9,27 @@ import React, { useState, useEffect } from 'react';
 const fetchUserCreatedEvents = async () => {
   // Simulate fetching user-created events
   return [
-      { id: 1, name: 'Event 1' },
-      { id: 2, name: 'Event 2' },
-      // Add more mock data as needed
+    { id: 1, name: 'Event 1' },
+    { id: 2, name: 'Event 2' },
+    // Add more mock data as needed
   ];
 };
 
 const fetchUserFavoriteEvents = async () => {
   // Simulate fetching user favorite events
   return [
-      { id: 3, name: 'Event 3' },
-      { id: 4, name: 'Event 4' },
-      // Add more mock data as needed
+    { id: 3, name: 'Event 3' },
+    { id: 4, name: 'Event 4' },
+    // Add more mock data as needed
   ];
 };
 
 const fetchUserSignedUpEvents = async () => {
   // Simulate fetching user signed up events
   return [
-      { id: 5, name: 'Event 5' },
-      { id: 6, name: 'Event 6' },
-      // Add more mock data as needed
+    { id: 5, name: 'Event 5' },
+    { id: 6, name: 'Event 6' },
+    // Add more mock data as needed
   ];
 };
 
@@ -39,18 +40,21 @@ const MyEvents = () => {
   const [userSignedUpEvents, setUserSignedUpEvents] = useState([]);
 
   useEffect(() => {
+    // Access actions from Flux store
+    const { actions } = getState();
+
     // Fetch user-created events
-    fetchUserCreatedEvents()
+    actions.fetchUserCreatedEvents()
       .then(data => setUserCreatedEvents(data))
       .catch(error => console.error('Error fetching user created events:', error));
 
     // Fetch user favorite events
-    fetchUserFavoriteEvents()
+    actions.fetchUserFavoriteEvents()
       .then(data => setUserFavoriteEvents(data))
       .catch(error => console.error('Error fetching user favorite events:', error));
 
     // Fetch user signed up events
-    fetchUserSignedUpEvents()
+    actions.fetchUserSignedUpEvents()
       .then(data => setUserSignedUpEvents(data))
       .catch(error => console.error('Error fetching user signed up events:', error));
   }, []);

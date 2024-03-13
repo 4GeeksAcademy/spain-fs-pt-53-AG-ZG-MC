@@ -1,39 +1,60 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 
-const CreateEditEvent = () => {
+const EditEvent = () => {
   const { store, actions } = useContext(Context);
 
   // Access the events from the store
   const { events } = store;
 
-  // component logic
-  // State to manage form inputs
+  // State to manage form inputs. To complete with other form fields.
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
-  // other form fields
 
   // UseEffect to fetch events when component mounts
   useEffect(() => {
     actions.fetchEventRecommended();
-  }, []);
+  }, [actions]);
 
-  // Function to handle event creation
-  const handleCreateEvent = () => {
-    const newEvent = {
+  // Function to handle event update
+  const handleUpdateEvent = () => {
+    const updatedEvent = {
       name: eventName,
       date: eventDate,
       // ... other form fields
     };
 
-    // Call the action to create a new event
-    actions.createEvent(newEvent);
+    // Placeholder API endpoint to update the event
+    // const apiUrl = `https://api-url.com/events/${eventId}`;
+
+    // PUT request to the backend API to update the event
+    // through the appContext.js
+    // PUT request to the API to update the event:
+    fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedEvent),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // If the event is successfully updated, update the UI or take other actions as needed
+        console.log("Event updated successfully:", data);
+
+        // Reset form fields
+        setEventName("");
+        setEventDate("");
+      })
+      .catch((error) => {
+        console.error("Error updating event:", error);
+      });
   };
 
-  // JSX component: - ATLAS
+  // JSX - ATLAS
   return (
     <div>
-      <h2>Create or Edit Event</h2>
+      <h2>Edit Event</h2>
       <form>
         {/* Event Name input */}
         <label htmlFor="eventName">Event Name:</label>
@@ -56,8 +77,8 @@ const CreateEditEvent = () => {
         {/* ... other form fields */}
 
         {/* Submit button */}
-        <button type="button" onClick={handleCreateEvent}>
-          Create Event
+        <button type="button" onClick={handleUpdateEvent}>
+          Update Event
         </button>
 
         {/* Display fetched events */}
@@ -65,7 +86,9 @@ const CreateEditEvent = () => {
           <h3>Fetched Events:</h3>
           <ul>
             {events.map((event, index) => (
-              <li key={index}>{event.name} - {event.date}</li>
+              <li key={index}>
+                {event.name} - {event.date}
+              </li>
             ))}
           </ul>
         </div>
@@ -74,5 +97,4 @@ const CreateEditEvent = () => {
   );
 };
 
-
-export default CreateEditEvent;
+export default EditEvent;

@@ -8,6 +8,8 @@ const RegistrationForm = () => {
     confirmPassword: ''
   });
 
+  const handleCreateUser = useStoreActions(actions => actions.handleCreateUser); // Access the handleCreateUser action from the store
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -18,22 +20,8 @@ const RegistrationForm = () => {
     // Perform client-side validation?
 
     try {
-      // Call the API to store registration data
-      //Replace 'API_ENDPOINT_URL' with the actual endpoint
-      const response = await axios.post('API_ENDPOINT_URL', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      // Handle the response as needed
-      console.log('Registration successful:', response.data);
+      // Call the action to create a user
+      await handleCreateUser(formData.username, formData.password);
 
       // Reset form fields
       setFormData({

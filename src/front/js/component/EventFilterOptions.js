@@ -8,6 +8,7 @@ const EventFilterOptions = () => {
   const { events } = store;
 
   // State to manage filter options
+  //this needs to be edited to make most filters static:predefined options, rather than Dynamic
   const [filterOptions, setFilterOptions] = useState({
     event_type: [],
     date_filter: "",
@@ -27,37 +28,11 @@ const EventFilterOptions = () => {
     // Add more filters based on models.py criteria
   });
 
-  // UseEffect to update filter options when events change
-  useEffect(() => {
-    // Implement logic to extract unique filter options from events
-    // and update the filterOptions state
-    const uniqueEventTypes = [...new Set(events.map((event) => event.type))];
-    const uniqueDates = [...new Set(events.map((event) => event.date))];
-    const uniqueDurations = [...new Set(events.map((event) => event.duration))];
-    const uniqueGenders = [...new Set(events.map((event) => event.gender))];
-    const uniqueLanguages = [...new Set(events.map((event) => event.language))];
-    const uniquePriceTypes = [...new Set(events.map((event) => event.price_type))];
+  // Function to handle applying filters
+  const handleApplyFilters = () => {
+    actions.fetchFilteredEvents(filterOptions); //accesses store.events
+  };
 
-    setFilterOptions({
-      ...filterOptions,
-      event_type: uniqueEventTypes,
-      date_filter: "", // Set default value based on  requirements
-      start_date: "", // Set default value based on  requirements
-      end_date: "", // Set default value based on  requirements
-      duration_filter: "", // Set default value based on  requirements
-      age_range_filter_min: null, // Set default value based on  requirements
-      age_range_filter_max: null, // Set default value based on  requirements
-      people_range_filter_min: null, // Set default value based on  requirements
-      people_range_filter_max: null, // Set default value based on  requirements
-      gender_filter: uniqueGenders,
-      language_filter: uniqueLanguages,
-      price_type_filter: uniquePriceTypes,
-      lgtbi: "", // Set default value based on  requirements
-      kid_friendly: "", // Set default value based on  requirements
-      pet_friendly: "", // Set default value based on  requirements
-      // Add more filters based on your models.py criteria
-    });
-  }, [events]);
 
   // JSX component - ATLAS
   return (
@@ -228,10 +203,46 @@ const EventFilterOptions = () => {
 
       {/* Add more filters based on models.py criteria */}
 
-      {/* Apply Filter Button */}
+      {/* Apply Filter Button DYNAMIC */}
       <button onClick={() => actions.fetchFilteredEvents(filterOptions)}>Apply Filter</button>
+      {/* Apply Filter Button STATIC*/}
+      <button onClick={handleApplyFilters}>Apply Filter</button>
     </div>
   );
 };
 
 export default EventFilterOptions;
+
+
+/* // UseEffect to update filter options when events change, ON DYNAMIC FILTERS
+useEffect(() => {
+  // Implement logic to extract unique filter options from events
+  // and update the filterOptions state
+  const uniqueEventTypes = [...new Set(events.map((event) => event.type))];
+  const uniqueDates = [...new Set(events.map((event) => event.date))];
+  const uniqueDurations = [...new Set(events.map((event) => event.duration))];
+  const uniqueGenders = [...new Set(events.map((event) => event.gender))];
+  const uniqueLanguages = [...new Set(events.map((event) => event.language))];
+  const uniquePriceTypes = [...new Set(events.map((event) => event.price_type))];
+
+  setFilterOptions({
+    ...filterOptions,
+    event_type: uniqueEventTypes,
+    date_filter: "", // Set default value based on  requirements
+    start_date: "", // Set default value based on  requirements
+    end_date: "", // Set default value based on  requirements
+    duration_filter: "", // Set default value based on  requirements
+    age_range_filter_min: null, // Set default value based on  requirements
+    age_range_filter_max: null, // Set default value based on  requirements
+    people_range_filter_min: null, // Set default value based on  requirements
+    people_range_filter_max: null, // Set default value based on  requirements
+    gender_filter: uniqueGenders,
+    language_filter: uniqueLanguages,
+    price_type_filter: uniquePriceTypes,
+    lgtbi: "", // Set default value based on  requirements
+    kid_friendly: "", // Set default value based on  requirements
+    pet_friendly: "", // Set default value based on  requirements
+    // Add more filters based on your models.py criteria
+  });
+}, [events]);
+ */

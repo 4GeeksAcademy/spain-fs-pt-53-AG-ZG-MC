@@ -13,7 +13,7 @@ import EventsAll from "./pages/EventsAll";
 import EventView from "./pages/EventView";
 import RegistrationAndRecovery from "./pages/Registration";
 import UserProfile from "./pages/UserProfileMine";
-import CreateEditEvent from "./component/CreateEditEvent";
+import EventCreate from "./component/EventCreate";
 import EventActions from "./component/EventActions";
 import EventCard from "./component/EventRecommended";
 import EventDetails from "./component/EventDetails";
@@ -42,7 +42,7 @@ const Layout = () => {
                         <Route path="/profile" exact element={<UserProfile />} />
 
                         {/* Testing elements */}
-                        <Route path="/create-edit-event" exact element={<CreateEditEvent />} />
+                        <Route path="/event-create" exact element={<CreateEventPage />} />
                         <Route path="/event-actions" exact element={<EventActions />} />
                         <Route path="/event-card" exact element={<EventCard />} />
                         <Route path="/event-details" exact element={<EventDetails />} />
