@@ -5,13 +5,14 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, unset_jwt_cookies, create_access_token
 from api.utils import APIException, generate_sitemap
 from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_cors import CORS
+import secrets
 
 
 # from models import Person
@@ -84,8 +85,8 @@ def expired_token_response(callback):
     return jsonify({"message": "Expired Token"}), 401
 
 # Endpoint para generar tokens
-@app.route("/auth", methods=["POST"])
-def create_token():
+@app.route("/login", methods=["POST"])
+def login():
     try:
         username = request.json.get("username", None)
         password = request.json.get("password", None)
@@ -102,6 +103,32 @@ def create_token():
         # Crea un nuevo token con el id de usuario dentro
         access_token = create_access_token(identity=user.id)
         return jsonify({ "token": access_token, "user_id": user.id })
+
+    except Exception as e:
+        return jsonify({"msg": f"Internal server error: {str(e)}"}), 500
+    
+# Endpoint para el logout
+@app.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    try:
+        # Obtiene el identificador del usuario del token
+        current_user_id = get_jwt_identity()
+
+        # Aquí podrías realizar cualquier otra lógica de logout necesaria, como invalidar sesiones, etc.
+
+        # Crear un nuevo token de acceso con una duración corta para evitar posibles reutilizaciones
+        new_access_token = create_access_token(identity=current_user_id, expires_delta=False)
+
+        # Elimina el token de acceso estableciendo las cookies del token como vacías
+        response = jsonify({"msg": "Logout successful"})
+        unset_jwt_cookies(response)
+        
+        # Añade el nuevo token al header de la respuesta para que el cliente lo borre también
+        response.headers["X-CSRF-TOKEN"] = secrets.token_hex(16)
+        response.headers["X-NEW-ACCESS-TOKEN"] = new_access_token
+        
+        return response
 
     except Exception as e:
         return jsonify({"msg": f"Internal server error: {str(e)}"}), 500
