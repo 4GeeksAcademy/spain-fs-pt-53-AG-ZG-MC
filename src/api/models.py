@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from datetime import datetime, timedelta
 from flask_bcrypt import generate_password_hash, check_password_hash
+from datetime import datetime, timedelta, timezone
 import re
 
 db = SQLAlchemy()
@@ -17,13 +18,17 @@ class User(db.Model):
     followed_users = db.Column(db.Integer, nullable=False)
     users_following_me = db.Column(db.Integer, nullable=False)
 
+    # Campos para el restablecimiento de contraseña
+    reset_password_token = db.Column(db.String(100), nullable=True)
+    reset_password_expires = db.Column(db.DateTime, nullable=True)
+
     created_events = db.relationship('Event', back_populates='user', lazy=True)
     signedup_event = db.relationship('Signedup_event', back_populates='user', lazy=True)
     favorite_event = db.relationship('Favorite_event', back_populates='user', lazy=True)
 
     # Campos de auditoría
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     def validate_email(self, email):
         regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
@@ -71,7 +76,7 @@ class User(db.Model):
 
     def save(self):
         # Actualizar la fecha de actualización al guardar
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
         # Guardar el usuario en la base de datos
         db.session.add(self)
         db.session.commit()

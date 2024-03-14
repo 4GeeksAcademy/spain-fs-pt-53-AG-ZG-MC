@@ -51,4 +51,9 @@ Tokens:
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDI0ODc1NywianRpIjoiZDRiNzlhMTMtYjMzNy00YmM2LTkwMzAtZDdlZDcyNTU2MzZjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MTEsIm5iZiI6MTcxMDI0ODc1NywiY3NyZiI6Ijc2MTRkN2RlLTFhNjktNGJiZi04MzM3LTkxOGY2MzYzYWQ5YiIsImV4cCI6MTcxMDMzNTE1N30.t5LmunmgVJg4blDTGEIT-gIup8OBR775_D5qh5HSpD4",
             "user_id": 11
         }
+    - admi:
+        {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMDQyMTEzNiwianRpIjoiNjE4NmQ4MDAtYzdlZi00MjIxLWFjZDItNjQzMTZkNzU4ZmNhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MTIsIm5iZiI6MTcxMDQyMTEzNiwiY3NyZiI6IjBjMTFmZDdkLWE5MWEtNGRiZi1hYjkzLWJhZWU2YzU0ZTkxOCIsImV4cCI6MTcxMDUwNzUzNn0.KLyHxTNm6DTt5wLeg_RmMUU3jVlsM6x-ea4XNEafM2c",
+            "user_id": 12
+        }
             
