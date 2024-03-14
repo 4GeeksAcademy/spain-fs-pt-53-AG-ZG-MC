@@ -7,6 +7,9 @@ from api.utils import generate_sitemap, APIException
 from sqlalchemy import func
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required
+from api.email_utils import send_password_reset_email
+import secrets
+from datetime import datetime, timedelta, timezone
 import json
 import re 
 
@@ -193,6 +196,73 @@ def update_user(user_id):
         return jsonify({"message": str(ve)}), 400
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
+
+# Endpoint para el formulario de solicitud de restablecimiento de contraseña
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    try:
+        data = request.get_json()
+
+        # Verifica si se proporcionó una dirección de correo electrónico
+        if "email" not in data:
+            return jsonify({"message": "Email is required"}), 400
+        
+        # Verifica si el correo electrónico pertenece a un usuario registrado
+        user = User.query.filter_by(email=data["email"]).first()
+        if not user:
+            return jsonify({"message": "Email not found"}), 404
+
+        # Genera un token único para la solicitud de restablecimiento de contraseña
+        reset_token = secrets.token_hex(16)
+
+        # Guarda el token en la base de datos junto con el usuario y la fecha de expiración (puedes agregar un campo en la tabla de usuarios para esto)
+        user.reset_password_token = reset_token
+        user.reset_password_expires = datetime.now(timezone.utc) + timedelta(hours=1)  # Corrección aquí
+        user.save()
+
+         # Envía el correo electrónico de restablecimiento de contraseña
+        send_password_reset_email(user.email, user.username, reset_token)
+
+        return jsonify({"message": "Password reset instructions sent to your email"}), 200
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"message": "Internal Server Error"}), 500
+
+    
+# Endpoint para restablecer la contraseña utilizando el token enviado por correo electrónico
+@api.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        data = request.get_json()
+
+        # Verifica si se proporcionó un token y una nueva contraseña
+        if "token" not in data or "new_password" not in data:
+            return jsonify({"message": "Token and new password are required"}), 400
+
+        # Encuentra al usuario asociado con el token proporcionado
+        user = User.query.filter_by(reset_password_token=data["token"]).first()
+        if not user:
+            return jsonify({"message": "Invalid or expired token"}), 400
+
+        # Verifica si el token ha expirado
+        current_time_utc = datetime.now(timezone.utc)
+        reset_password_expires_utc = user.reset_password_expires.astimezone(timezone.utc)
+        if reset_password_expires_utc < current_time_utc:
+            return jsonify({"message": "Token has expired"}), 400
+
+        # Actualiza la contraseña del usuario
+        user.set_password_hash(data["new_password"])
+        user.reset_password_token = None
+        user.reset_password_expires = None
+        user.save()
+
+        return jsonify({"message": "Password reset successfully"}), 200
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"message": "Internal Server Error"}), 500
+
 
 # Endpoint para eliminar un usuario específico
 @api.route('/users/<int:user_id>', methods=['DELETE'])
