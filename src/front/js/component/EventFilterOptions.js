@@ -11,9 +11,12 @@ const EventFilterOptions = () => {
   //this needs to be edited to make most filters static:predefined options, rather than Dynamic
   const [filterOptions, setFilterOptions] = useState({
     event_type: [],
+
     date_filter: "",
     start_date: "",
     end_date: "",
+
+    
     duration_filter: "",
     age_range_filter_min: null,
     age_range_filter_max: null,

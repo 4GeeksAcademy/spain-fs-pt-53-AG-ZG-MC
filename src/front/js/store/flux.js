@@ -1,3 +1,56 @@
+const fetchUserProfile = async () => {
+	try {
+		//replace ${process.env.BACKEND_URL}/api/user/profile with our API
+		const response = await fetch(`${process.env.BACKEND_URL}/api/user/profile`, {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Include authorization token if required
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to fetch user profile');
+		}
+
+		const userProfileData = await response.json();
+
+		// Update the store with the fetched user profile data
+		setStore(prevState => ({
+			...prevState,
+			userProfile: userProfileData
+		}));
+
+		return userProfileData;
+	} catch (error) {
+		console.error('Error fetching user profile:', error);
+		throw error;
+	}
+};
+
+const editUserProfile = async (userId, updatedProfileData) => {
+	try {
+		// Make a PUT request to update the user's profile in the backend
+		const response = await fetch(`${process.env.BACKEND_URL}/api/user/profile/${userId}`, {
+			method: 'PUT',
+			headers: {
+				'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(updatedProfileData)
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to edit user profile');
+		}
+
+		// Optionally, parse the response JSON and return any updated profile data
+	} catch (error) {
+		console.error('Error editing user profile:', error);
+		throw error;
+	}
+};
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -196,7 +249,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
 			getMessage: async () => {
 				try {
 					// Implement the logic to fetch the message from the backend
@@ -356,8 +408,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// Handle the error as needed
 				}
 			},
+
 		},
+
+		fetchUserProfile: fetchUserProfile, // Exporting the fetchUserProfile function
+		editUserProfile: editUserProfile
+
 	};
 };
 
 export default getState;
+// Export the fetchUserProfile function separately
+export { fetchUserProfile };
+export { editUserProfile };

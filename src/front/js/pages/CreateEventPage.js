@@ -1,6 +1,5 @@
 import React from 'react';
-import EventCreate from '../components/EventCreate'; // Assuming EventCreate.js is located in the components folder
-
+import EventCreate from '../component/EventCreate'; // Assuming EventCreate.js is located in the components folder
 const CreateEventPage = () => {
   return (
     <div>

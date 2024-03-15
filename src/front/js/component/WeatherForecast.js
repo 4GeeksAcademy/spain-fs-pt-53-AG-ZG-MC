@@ -13,7 +13,7 @@ const WeatherForecast = ({ location }) => {
     useEffect(() => {
         const fetchWeatherForecast = async () => {
             try {
-                const response = await fetch(`https://api.example.com/weather?location=${location}`);
+                const response = await fetch(`http://api.weatherapi.com/v1/forecast.json=${location}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch weather forecast');
                 }

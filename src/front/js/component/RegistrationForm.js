@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../store/appContext'; // Import your app context
 
 const RegistrationForm = () => {
+  const { actions } = useContext(Context); // Access the context and its actions
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
-
-  const handleCreateUser = useStoreActions(actions => actions.handleCreateUser); // Access the handleCreateUser action from the store
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,8 +20,8 @@ const RegistrationForm = () => {
     // Perform client-side validation?
 
     try {
-      // Call the action to create a user
-      await handleCreateUser(formData.username, formData.password);
+      // Call the action to create a user from the context
+      await actions.handleCreateUser(formData.username, formData.password);
 
       // Reset form fields
       setFormData({
@@ -36,7 +36,7 @@ const RegistrationForm = () => {
     }
   };
 
-  // JSX -ATLAS
+  // JSX
   return (
     <form onSubmit={handleSubmit}>
       <div>

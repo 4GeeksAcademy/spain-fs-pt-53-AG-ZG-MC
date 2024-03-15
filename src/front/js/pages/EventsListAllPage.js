@@ -1,10 +1,10 @@
 // EventsAll.js
 
 import React, { useContext, useEffect } from 'react';
-import { Context } from '../appContext';
-import EventCard from '../components/EventCard';
+import { Context } from '../store/appContext';
+import EventCard from '../component/EventCard';
 
-const EventsAll = () => {
+const EventsListAll = () => {
   const { store, actions } = useContext(Context);
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const EventsAll = () => {
   );
 };
 
-export default EventsAll;
+export default EventsListAll;

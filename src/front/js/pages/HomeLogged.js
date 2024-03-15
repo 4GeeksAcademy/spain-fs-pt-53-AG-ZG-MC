@@ -1,26 +1,26 @@
-// HomePageNotLoggedIn.js
+// HomePageLoggedIn.js
 // header, footer, searchEvents, eventos destacados, hero-info
+
 
 import React from 'react';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
+import EventSearchBar from '../component/EventSearchBar';
 import EventRecommended from '../component/EventRecommended';
-import LoginPasswordRecovery from '../component/LoginPasswordRecovery';
-import RegistrationForm from '../component/RegistrationForm';
+import HeroSection from '../component/HeroSection';
 
-
-const HomePageNotLogged = () => {
+const HomePageLoggedIn = () => {
   return (
     <div>
       <Header />
       <p>Home Logged In</p>
+      <EventSearchBar />
       <EventRecommended />
-      <LoginPasswordRecovery />
-      {/* <RegistrationForm /> */}
+      <HeroSection />
       <Footer />
     </div>
   );
 };
 
-export default HomePageNotLogged;
+export default HomePageLoggedIn;
 

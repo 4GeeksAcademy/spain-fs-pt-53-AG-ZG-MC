@@ -5,6 +5,11 @@ import EventCard from './EventCard';
 // diseño dentro card vertical
 
 const EventRecommended = ({ events }) => {
+
+  if (!events || !Array.isArray(events)) {
+    return <div>No events available</div>;
+  }
+
   return (
     <div className="event-recommended">
       <h2>Recommended Events</h2>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import getState from './flux';
 
+
 // Import API functions
 //import { fetchUserCreatedEvents, fetchUserFavoriteEvents, fetchUserSignedUpEvents } from './api'; 
 

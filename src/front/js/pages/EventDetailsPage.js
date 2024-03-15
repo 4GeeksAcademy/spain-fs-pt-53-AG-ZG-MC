@@ -2,10 +2,10 @@
 
 import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Context } from '../appContext';
-import EventDetails from '../components/EventDetails';
+import { Context } from '../store/appContext';
+import EventDetails from '../component/EventDetails';
 
-const EventView = () => {
+const EventDetailsPage = () => {
   const { id } = useParams(); // Get the event ID from URL params
   const { store, actions } = useContext(Context);
 
@@ -26,4 +26,4 @@ const EventView = () => {
   );
 };
 
-export default EventView;
+export default EventDetailsPage;

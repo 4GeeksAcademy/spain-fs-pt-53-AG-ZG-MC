@@ -1,24 +1,26 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/BackendURL";
+import injectContext from './store/appContext';
 
 
-import Home from "./pages/Home";
-import injectContext from "./store/appContext";
-import ScrollToTop from "./component/ScrollToTop";
-import Navbar from "./component/Navbar";
-import Footer from "./component/Footer";
-import EventsAll from "./pages/EventsAll";
+import Header from './component/Header';
+import Navbar from './component/Navbar';
+import Footer from './component/Footer';
+import HomeLogged from './pages/HomeLogged';
+import HomeNotLogged from './pages/HomeNotLogged';
+import CreateEventPage from './pages/CreateEventPage';
+import EventDetailsPage from './pages/EventDetailsPage';
+import EventsListAllPage from './pages/EventsListAllPage';
+import RegistrationPage from './pages/RegistrationPage';
+import UserProfileMine from './pages/UserProfileMine';
+import UserProfileOther from './pages/UserProfileOther';
+import LoginPasswordRecovery from './component/LoginPasswordRecovery';
+import Logout from './component/Logout';
 
-import EventView from "./pages/EventView";
-import RegistrationAndRecovery from "./pages/Registration";
-import UserProfile from "./pages/UserProfileMine";
-import EventCreate from "./component/EventCreate";
-import EventActions from "./component/EventActions";
-import EventCard from "./component/EventRecommended";
-import EventDetails from "./component/EventDetails";
-import EventFilterOptions from "./component/EventFilterOptions";
-import MyEvents from "./component/MyEvents";
+import NotFound from './component/NotFound';
+import ScrollToTop from './component/ScrollToTop';
+
 
 //create your first element
 const Layout = () => {
@@ -35,21 +37,17 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         {/* Pages */}
-                        <Route path="/" exact element={<Home />} />
-                        <Route path="/events" exact element={<EventsAll />} />
-                        <Route path="/event/view/:eventId" exact element={<EventView />} />
-                        <Route path="/register" exact element={<RegistrationAndRecovery />} />
-                        <Route path="/profile" exact element={<UserProfile />} />
-
-                        {/* Testing elements */}
-                        <Route path="/event-create" exact element={<CreateEventPage />} />
-                        <Route path="/event-actions" exact element={<EventActions />} />
-                        <Route path="/event-card" exact element={<EventCard />} />
-                        <Route path="/event-details" exact element={<EventDetails />} />
-                        <Route path="/event-filter-options" exact element={<EventFilterOptions />} />
-                        <Route path="/my-events" exact element={<MyEvents />} />
-                        {/* Other routes go here */}
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route exact path="/" element={<HomeNotLogged />} />
+                        <Route exact path="/home" element={<HomeNotLogged />} />
+                        <Route exact path="/login" element={<LoginPasswordRecovery />} />
+                        <Route exact path="/register" element={<RegistrationPage />} />
+                        <Route exact path="/events" element={<EventsListAllPage />} />
+                        <Route exact path="/events/:eventId" element={<EventDetailsPage />} />
+                        <Route exact path="/create-event" element={<CreateEventPage />} />
+                        <Route exact path="/profile/mine" element={<UserProfileMine />} />
+                        <Route exact path="/profile/:userId" element={<UserProfileOther />} />
+                        <Route exact path="/logout" element={<Logout />} />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
