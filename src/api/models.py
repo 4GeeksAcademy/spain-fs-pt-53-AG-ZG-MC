@@ -15,8 +15,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
-    followed_users = db.Column(db.Integer, nullable=False)
-    users_following_me = db.Column(db.Integer, nullable=False)
+    followed_users = db.Column(db.Integer)
+    users_following_me = db.Column(db.Integer)
 
     # Campos para el restablecimiento de contraseña
     reset_password_token = db.Column(db.String(100), nullable=True)

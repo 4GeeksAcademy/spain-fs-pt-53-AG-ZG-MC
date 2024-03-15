@@ -4,6 +4,8 @@ import { Context } from '../store/appContext'; // Import your app context
 const RegistrationForm = () => {
   const { actions } = useContext(Context); // Access the context and its actions
   const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
     username: '',
     email: '',
     password: '',
@@ -21,10 +23,17 @@ const RegistrationForm = () => {
 
     try {
       // Call the action to create a user from the context
-      await actions.handleCreateUser(formData.username, formData.password);
+      await actions.handleCreateUser(formData.first_name,
+        formData.last_name,
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.confirmPassword);
 
       // Reset form fields
       setFormData({
+        first_name: '',
+        last_name: '',
         username: '',
         email: '',
         password: '',
@@ -32,13 +41,25 @@ const RegistrationForm = () => {
       });
     } catch (error) {
       // Handle error if registration fails
-      console.error('Registration failed:', error.response.data);
+      if (error.response && error.response.data) {
+        console.error('Registration failed:', error.response.data);
+      } else {
+        console.error('An error occurred while processing your registration:', error);
+      }
     }
   };
 
   // JSX
   return (
     <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value={formData.first_name} onChange={handleChange} required />
+      </div>
+      <div>
+        <label htmlFor="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value={formData.last_name} onChange={handleChange} required />
+      </div>
       <div>
         <label htmlFor="username">Username:</label>
         <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />

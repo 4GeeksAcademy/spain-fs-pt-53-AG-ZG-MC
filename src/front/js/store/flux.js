@@ -157,16 +157,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}));
 			},
 
-			handleCreateUser: async (username, password) => {
+			handleCreateUser: async (firstName, lastName, username, email, password, confirmPassword) => {
 				try {
 					// Implement the logic to create a user in the backend
-					//replace API url with correct one
-					const response = await fetch(process.env.BACKEND_URL + "/api/createUser", {
+					const userData = {
+						first_name: firstName,
+						last_name: lastName,
+						username,
+						email,
+						password,
+						confirm_password: confirmPassword
+					};
+
+					const response = await fetch("https://opulent-space-train-wwpgj6v5vrxh5j5j-3001.app.github.dev/api/users", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify({ username, password }),
+						body: JSON.stringify(userData),
 					});
 
 					if (!response.ok) {
