@@ -24,6 +24,7 @@ def get_engine():
         return current_app.extensions['migrate'].db.engine
 
 
+
 def get_engine_url():
     try:
         return get_engine().url.render_as_string(hide_password=False).replace(
@@ -36,6 +37,7 @@ def get_engine_url():
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+
 config.set_main_option('sqlalchemy.url', get_engine_url())
 target_db = current_app.extensions['migrate'].db
 
@@ -100,6 +102,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
+
             **conf_args
         )
 
