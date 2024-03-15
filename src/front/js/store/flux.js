@@ -1,3 +1,28 @@
+import { createContext, useContext } from 'react';
+import React, { useState } from 'react';
+
+const StoreContext = createContext();
+
+const StoreProvider = ({ children }) => {
+	const [store, setStore] = useState({
+		// initial store state here
+	});
+
+	return (
+		<StoreContext.Provider value={{ store, setStore }}>
+			{children}
+		</StoreContext.Provider>
+	);
+};
+
+const useStore = () => {
+	const context = useContext(StoreContext);
+	if (!context) {
+		throw new Error('useStore must be used within a StoreProvider');
+	}
+	return context;
+};
+
 const fetchUserProfile = async () => {
 	try {
 		//replace ${process.env.BACKEND_URL}/api/user/profile with our API
@@ -427,5 +452,5 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 export default getState;
 // Export the fetchUserProfile function separately
-export { fetchUserProfile };
-export { editUserProfile };
+export { StoreProvider, useStore, fetchUserProfile, editUserProfile };
+

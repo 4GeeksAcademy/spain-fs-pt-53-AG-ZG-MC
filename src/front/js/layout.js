@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/BackendURL";
 import injectContext from './store/appContext';
-
+import { StoreProvider } from './store/flux';
 
 import Header from './component/Header';
 import Navbar from './component/Navbar';
@@ -31,29 +31,31 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
-            <BrowserRouter basename={basename}>
-                <ScrollToTop>
-                    <Header />
-                    <Navbar />
-                    <Routes>
-                        {/* Pages */}
-                        <Route exact path="/" element={<HomeNotLogged />} />
-                        <Route exact path="/home" element={<HomeNotLogged />} />
-                        <Route exact path="/login" element={<LoginPasswordRecovery />} />
-                        <Route exact path="/register" element={<RegistrationPage />} />
-                        <Route exact path="/events" element={<EventsListAllPage />} />
-                        <Route exact path="/events/:eventId" element={<EventDetailsPage />} />
-                        <Route exact path="/create-event" element={<CreateEventPage />} />
-                        <Route exact path="/profile/mine" element={<UserProfileMine />} />
-                        <Route exact path="/profile/:userId" element={<UserProfileOther />} />
-                        <Route exact path="/logout" element={<Logout />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                    <Footer />
-                </ScrollToTop>
-            </BrowserRouter>
-        </div>
+        <StoreProvider>
+            <div>
+                <BrowserRouter basename={basename}>
+                    <ScrollToTop>
+                        <Header />
+                        <Navbar />
+                        <Routes>
+                            {/* Pages */}
+                            <Route exact path="/" element={<HomeNotLogged />} />
+                            <Route exact path="/home" element={<HomeNotLogged />} />
+                            <Route exact path="/login" element={<LoginPasswordRecovery />} />
+                            <Route exact path="/register" element={<RegistrationPage />} />
+                            <Route exact path="/events" element={<EventsListAllPage />} />
+                            <Route exact path="/events/:eventId" element={<EventDetailsPage />} />
+                            <Route exact path="/create-event" element={<CreateEventPage />} />
+                            <Route exact path="/profile/mine" element={<UserProfileMine />} />
+                            <Route exact path="/profile/:userId" element={<UserProfileOther />} />
+                            <Route exact path="/logout" element={<Logout />} />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                        <Footer />
+                    </ScrollToTop>
+                </BrowserRouter>
+            </div>
+        </StoreProvider>
     );
 };
 
