@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
+import { getCookie } from "../store/flux";
+
 
 const EditEvent = () => {
   const { store, actions } = useContext(Context);
@@ -34,6 +36,7 @@ const EditEvent = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'X-CSRF-TOKEN': getCookie('access_token')
       },
       body: JSON.stringify(updatedEvent),
     })

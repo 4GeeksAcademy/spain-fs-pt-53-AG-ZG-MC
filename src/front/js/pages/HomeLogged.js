@@ -9,7 +9,7 @@ import EventSearchBar from '../component/EventSearchBar';
 import EventRecommended from '../component/EventRecommended';
 import HeroSection from '../component/HeroSection';
 
-const HomePageLoggedIn = () => {
+const HomeLoggedIn = () => {
   return (
     <div>
       <Header />
@@ -22,5 +22,5 @@ const HomePageLoggedIn = () => {
   );
 };
 
-export default HomePageLoggedIn;
+export default HomeLoggedIn;
 

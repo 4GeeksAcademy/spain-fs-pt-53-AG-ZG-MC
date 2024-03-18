@@ -16,6 +16,13 @@ import re
 
 api = Blueprint('api', __name__)
 
+@api.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = 'https://stunning-space-trout-pjrppqwgj77gc6j45-3000.app.github.dev'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
+    return response
+
 # Allow CORS requests to this API
 CORS(api)
 
@@ -25,18 +32,12 @@ def handle_hello():
         response_body = {
             "message": "Hello! I'm a message that came from the backend, check the network tab on the Google inspector and you will see the GET request"
         }
-        response = make_response(json.dumps(response_body), 200)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify(response_body), 200
     except Exception as e:
         response_body = {
             "error": str(e)
         }
-        response = make_response(json.dumps(response_body), 500)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify(response_body), 500
 
 # Endpoint para crear un nuevo usuario
 @api.route('/users', methods=['POST'])
@@ -116,11 +117,11 @@ def get_all_users():
                 # Agregar la lista de eventos creados al diccionario de información del usuario
                 user_info['created_events'] = created_events
 
-                # Obtener los eventos a los que está inscrito este usuario
-                signedup_event = [event.serialize() for event in user.signedup_event]
+                # # Obtener los eventos a los que está inscrito este usuario
+                # signedup_event = [event.serialize() for event in user.signedup_event]
 
-                # Agregar la lista de eventos inscritos al diccionario de información del usuario
-                user_info['signedup_event'] = signedup_event
+                # # Agregar la lista de eventos inscritos al diccionario de información del usuario
+                # user_info['signedup_event'] = signedup_event
 
                 # Agregar el diccionario de información del usuario a la lista de usuarios con eventos
                 users_with_events.append(user_info)
@@ -230,7 +231,6 @@ def forgot_password():
         print("Error:", e)
         return jsonify({"message": "Internal Server Error"}), 500
 
-    
 # Endpoint para restablecer la contraseña utilizando el token enviado por correo electrónico
 @api.route('/reset-password', methods=['POST'])
 def reset_password():
@@ -263,7 +263,6 @@ def reset_password():
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "Internal Server Error"}), 500
-
 
 # Endpoint para eliminar un usuario específico
 @api.route('/users/<int:user_id>', methods=['DELETE'])
