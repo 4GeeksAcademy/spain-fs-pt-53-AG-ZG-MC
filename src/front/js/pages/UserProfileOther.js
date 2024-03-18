@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; // Assuming you're using React Router
-import { fetchUserProfile } from '../store/flux'; // Import the fetchUserProfile action
 
 const UserProfileOther = () => {
   const { userId } = useParams(); // Get the userId from the URL params

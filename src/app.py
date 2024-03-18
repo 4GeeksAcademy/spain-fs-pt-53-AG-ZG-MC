@@ -70,7 +70,6 @@ app.config["JWT_SECRET_KEY"] = "xS5j#8Fp@L2n!9G"
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400  # 24 horas en segundos
 jwt = JWTManager(app)
 
-# PREGUNTAR
 # Manejo de errores relacionados con la autenticación
 @jwt.unauthorized_loader
 def unauthorized_response(callback):

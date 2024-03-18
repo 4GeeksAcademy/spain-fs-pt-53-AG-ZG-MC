@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import { useStore } from '../store/flux';
 
 
 const LoginPasswordRecovery = () => {
@@ -17,7 +16,7 @@ const LoginPasswordRecovery = () => {
 
       // Call the API endpoint to send a recovery email
       //replace process.env.API_URL with the actual URL of our API endpoint
-      const response = await fetch(`https://opulent-space-train-wwpgj6v5vrxh5j5j-3001.app.github.dev/forgot-password`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,19 +37,44 @@ const LoginPasswordRecovery = () => {
   };
 
   // Function to handle login submission
-  const handleLoginSubmit = async () => {
-    try {
+// Function to handle login submission
+const handleLoginSubmit = async () => {
+  try {
+    console.log('Attempting login...');
+
+    // Check if actions and login function exist
+    if (actions && actions.login) {
+      console.log('Login action exists, attempting login...');
+
       // Call the login action from the store
       await actions.login(username, password);
 
       // Clear form fields after successful login
+      console.log('Login successful. Clearing form fields...');
       setUsername('');
       setPassword('');
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setError('Failed to log in. Please try again.'); // Set error message
+    } else {
+      throw new Error('Login action is not available');
     }
-  };
+  } catch (error) {
+    console.error('Error logging in:', error);
+    setError('Failed to log in. Please try again.'); // Set error message
+  }
+};
+
+  // const handleLoginSubmit = async () => {
+  //   try {
+  //     // Call the login action from the store
+  //     await actions.login(username, password);
+
+  //     // Clear form fields after successful login
+  //     setUsername('');
+  //     setPassword('');
+  //   } catch (error) {
+  //     console.error('Error logging in:', error);
+  //     setError('Failed to log in. Please try again.'); // Set error message
+  //   }
+  // };
 
   //JSX - ATLAS
   return (

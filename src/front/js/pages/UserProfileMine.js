@@ -5,8 +5,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
-import { fetchUserProfile } from '../store/flux'; // Import the fetchUserProfile action
-import { editUserProfile } from '../store/flux';
 
 const UserProfileMine = () => {
   const { actions } = useContext(Context);

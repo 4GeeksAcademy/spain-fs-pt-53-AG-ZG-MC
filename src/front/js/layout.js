@@ -2,12 +2,11 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/BackendURL";
 import injectContext from './store/appContext';
-import { StoreProvider } from './store/flux';
 
 import Header from './component/Header';
 import Navbar from './component/Navbar';
 import Footer from './component/Footer';
-import HomeLogged from './pages/HomeLogged';
+import HomeLoggedIn from './pages/HomeLogged'; // Añadir al enrutado
 import HomeNotLogged from './pages/HomeNotLogged';
 import CreateEventPage from './pages/CreateEventPage';
 import EventDetailsPage from './pages/EventDetailsPage';
@@ -31,7 +30,6 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <StoreProvider>
             <div>
                 <BrowserRouter basename={basename}>
                     <ScrollToTop>
@@ -55,7 +53,6 @@ const Layout = () => {
                     </ScrollToTop>
                 </BrowserRouter>
             </div>
-        </StoreProvider>
     );
 };
 

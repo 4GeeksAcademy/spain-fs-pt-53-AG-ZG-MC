@@ -35,7 +35,9 @@ const CreateEvent = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'X-CSRF-TOKEN': getCookie('access_token')
       },
+
       body: JSON.stringify(newEvent),
     })
       .then((response) => response.json())
