@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 const LoginPasswordRecovery = () => {
-  const { actions } = useStore();
+  const { actions } = useState();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [recoverySent, setRecoverySent] = useState(false);
