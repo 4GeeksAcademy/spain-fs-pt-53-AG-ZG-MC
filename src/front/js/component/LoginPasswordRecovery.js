@@ -1,9 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../store/appContext';
 
 
 const LoginPasswordRecovery = () => {
-  const { actions } = useState();
+  const { store, actions } = useContext(Context);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [recoverySent, setRecoverySent] = useState(false);

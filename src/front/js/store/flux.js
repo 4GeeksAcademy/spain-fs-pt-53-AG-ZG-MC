@@ -522,13 +522,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
 					
 					// Update the store with the fetched events
-					setStore(prevState => {
-						const updatedState = {
-							...prevState,
-							events: data,
-						};
-            			console.log("Updated store:", updatedState); // Verificar el estado actualizado
-						return updatedState;
+					setStore({
+						events: data
 					});
 				} catch (error) {
 					console.error('Error fetching events', error);

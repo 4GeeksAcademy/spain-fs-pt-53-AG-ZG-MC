@@ -5,14 +5,16 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
+import { Link } from 'react-router-dom';
+
 
 const UserProfileMine = () => {
-  const { actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
     // Fetch user profile information when component mounts
-    fetchUserProfile()
+    actions.fetchUserProfile()
       .then(userProfileData => setUserProfile(userProfileData))
       .catch(error => console.error('Error fetching user profile:', error));
   }, [actions]);
@@ -44,8 +46,12 @@ const UserProfileMine = () => {
           <p>Username: {userProfile.username}</p>
           <p>Email: {userProfile.email}</p>
           <Link to="/edit-profile">Edit Profile</Link>
-          <button onClick={handleEditProfile}>Edit Profile</button>
-          {/* Render other user profile information */}
+          {userProfile ? (
+            <button onClick={handleEditProfile}>Edit Profile</button>
+          ) : (
+            <div>User profile is null</div>
+          )}
+
         </div>
       )}
     </div>
