@@ -8,20 +8,22 @@ import EventDetails from '../component/EventDetails';
 const EventDetailsPage = () => {
   const { id } = useParams(); // Get the event ID from URL params
   const { store, actions } = useContext(Context);
+  const { events } = store
 
-  useEffect(() => {
-    // Fetch event details when component mounts
-    actions.fetchEventDetails(id);
-  }, [id, actions]);
+  console.log("Events Details Page:", events);
+
 
   return (
     <div>
       <h1>Event Details</h1>
-      {store.eventDetails ? (
+      {events.events && events.events.length > 0 && events.events.map(event => (
+          <EventDetails key={event.id} event={event} />
+        ))}
+      {/* {events.events ? (
         <EventDetails event={store.eventDetails} />
       ) : (
         <p>Loading event details...</p>
-      )}
+      )} */}
     </div>
   );
 };
