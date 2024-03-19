@@ -30,7 +30,7 @@ const UserProfileMine = () => {
 
   const handleEditProfile = async (updatedProfileData) => {
     try {
-      await editUserProfile(userProfile.id, updatedProfileData);
+      await actions.editUserProfile(userProfile.id, updatedProfileData);
       // Optionally, update state or show success message
     } catch (error) {
       console.error('Error editing user profile:', error);

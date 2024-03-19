@@ -1,57 +1,33 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import { getCookie } from "../store/flux";
 
+// REVISAR PORQUE RENDERIZA CADA INPUT
+// AÑADIR QUE SOLO EL PROPIETARIO DEL EVENTO PUEDA EDITAR
 
-const EditEvent = () => {
-  const { store, actions } = useContext(Context);
+const EditEvent = ({ event }) => {
+  console.log("Event edit:", event);
 
-  // Access the events from the store
-  const { events } = store;
+  const { actions } = useContext(Context);
 
-  // State to manage form inputs. To complete with other form fields.
-  const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState("");
+  const [eventData, setEventData] = useState(event);
 
-  // UseEffect to fetch events when component mounts
-  useEffect(() => {
-    actions.fetchEventRecommended();
-  }, [actions]);
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    setEventData(prevData => ({
+      ...prevData,
+      [name]: newValue
+    }));
+  };
 
   // Function to handle event update
-  const handleUpdateEvent = () => {
-    const updatedEvent = {
-      name: eventName,
-      date: eventDate,
-      // ... other form fields
-    };
-
-    // Placeholder API endpoint to update the event
-    // const apiUrl = `https://api-url.com/events/${eventId}`;
-
-    // PUT request to the backend API to update the event
-    // through the appContext.js
-    // PUT request to the API to update the event:
-    fetch(apiUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        'X-CSRF-TOKEN': getCookie('access_token')
-      },
-      body: JSON.stringify(updatedEvent),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // If the event is successfully updated, update the UI or take other actions as needed
-        console.log("Event updated successfully:", data);
-
-        // Reset form fields
-        setEventName("");
-        setEventDate("");
-      })
-      .catch((error) => {
-        console.error("Error updating event:", error);
-      });
+  const handleUpdateEvent = async () => {
+    try {
+      await actions.editEvent(eventData);
+      console.log('Evento editado exitosamente');
+    } catch (error) {
+      console.error('Error al editar el evento:', error);
+    }
   };
 
   // JSX - ATLAS
@@ -64,8 +40,9 @@ const EditEvent = () => {
         <input
           type="text"
           id="eventName"
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
+          name="name"
+          value={eventData.name}
+          onChange={handleInputChange}
         />
 
         {/* Event Date input */}
@@ -73,28 +50,176 @@ const EditEvent = () => {
         <input
           type="date"
           id="eventDate"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
+          name="date"
+          value={eventData.date}
+          onChange={handleInputChange}
         />
 
-        {/* ... other form fields */}
+        {/* Event Duration input */}
+        <label htmlFor="eventDuration">Event Duration:</label>
+        <input
+          type="text"
+          id="eventDuration"
+          name="duration"
+          value={eventData.duration}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Type input */}
+        <label htmlFor="eventType">Event Type:</label>
+        <input
+          type="text"
+          id="eventType"
+          name="type"
+          value={eventData.type}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Place input */}
+        <label htmlFor="eventPlace">Event Place:</label>
+        <input
+          type="text"
+          id="eventPlace"
+          name="place"
+          value={eventData.place}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Description input */}
+        <label htmlFor="eventDescription">Event Description:</label>
+        <input
+          type="text"
+          id="eventDescription"
+          name="description"          
+          value={eventData.description}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Language input */}
+        <label htmlFor="eventLanguage">Event Language:</label>
+        <input
+          type="text"
+          id="eventLanguage"
+          name="language"
+          value={eventData.language}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Gender input */}
+        <label htmlFor="eventGender">Event Gender:</label>
+        <input
+          type="text"
+          id="eventGender"
+          name="gender"
+          value={eventData.gender}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Price Type input */}
+        <label htmlFor="eventPriceType">Event Price Type:</label>
+        <input
+          type="text"
+          id="eventPriceType"
+          name="price_type"
+          value={eventData.price_type}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Price input */}
+        <label htmlFor="eventPrice">Event Price:</label>
+        <input
+          type="number"
+          id="eventPrice"
+          name="price"
+          value={eventData.price}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Min Age input */}
+        <label htmlFor="eventMinAge">Event Min Age:</label>
+        <input
+          type="number"
+          id="eventMinAge"
+          name="min_age"
+          value={eventData.min_age}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Max Age input */}
+        <label htmlFor="eventMaxAge">Event Max Age:</label>
+        <input
+          type="number"
+          id="eventMaxAge"
+          name="max_age"
+          value={eventData.max_age}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Min People input */}
+        <label htmlFor="eventMinPeople">Event Min People:</label>
+        <input
+          type="number"
+          id="eventMinPeople"
+          name="min_people"
+          value={eventData.min_people}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Max People input */}
+        <label htmlFor="eventMaxPeople">Event Max People:</label>
+        <input
+          type="number"
+          id="eventMaxPeople"
+          name="max_people"
+          value={eventData.max_people}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Lgtbi input */}
+        <label htmlFor="eventLgtbi">Event Lgtbi:</label>
+        <input
+          type="checkbox"
+          id="eventLgtbi"
+          name="lgtbi"
+          checked={eventData.lgtbi}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Pet input */}
+        <label htmlFor="eventPet">Event Pet:</label>
+        <input
+          type="checkbox"
+          id="eventPet"
+          name="pet_friendly"
+          checked={eventData.pet_friendly}
+          onChange={handleInputChange}
+        />
+
+        {/* Event Kids input */}
+        <label htmlFor="eventKids">Event Kids:</label>
+        <input
+          type="checkbox"
+          id="eventKids"
+          name="kid_friendly"
+          checked={eventData.kid_friendly}
+          onChange={handleInputChange}
+        />
+
+        {/* Event UserId input */}
+        <label htmlFor="eventUserId">Event UserId:</label>
+        <input
+          type="text"
+          id="eventUserId"
+          name="user_id"
+          value={eventData.user_id}
+          onChange={handleInputChange}
+        />       
 
         {/* Submit button */}
         <button type="button" onClick={handleUpdateEvent}>
           Update Event
         </button>
 
-        {/* Display fetched events */}
-        <div>
-          <h3>Fetched Events:</h3>
-          <ul>
-            {events.map((event, index) => (
-              <li key={index}>
-                {event.name} - {event.date}
-              </li>
-            ))}
-          </ul>
-        </div>
       </form>
     </div>
   );

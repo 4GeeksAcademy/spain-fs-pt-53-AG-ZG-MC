@@ -1,29 +1,54 @@
 // EventView.js
 
-import React, { useContext } from 'react';
+// LA FECHA NO SE TRAE, SALE VACIA
+// NO SE PUEDEN GUARDAR LOS CAMBIOS DEL EVENTO POR CORS
+
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import EventDetails from '../component/EventDetails';
+import EditEvent from '../component/EventEdit';
 
 const EventDetailsPage = () => {
-  const { id } = useParams(); // Get the event ID from URL params
-  const { store } = useContext(Context);
-  const { events } = store;
+  const { eventId } = useParams(); // Get the event ID from URL params
+  console.log("ID: ", eventId)
+  const { store, actions } = useContext(Context);
+  const { eventDetails } = store
 
-  console.log("Events Details Page:", events);
+  useEffect(() => {
+    // Fetch user profile information when component mounts
+    actions.fetchEventDetails(eventId)
+      .then(eventData => console.log('Event fetched:', eventData))
+      .catch(error => console.error('Error fetching event:', error));
+  }, [eventId]);
 
-  const eventList = events.events || [];
+  console.log("Events Details Page:", eventDetails);
 
-  const eventToShow = eventList.find(event => event.id === parseInt(id));
+  // Estado para controlar si estamos en modo de edición o no
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Función para activar el modo de edición
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
   return (
     <div>
-      <h1>Event Details</h1>
-      {eventToShow &&
-          <EventDetails key={eventToShow.id} event={eventToShow} />
-      }
+      <h1>Event Details Page</h1>
+      {isEditing ? (
+        <EditEvent event={eventDetails} />
+      ) : (
+        eventDetails && (
+          <div>
+            <EventDetails event={eventDetails} />
+            {/* Render other user profile information */}
+            <button onClick={handleEditClick}>Edit Event</button>
+          </div>
+        )
+      )}
     </div>
   );
 };
 
 export default EventDetailsPage;
+
