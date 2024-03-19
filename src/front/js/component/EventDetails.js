@@ -1,4 +1,5 @@
 import React from "react";
+import WeatherForecast from "./WeatherForecast";
 
 //ver ubicacion del evento en mapa con api
 //ver el clima API - componente separado
@@ -59,8 +60,8 @@ const EventDetails = ({ event }) => {
           <p>User ID: {user_id}</p>
           {/* assuming weather forecast needs location to fetch weather, 
           from separate component */}
-          {/* <WeatherForecast location={eventDetails.location} />
-          <p>Attendees Count: {attendeesCount}</p>
+          <WeatherForecast />
+          {/* <p>Attendees Count: {attendeesCount}</p>
           <EventActions eventId={eventId} /> */}
         </div>
       )}

@@ -13,7 +13,7 @@ const WeatherForecast = ({ location }) => {
     useEffect(() => {
         const fetchWeatherForecast = async () => {
             try {
-                const response = await fetch(`http://api.weatherapi.com/v1/forecast.json=${location}`);
+                const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=f3005ec375c34e01a4e171411241903&q=barcelona`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch weather forecast');
                 }
