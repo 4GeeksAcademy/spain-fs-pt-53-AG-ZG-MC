@@ -1,6 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Context } from "../store/appContext";
-import EventActions from "./EventActions";
+import React from "react";
 
 //ver ubicacion del evento en mapa con api
 //ver el clima API - componente separado
@@ -13,7 +11,7 @@ const EventDetails = ({ event }) => {
     return null; // Si no hay evento, retorna null para evitar errores
   }
 
-  const { id, name, date, location } = event;
+  const { id, name, date, duration, description } = event;
 
   // JSX component - Atlas
   return (
@@ -21,9 +19,11 @@ const EventDetails = ({ event }) => {
       <h2>Event Details</h2>
       {event && (
         <div>
-          <h3>{name}</h3>
+          <h3>{id}, {name}</h3>
           <p>Date: {date}</p>
-          <p>Location: {location}</p>
+          <p>Duration: {duration}</p>
+          <p>Description: {description}</p>
+
           {/* assuming weather forecast needs location to fetch weather, 
           from separate component */}
           {/* <WeatherForecast location={eventDetails.location} />

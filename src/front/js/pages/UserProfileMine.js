@@ -17,12 +17,12 @@ const UserProfileMine = () => {
     actions.fetchUserProfile()
       .then(userProfileData => setUserProfile(userProfileData))
       .catch(error => console.error('Error fetching user profile:', error));
-  }, [actions]);
+  }, []);
 
   // Check if userProfile is null, if null, edit button can't be seen. ¿backend connection would fix it?
   useEffect(() => {
     if (userProfile === null) {
-      console.log('userProfile is null');
+      console.log("User Mine Page:", userProfile);
       // Or display a message
       // return <div>User profile is null</div>;
     }

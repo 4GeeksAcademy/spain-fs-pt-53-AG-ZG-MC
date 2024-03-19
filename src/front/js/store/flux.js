@@ -26,16 +26,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			fetchUserProfile: async (userId) => {
+				const actions = getActions();
+				console.log(actions.getCookie('access_token'))
 				try {
 					//replace ${process.env.BACKEND_URL}/api/user/profile with our API
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
 						method: 'GET',
 						headers: {
 							// COMENTADO ALONDRA. Quita el token de acceso del localStorage y usa las cookies
-							// 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Include authorization token if required
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`, // Include authorization token if required
 							'Content-Type': 'application/json',
 							// Incluye la cookie de acceso en el encabezado de la solicitud
-							'X-CSRF-TOKEN': getCookie('access_token') // Define una función para obtener la cookie
+							// 'X-CSRF-TOKEN': actions.getCookie('access_token') // Define una función para obtener la cookie
 						}
 					});
 			
@@ -59,6 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			editUserProfile: async (userId, updatedProfileData) => {
+				const actions = getActions();
 				try {
 					// Make a PUT request to update the user's profile in the backend
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
@@ -68,7 +71,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							// 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
 							'Content-Type': 'application/json',
 							// Incluye la cookie de acceso en el encabezado de la solicitud
-							'X-CSRF-TOKEN': getCookie('access_token') // Define una función para obtener la cookie
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						body: JSON.stringify(updatedProfileData)
 					});
@@ -271,12 +274,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			createEvent: async (newEvent) => {
+				const actions = getActions();
 				try {
 					// Implement logic to create a new event in the backend
 					const response = await fetch(process.env.BACKEND_URL + "/api/events", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						body: JSON.stringify(newEvent),
 					});
@@ -349,6 +354,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			signUpForEvent: async (eventId) => {
+				const actions = getActions();
 				try {
 					//correct backend logic as needed to signup for event
 					//replace the placeholder URL (${process.env.BACKEND_URL}/api/user/profile) 
@@ -357,7 +363,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						// include any other data we need
 					});
@@ -379,7 +385,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'PUT',
 						headers: {
 							'Content-Type': 'application/json',
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						body: JSON.stringify({
 							eventId,
@@ -412,6 +418,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// AÑADIDO ALONDRA. He añadido userId en el async () 
 			cancelAssistance: async (eventId) => {
+				const actions = getActions();
 				try {
 					// correct backend logic to cancel assistance
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/signup`, {
@@ -421,7 +428,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						// method: 'POST', ORIGINAL ZAIRA
 						headers: {
 							'Content-Type': 'application/json',
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						//include any other data we may need
 					});
@@ -436,12 +443,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			fetchEventDetails: async (eventId) => {
+				const actions = getActions();
 				try {
 					//correct backend logic as needed to fetch EventDetails
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 
@@ -467,12 +475,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getAttendeesCount: async (eventId) => {
+				const actions = getActions();
 				try {
 					// coorect backend logic to fetch number of attendees for the event
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
 						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
@@ -532,12 +541,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			deleteUser: async (userId) => {
+				const actions = getActions();
 				try {
 					// Realiza una solicitud DELETE al backend para eliminar un usuario específico
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
 						method: 'DELETE',
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 			
@@ -555,12 +565,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			deleteEvent: async (eventId) => {
+				const actions = getActions();
 				try {
 					// Realiza una solicitud DELETE al backend para eliminar un evento específico
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						method: 'DELETE',
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 			
@@ -578,10 +589,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			getEventsByUser: async (userId) => {
+				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events`, {
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
@@ -596,10 +608,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			getUsersByEvent: async (eventId) => {
+				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
@@ -614,11 +627,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			addEventToFavorites: async (userId, eventId) => {
+				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
 						method: "POST",
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
@@ -633,11 +647,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			removeEventFromFavorites: async (userId, eventId) => {
+				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
 						method: "DELETE",
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
@@ -652,10 +667,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			getUserFavoriteEvents: async (userId) => {
+				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/favorite_event`, {
 						headers: {
-							'X-CSRF-TOKEN': getCookie('access_token')
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
 					if (!response.ok) {
