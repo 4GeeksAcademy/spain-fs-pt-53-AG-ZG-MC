@@ -43,7 +43,6 @@ const Layout = () => {
                             <Route exact path="/register" element={<RegistrationPage />} /> {/* DONE */}
                             <Route exact path="/events" element={<EventsListAllPage />} /> {/* DONE */}
                             <Route exact path="/events/:eventId" element={<EventDetailsPage />} /> {/* DONE */}
-                            <Route exact path="/events/:eventId/edit" element={<EventDetailsPage />} /> {/*  */}
                             <Route exact path="/create-event" element={<CreateEventPage />} /> 
                             <Route exact path="/profile/mine" element={<UserProfileMine />} />
                             <Route exact path="/profile/:userId" element={<UserProfileOther />} />

@@ -306,12 +306,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			editEvent: async (eventId, updatedEvent) => {
+				const actions = getActions();
 				try {
 					// logic to update the existing event in the backend, Replace API
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
+							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						},
 						body: JSON.stringify(updatedEvent),
 					});
@@ -687,7 +689,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			searchEventsByType: async (eventType) => {
 				try {
-					const response = await fetch(`/api/events/search?type=${eventType}`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/search?type=${eventType}`);
 					const data = await response.json();
 					return data;
 				} catch (error) {
@@ -699,7 +701,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			filterEvents: async (filters) => {
 				try {
 					const queryString = new URLSearchParams(filters).toString();
-					const response = await fetch(`/api/events/filter?${queryString}`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/filter?${queryString}`);
 					const data = await response.json();
 					return data;
 				} catch (error) {
