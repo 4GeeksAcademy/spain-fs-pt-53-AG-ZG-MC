@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate desde React Router
 
 
 const LoginPasswordRecovery = () => {
@@ -8,6 +9,7 @@ const LoginPasswordRecovery = () => {
   const [password, setPassword] = useState('');
   const [recoverySent, setRecoverySent] = useState(false);
   const [error, setError] = useState(null); // New state for error message
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   // Function to handle password recovery
   const handlePasswordRecovery = async () => {
@@ -30,13 +32,13 @@ const LoginPasswordRecovery = () => {
 
       setRecoverySent(true);
       setError(null); // Reset error state if recovery succeeds
+      // AQUI VA EL NAVIGATE
     } catch (error) {
       console.error('Error recovering password:', error);
       setError('Failed to send recovery email. Please try again.'); // Set error message
     }
   };
 
-  // Function to handle login submission
 // Function to handle login submission
 const handleLoginSubmit = async () => {
   try {
@@ -53,6 +55,9 @@ const handleLoginSubmit = async () => {
       console.log('Login successful. Clearing form fields...');
       setUsername('');
       setPassword('');
+
+      navigate('/');
+
     } else {
       throw new Error('Login action is not available');
     }
@@ -61,20 +66,6 @@ const handleLoginSubmit = async () => {
     setError('Failed to log in. Please try again.'); // Set error message
   }
 };
-
-  // const handleLoginSubmit = async () => {
-  //   try {
-  //     // Call the login action from the store
-  //     await actions.login(username, password);
-
-  //     // Clear form fields after successful login
-  //     setUsername('');
-  //     setPassword('');
-  //   } catch (error) {
-  //     console.error('Error logging in:', error);
-  //     setError('Failed to log in. Please try again.'); // Set error message
-  //   }
-  // };
 
   //JSX - ATLAS
   return (

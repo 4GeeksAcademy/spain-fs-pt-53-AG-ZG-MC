@@ -30,7 +30,6 @@ const injectContext = PassedComponent => {
 					console.error('Error fetching data:', error);
 				}
 			};
-			
 			fetchData();
 		}, []);
 

@@ -12,12 +12,10 @@ import HeroSection from '../component/HeroSection';
 const HomeLoggedIn = () => {
   return (
     <div>
-      <Header />
-      <p>Home Logged In</p>
+      <h1>Pagína loggeado</h1>
       <EventSearchBar />
       <EventRecommended />
       <HeroSection />
-      <Footer />
     </div>
   );
 };

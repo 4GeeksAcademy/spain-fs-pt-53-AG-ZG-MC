@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Context } from '../store/appContext';
 
 // REVISAR PORQUE RENDERIZA CADA INPUT
+// REVISAR EL PROBLEMA DE MAX Y MIN PEOPLE
 
 const CreateEvent = ({ event }) => {
   console.log("Event Create:", event);

@@ -34,6 +34,8 @@ const EventDetails = ({ event }) => {
     user_id  
   } = event;
 
+  const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+
   // JSX component - Atlas
   return (
     <div>
@@ -60,7 +62,7 @@ const EventDetails = ({ event }) => {
           <p>User ID: {user_id}</p>
           {/* assuming weather forecast needs location to fetch weather, 
           from separate component */}
-          <WeatherForecast />
+          <WeatherForecast location={event.place} eventDate={eventDateFormatted} />
           {/* <p>Attendees Count: {attendeesCount}</p>
           <EventActions eventId={eventId} /> */}
         </div>

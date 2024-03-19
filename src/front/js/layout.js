@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BackendURL } from "./component/BackendURL";
 import injectContext from './store/appContext';
-
+// ARREGLAR LO DEL LOGIN / PAGINA DE INICIO AUTENTIFICADA (LOGGEADO O NO)
 import Header from './component/Header';
 import Navbar from './component/Navbar';
 import Footer from './component/Footer';
@@ -38,12 +38,11 @@ const Layout = () => {
                         <Routes>
                             {/* Pages */}
                             <Route exact path="/" element={<HomeNotLogged />} />
-                            <Route exact path="/home" element={<HomeNotLogged />} />
                             <Route exact path="/login" element={<LoginPasswordRecovery />} /> {/* DONE */}
                             <Route exact path="/register" element={<RegistrationPage />} /> {/* DONE */}
                             <Route exact path="/events" element={<EventsListAllPage />} /> {/* DONE */}
                             <Route exact path="/events/:eventId" element={<EventDetailsPage />} /> {/* DONE */}
-                            <Route exact path="/create-event" element={<CreateEventPage />} /> 
+                            <Route exact path="/create-event" element={<CreateEventPage />} /> {/* DONE */}
                             <Route exact path="/profile/mine" element={<UserProfileMine />} />
                             <Route exact path="/profile/:userId" element={<UserProfileOther />} />
                             <Route exact path="/logout" element={<Logout />} />
