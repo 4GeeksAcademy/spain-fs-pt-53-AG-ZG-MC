@@ -181,3 +181,4 @@ filterEvents: async (filters) => {
         throw new Error("Error filtering events");
     }
 };
+
