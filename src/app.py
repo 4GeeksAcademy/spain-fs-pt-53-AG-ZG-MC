@@ -5,7 +5,7 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, unset_jwt_cookies, create_access_token
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 from api.utils import APIException, generate_sitemap
 from api.models import db, User
 from api.routes import api
@@ -110,9 +110,7 @@ def logout():
         # Crear un nuevo token de acceso con una duración corta para evitar posibles reutilizaciones
         new_access_token = create_access_token(identity=current_user_id, expires_delta=False)
 
-        # Elimina el token de acceso estableciendo las cookies del token como vacías
         response = jsonify({"msg": "Logout successful"})
-        unset_jwt_cookies(response)
         
         # Añade el nuevo token al header de la respuesta para que el cliente lo borre también
         response.headers["X-CSRF-TOKEN"] = secrets.token_hex(16)

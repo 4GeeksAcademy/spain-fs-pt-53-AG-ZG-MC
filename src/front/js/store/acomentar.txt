@@ -1,6 +1,6 @@
 Cosas a revisar/arreglar:
     - la página de home y el login
-        - debe mantenerse la sesión iniciada PROBLEMA
+        - debe mantenerse la sesión iniciada PROBLEMA --> ¡¡SOLUCIONADO!!
         - tiene que verse reflejado en la renderización NO ME ACUERDO DE QUÉ SIGNIFICA
         - el navigate tiene que llevar a la home logged --> ¡¡SOLUCIONADO!!
     - loggout tiene que cerrar sesión --> CREO QUE FUNCIONA (no sé si es porque recarga)

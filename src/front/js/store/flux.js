@@ -17,26 +17,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Other actions?...
-			// AÑADIDO ALONDRA. Función de obtener el token de las cookies
-			getCookie: (name) => {
-				const value = `; ${document.cookie}`;
-				const parts = value.split(`; ${name}=`);
-				if (parts.length === 2) return parts.pop().split(';').shift();
-			},
 
 			fetchUserProfile: async (userId) => {
 				const actions = getActions();
-				console.log(actions.getCookie('access_token'))
+				console.log(localStorage.getItem("access_token"))
 				try {
 					//replace ${process.env.BACKEND_URL}/api/user/profile with our API
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
 						method: 'GET',
 						headers: {
-							// COMENTADO ALONDRA. Quita el token de acceso del localStorage y usa las cookies
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`, // Include authorization token if required
+							// COMENTADO ALONDRA. Quita el token de acceso del localStorage y
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`, // Include authorization token if required
 							'Content-Type': 'application/json',
-							// Incluye la cookie de acceso en el encabezado de la solicitud
-							// 'X-CSRF-TOKEN': actions.getCookie('access_token') // Define una función para obtener la cookie
 						}
 					});
 
@@ -69,8 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							// COMENTADO ALONDRA. 
 							// 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
 							'Content-Type': 'application/json',
-							// Incluye la cookie de acceso en el encabezado de la solicitud
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						body: JSON.stringify(updatedProfileData)
 					});
@@ -90,26 +81,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+			syncroniseToken: async () => {
+				const token = localStorage.getItem("access_token");
 
-			// AÑADIDO ALONDRA. Función para realizar una solicitud HTTP con las cookies
-			fetchWithCookies: async (url, options) => {
-				try {
-					const response = await fetch(url, {
-						...options,
-						credentials: 'include', // Incluir cookies en la solicitud
-					});
-
-					if (!response.ok) {
-						throw new Error('Failed to fetch');
-					}
-
-					return response;
-				} catch (error) {
-					console.error('Error fetching:', error);
-					throw error;
+				if (token) {
+					setStore({
+						session: {
+							isLoggedIn: true,
+							accessToken: token,
+						}
+					})
 				}
 			},
-
 			// AÑADIDO ALONDRA PARCIAL. Función para realizar el login
 			login: async (username, password) => {
 				try {
@@ -127,8 +110,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 
-					// Configura una cookie HTTPOnly con el token de acceso
-					document.cookie = `access_token=${data.token}; path=/; HttpOnly`;
+					localStorage.setItem("access_token", data.token)
 
 					console.log('Login successful. Data:', data); // Agregar un console.log para verificar los datos recibidos del backend
 
@@ -144,7 +126,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// AÑADIDO ALONDRA. Función para realizar el logout, EN EL ENDPOINT YA SE BORRAN LAS COOKIES
+			// AÑADIDO ALONDRA. Función para realizar el logout
 			logout: async () => {
 				try {
 					// Llama al endpoint de logout
@@ -152,6 +134,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 					});
 
@@ -168,39 +151,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						isLoggedIn: false,
 						user: null,
 						accessToken: null,
-					}});   
-					// Codigo original, por si el cambio
-					// setStore(prevState => {
-					// 	console.log('Previous state:', prevState); // Agrega un console.log para ver el estado anterior
-					// 	return {
-					// 		...prevState,
-					// 		session: {
-					// 			...prevState.session,
-					// 			isLoggedIn: false,
-					// 			user: null,
-					// 			accessToken: null,
-					// 		}
-					// 	}
-					// });   				
+					}});    				
 				} catch (error) {
 					console.error('Error logging out:', error);
 					throw error;
 				}
 			},
-
-			// FUNCIÓN ORIGINAL ZAIRA
-			// logout: () => {
-			// 	// Logic to clear session state upon logout
-			// 	setStore(prevState => ({
-			// 		...prevState,
-			// 		session: {
-			// 			isLoggedIn: false,
-			// 			user: null,
-			// 			accessToken: null,
-			// 		},
-			// 	}));
-			// },
-
 			initiatePasswordRecovery: async (username) => {
 				try {
 					// Logic to initiate password recovery process
@@ -279,7 +235,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						body: JSON.stringify(newEvent),
 					});
@@ -312,7 +268,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						body: JSON.stringify(updatedEvent),
 					});
@@ -364,7 +320,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						// include any other data we need
 					});
@@ -386,7 +342,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: 'PUT',
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						body: JSON.stringify({
 							eventId,
@@ -429,7 +385,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						// method: 'POST', ORIGINAL ZAIRA
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						//include any other data we may need
 					});
@@ -450,7 +406,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 
@@ -482,7 +438,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
 						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
@@ -514,6 +470,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// CAMBIO ALONDRA 
 					setStore({ recommendedEvents: data }); // Set the fetched events in the store
 					// setStore({ events: data }); // Set the fetched events in the store
+					return data; // Devolver los datos obtenidos
 				} catch (error) {
 					console.error("Error fetching events from backend", error);
 				}
@@ -547,7 +504,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
 						method: 'DELETE',
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 
@@ -571,7 +528,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						method: 'DELETE',
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 
@@ -593,7 +550,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events`, {
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
@@ -612,7 +569,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
@@ -632,7 +589,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
 						method: "POST",
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
@@ -652,7 +609,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
 						method: "DELETE",
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
@@ -671,7 +628,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/favorite_event`, {
 						headers: {
-							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 					if (!response.ok) {
