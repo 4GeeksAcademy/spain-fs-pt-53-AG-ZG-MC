@@ -9,6 +9,8 @@ const EditEvent = ({ event }) => {
 
   const { actions } = useContext(Context);
 
+  event.date = new Date(event.date);
+
   const [eventData, setEventData] = useState(event);
 
   const handleInputChange = (e) => {
@@ -51,7 +53,7 @@ const EditEvent = ({ event }) => {
           type="date"
           id="eventDate"
           name="date"
-          value={eventData.date}
+          value={eventData.date.toISOString().split('T')[0]}
           onChange={handleInputChange}
         />
 

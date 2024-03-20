@@ -2,7 +2,6 @@ import React from "react";
 import WeatherForecast from "./WeatherForecast";
 
 //ver ubicacion del evento en mapa con api
-//ver el clima API - componente separado
 //VER Nº de asistentes
 
 const EventDetails = ({ event }) => {
@@ -60,11 +59,19 @@ const EventDetails = ({ event }) => {
           <p>Pets: {pet_friendly}</p>
           <p>Kids: {kid_friendly}</p>
           <p>User ID: {user_id}</p>
-          {/* assuming weather forecast needs location to fetch weather, 
-          from separate component */}
+
           <WeatherForecast location={event.place} eventDate={eventDateFormatted} />
           {/* <p>Attendees Count: {attendeesCount}</p>
           <EventActions eventId={eventId} /> */}
+          <iframe
+          width="600"
+          height="450"
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDB9WpSu4YZXGeyeD72uuxNKM-kBpDBaCI&q=${encodeURIComponent(event.place)}`}
+          title="Event map"
+        ></iframe>
         </div>
       )}
     </div>

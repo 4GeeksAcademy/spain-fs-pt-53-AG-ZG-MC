@@ -31,12 +31,6 @@ const EventActions = ({ eventId }) => {
     setIsSignedUp(false);
   };
 
-  // Function to handle sharing the event
-  const handleShareEvent = () => {
-    // Call the action to share the event
-    actions.shareEvent(eventId);
-  };
-
   // Function to handle adding event to favorites
   const handleFavorite = () => {
     // Call the action to add the event to favorites
