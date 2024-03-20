@@ -504,17 +504,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					//correct backend logic as needed to see recommended events
 					const response = await fetch(process.env.BACKEND_URL + "/api/events/recommended");
-					console.log(response); // Agregar aquí el console.log
+					console.log("Response status recommended events:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch recommended events');
 					}
 					const data = await response.json();
 					// AÑADIDO ALONDRA.
-					console.log('Recommended events:', data);
+					console.log("Data from Event Recommended:", data); // Agregar este console.log para verificar los datos recibidos
 					// CAMBIO ALONDRA 
 					setStore({ recommendedEvents: data }); // Set the fetched events in the store
 					// setStore({ events: data }); // Set the fetched events in the store
-					return data;
 				} catch (error) {
 					console.error("Error fetching events from backend", error);
 				}
