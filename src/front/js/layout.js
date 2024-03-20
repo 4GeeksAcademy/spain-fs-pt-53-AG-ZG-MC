@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Context } from './store/appContext';
 import { BackendURL } from "./component/BackendURL";
 import injectContext from './store/appContext';
-// ARREGLAR LO DEL LOGIN / PAGINA DE INICIO AUTENTIFICADA (LOGGEADO O NO)
 import Header from './component/Header';
-import Navbar from './component/Navbar';
+import NavbarLogged from './component/NavbarLogged';
+import NavbarNotLogged from './component/NavbarNotLogged';
 import Footer from './component/Footer';
-import HomeLoggedIn from './pages/HomeLogged'; // Añadir al enrutado
+import HomeLogged from './pages/HomeLogged';
 import HomeNotLogged from './pages/HomeNotLogged';
 import CreateEventPage from './pages/CreateEventPage';
 import EventDetailsPage from './pages/EventDetailsPage';
@@ -23,6 +24,11 @@ import ScrollToTop from './component/ScrollToTop';
 
 //create your first element
 const Layout = () => {
+    const { store, actions } = useContext(Context);
+    const isLoggedIn = store.session.isLoggedIn;
+
+    console.log("isLoggedIn: ", isLoggedIn);
+
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
@@ -34,10 +40,10 @@ const Layout = () => {
                 <BrowserRouter basename={basename}>
                     <ScrollToTop>
                         <Header />
-                        <Navbar />
+                        {isLoggedIn ? <NavbarLogged /> : <NavbarNotLogged />}
                         <Routes>
                             {/* Pages */}
-                            <Route exact path="/" element={<HomeNotLogged />} />
+                            <Route exact path="/" element={isLoggedIn ? <HomeLogged /> : <HomeNotLogged />} />
                             <Route exact path="/login" element={<LoginPasswordRecovery />} /> {/* DONE */}
                             <Route exact path="/register" element={<RegistrationPage />} /> {/* DONE */}
                             <Route exact path="/events" element={<EventsListAllPage />} /> {/* DONE */}

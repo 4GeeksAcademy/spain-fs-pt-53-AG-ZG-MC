@@ -13,7 +13,7 @@ const EventSearchBar = ({ options, onSelect }) => {
             <label htmlFor="search-select">Search events:</label>
             <select id="search-select" onChange={handleSelect}>
                 <option value="">Select an option...</option>
-                {options.map((option, index) => (
+                {options && options.map((option, index) => (
                     <option key={index} value={option.value}>{option.label}</option>
                 ))}
             </select>

@@ -3,8 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			events: [], // Add an empty array to store events
-			// AÑADIDO ALONDRA.
-			recommendedEvents: [], 
+			recommendedEvents: [],
 			session: {
 				isLoggedIn: false,
 				user: null,
@@ -40,26 +39,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 							// 'X-CSRF-TOKEN': actions.getCookie('access_token') // Define una función para obtener la cookie
 						}
 					});
-			
+
 					if (!response.ok) {
 						throw new Error('Failed to fetch user profile');
 					}
-			
+
 					const userProfileData = await response.json();
-			
+
 					// Update the store with the fetched user profile data
 					setStore(prevState => ({
 						...prevState,
 						userProfile: userProfileData
 					}));
-			
+
 					return userProfileData;
 				} catch (error) {
 					console.error('Error fetching user profile:', error);
 					throw error;
 				}
 			},
-			
+
 			editUserProfile: async (userId, updatedProfileData) => {
 				const actions = getActions();
 				try {
@@ -75,15 +74,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(updatedProfileData)
 					});
-			
+
 					if (!response.ok) {
 						throw new Error('Failed to edit user profile');
 					}
-			
+
 					// AÑADIDO ALONDRA. Estaba el comentario ya. Optionally, parse the response JSON and return any updated profile data
 					const data = await response.json();
 					console.log('User profile updated successfully:', data);
-			
+
 					// AÑADIDO ALONDRA
 					return data; // Devuelve los datos actualizados del perfil si es necesario
 				} catch (error) {
@@ -114,9 +113,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// AÑADIDO ALONDRA PARCIAL. Función para realizar el login
 			login: async (username, password) => {
 				try {
-					// Implement logic to authenticate user
-					// Set session state if authentication is successful
-					//Replace the placeholder URL (process.env.BACKEND_URL) with the actual endpoints 
 					const response = await fetch(`${process.env.BACKEND_URL}/login`, {
 						method: 'POST',
 						headers: {
@@ -131,26 +127,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 
-					// No necesitas almacenar el token de acceso en localStorage
+					// Configura una cookie HTTPOnly con el token de acceso
+					document.cookie = `access_token=${data.token}; path=/; HttpOnly`;
 
-					// Configurar las cookies con el token de acceso
-					document.cookie = `access_token=${data.token}; path=/;`;
-					// COMENTADO ALONDRA. 
-					// const access_token = data.access_token; // Assuming the token is returned as 'accessToken'
-					// Store the access token in local storage or a secure location
-					// localStorage.setItem('access_token', access_token);
+					console.log('Login successful. Data:', data); // Agregar un console.log para verificar los datos recibidos del backend
 
-					// Set session state if authentication is successful
-					setStore(prevState => ({
-						...prevState,
-						session: {
-							isLoggedIn: true,
-							user: { username }, // Store user data as needed
-							access_token: data.token,
-							// COMENTADO ALONDRA: access_token,
-							// Add other user-related data as needed
-						}
-					}));
+				// GRAN LOGRO. Set session state if authentication is successful
+					setStore({session: {
+						isLoggedIn: true,
+						user: { username },
+						accessToken: data.token,
+					}}); 	
 				} catch (error) {
 					console.error('Error logging in:', error);
 					throw error;
@@ -175,15 +162,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// Elimina el token de acceso del almacenamiento local
 					localStorage.removeItem('access_token');
 
+					console.log('Logout successful.');
 					// Actualiza el estado de la sesión
-					setStore(prevState => ({
-						...prevState,
-						session: {
-							isLoggedIn: false,
-							user: null,
-							accessToken: null,
-						},
-					}));
+					setStore({session: {
+						isLoggedIn: false,
+						user: null,
+						accessToken: null,
+					}});   
+					// Codigo original, por si el cambio
+					// setStore(prevState => {
+					// 	console.log('Previous state:', prevState); // Agrega un console.log para ver el estado anterior
+					// 	return {
+					// 		...prevState,
+					// 		session: {
+					// 			...prevState.session,
+					// 			isLoggedIn: false,
+					// 			user: null,
+					// 			accessToken: null,
+					// 		}
+					// 	}
+					// });   				
 				} catch (error) {
 					console.error('Error logging out:', error);
 					throw error;
@@ -309,6 +307,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const actions = getActions();
 				try {
 					// logic to update the existing event in the backend, Replace API
+					console.log('Updating event:', eventId, updatedEvent); // Agregar este console.log()
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						method: "PUT",
 						headers: {
@@ -469,7 +468,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					setStore({ eventDetails: data }); // Set the fetched event details in the store
-					
+
 					return data;
 				} catch (error) {
 					console.error(`Error fetching event details for event ${eventId}`, error);
@@ -505,7 +504,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					//correct backend logic as needed to see recommended events
 					const response = await fetch(process.env.BACKEND_URL + "/api/events/recommended");
-					// AÑADIDO ALONDRA.
+					console.log(response); // Agregar aquí el console.log
 					if (!response.ok) {
 						throw new Error('Failed to fetch recommended events');
 					}
@@ -531,7 +530,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					const data = await response.json();
 					console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
-					
+
 					// Update the store with the fetched events
 					setStore({
 						events: data
@@ -552,20 +551,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
-			
+
 					if (!response.ok) {
 						throw new Error('Failed to delete user');
 					}
-			
+
 					// Maneja la respuesta si es necesario
 					console.log('User deleted successfully');
-			
+
 				} catch (error) {
 					console.error('Error deleting user:', error);
 					throw error;
 				}
 			},
-			
+
 			deleteEvent: async (eventId) => {
 				const actions = getActions();
 				try {
@@ -576,20 +575,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': `Bearer ${actions.getCookie('access_token')}`,
 						}
 					});
-			
+
 					if (!response.ok) {
 						throw new Error('Failed to delete event');
 					}
-			
+
 					// Maneja la respuesta si es necesario
 					console.log('Event deleted successfully');
-			
+
 				} catch (error) {
 					console.error('Error deleting event:', error);
 					throw error;
 				}
 			},
-			
+
 			getEventsByUser: async (userId) => {
 				const actions = getActions();
 				try {
@@ -608,7 +607,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-			
+
 			getUsersByEvent: async (eventId) => {
 				const actions = getActions();
 				try {
@@ -627,7 +626,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-			
+
 			addEventToFavorites: async (userId, eventId) => {
 				const actions = getActions();
 				try {
@@ -647,7 +646,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-			
+
 			removeEventFromFavorites: async (userId, eventId) => {
 				const actions = getActions();
 				try {
@@ -667,7 +666,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-			
+
 			getUserFavoriteEvents: async (userId) => {
 				const actions = getActions();
 				try {
@@ -686,7 +685,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-			
+
 			searchEventsByType: async (eventType) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/search?type=${eventType}`);
@@ -697,7 +696,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw new Error("Error searching events by type");
 				}
 			},
-			
+
 			filterEvents: async (filters) => {
 				try {
 					const queryString = new URLSearchParams(filters).toString();

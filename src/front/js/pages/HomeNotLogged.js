@@ -7,7 +7,7 @@ import LoginPasswordRecovery from '../component/LoginPasswordRecovery';
 import RegistrationForm from '../component/RegistrationForm';
 
 
-const HomePageNotLogged = () => {
+const HomeNotLogged = () => {
   return (
     <div>
       <h1>Página de inicio sin estar loggeado</h1>
@@ -18,5 +18,5 @@ const HomePageNotLogged = () => {
   );
 };
 
-export default HomePageNotLogged;
+export default HomeNotLogged;
 

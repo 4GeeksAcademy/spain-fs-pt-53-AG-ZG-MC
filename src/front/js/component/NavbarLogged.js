@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Navbar = () => {
+const NavbarLogged = () => {
   return <nav>This is the Navbar loggedin</nav>;
   //todo
 };
 
-export default Navbar;
+export default NavbarLogged;

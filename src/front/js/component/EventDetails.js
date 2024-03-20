@@ -42,7 +42,7 @@ const EventDetails = ({ event }) => {
       {event && (
         <div>
           <h3>{id}, {name}</h3>
-          <p>Date: {date}</p>
+          <p>Date: {new Date(date).toDateString()}</p>
           <p>Duration: {duration}</p>
           <p>Type: {type}</p>
           <p>Place: {place}</p>
@@ -55,9 +55,9 @@ const EventDetails = ({ event }) => {
           <p>Maximun age: {max_age}</p>
           <p>Minimum people: {min_people}</p>
           <p>Maximum people: {max_people}</p>
-          <p>Lgtbi: {lgtbi}</p>
-          <p>Pets: {pet_friendly}</p>
-          <p>Kids: {kid_friendly}</p>
+          <p>Lgtbi: {lgtbi ? 'Allowed' : 'Not Allowed'}</p>
+          <p>Pets: {pet_friendly  ? 'Allowed' : 'Not Allowed'}</p>
+          <p>Kids: {kid_friendly ? 'Allowed' : 'Not Allowed'}</p>
           <p>User ID: {user_id}</p>
 
           <WeatherForecast location={event.place} eventDate={eventDateFormatted} />

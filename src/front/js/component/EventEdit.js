@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 
 // REVISAR PORQUE RENDERIZA CADA INPUT
-// AÑADIR QUE SOLO EL PROPIETARIO DEL EVENTO PUEDA EDITAR
+// AÑADIR QUE SOLO EL PROPIETARIO DEL EVENTO PUEDA EDITAR (creo que ese es el problema)
+// añadido al form la parte que estaba en el boton, da menos problemas
+// creo que da error de cors porque solo el propietario puede hacerlo
 
 const EditEvent = ({ event }) => {
   console.log("Event edit:", event);
@@ -15,6 +17,7 @@ const EditEvent = ({ event }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    console.log('Input changed:', name, value); // Agregar este console.log()
     const newValue = type === 'checkbox' ? checked : value;
     setEventData(prevData => ({
       ...prevData,
@@ -25,6 +28,7 @@ const EditEvent = ({ event }) => {
   // Function to handle event update
   const handleUpdateEvent = async () => {
     try {
+      console.log('Updating event:', eventData); // Agregar este console.log()
       await actions.editEvent(eventData);
       console.log('Evento editado exitosamente');
     } catch (error) {
@@ -36,7 +40,7 @@ const EditEvent = ({ event }) => {
   return (
     <div>
       <h2>Edit Event</h2>
-      <form>
+      <form onSubmit={handleUpdateEvent}>
         {/* Event Name input */}
         <label htmlFor="eventName">Event Name:</label>
         <input
@@ -218,7 +222,7 @@ const EditEvent = ({ event }) => {
         />       
 
         {/* Submit button */}
-        <button type="button" onClick={handleUpdateEvent}>
+        <button type="submit">
           Update Event
         </button>
 

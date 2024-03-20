@@ -1,24 +1,23 @@
-// HomePageLoggedIn.js
 // header, footer, searchEvents, eventos destacados, hero-info
 
 
 import React from 'react';
-import Header from '../component/Header';
-import Footer from '../component/Footer';
 import EventSearchBar from '../component/EventSearchBar';
 import EventRecommended from '../component/EventRecommended';
 import HeroSection from '../component/HeroSection';
+import Logout from '../component/Logout';
 
-const HomeLoggedIn = () => {
+const HomeLogged = () => {
   return (
     <div>
-      <h1>Pagína loggeado</h1>
+      <h1>Pagina loggeado</h1>
       <EventSearchBar />
       <EventRecommended />
       <HeroSection />
+      <Logout />
     </div>
   );
 };
 
-export default HomeLoggedIn;
+export default HomeLogged;
 
