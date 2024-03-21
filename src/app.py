@@ -92,7 +92,7 @@ def login():
 
         # Crea un nuevo token con el id de usuario dentro
         access_token = create_access_token(identity=user.id)
-        return jsonify({ "token": access_token, "user_id": user.id })
+        return jsonify({ "token": access_token, "user_id": user.id, "username": username })
 
     except Exception as e:
         return jsonify({"msg": f"Internal server error: {str(e)}"}), 500

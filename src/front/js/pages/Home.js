@@ -9,16 +9,16 @@ import HeroSection from '../component/HeroSection';
 import LoginPasswordRecovery from '../component/LoginPasswordRecovery';
 import Logout from '../component/Logout';
 
-const HomeNotLogged = () => {
+const Home = () => {
   const { actions, store } = useContext(Context);
   const [recommendedEvents, setRecommendedEvents] = useState([]);
-  const [storeLog, setStoreLog] = useState({ session: { isLoggedIn: true, user: {}, accessToken: '' } });
+  const [storeLog, setStoreLog] = useState({ session: { isLoggedIn: true, username: {}, userId: {}, accessToken: '' } });
 
   useEffect(() => {
     const fetchRecommendedEvents = async () => {
       try {
         const response = await actions.fetchEventRecommended();
-        console.log('Recommended events response:', response); // Agrega un console.log para verificar los datos
+        // console.log('Recommended events response:', response); // Agrega un console.log para verificar los datos
         setRecommendedEvents(response);
       } catch (error) {
         console.error('Error fetching recommended events:', error);
@@ -36,7 +36,7 @@ const HomeNotLogged = () => {
         <>
           <h3>Página de inicio sin estar loggeado</h3>
           <EventRecommended events={recommendedEvents} />
-          <LoginPasswordRecovery />
+          {/* <LoginPasswordRecovery /> */}
           {/* <RegistrationForm /> */}
         </>
       ) : (
@@ -53,5 +53,5 @@ const HomeNotLogged = () => {
   );
 };
 
-export default HomeNotLogged;
+export default Home;
 

@@ -5,16 +5,16 @@ import { Context } from '../store/appContext';
 // REVISAR EL PROBLEMA DE MAX Y MIN PEOPLE
   
 const CreateEvent = ({ event }) => {
-  console.log("Event Create:", event);
-
   const { actions } = useContext(Context);
+
+  const defaultLocation = "Barcelona"; // Ubicación predeterminada
 
   const [eventData, setEventData] = useState({
     name: "",
     date: "",
     duration: "",
     type: "",
-    place: "",
+    place: defaultLocation,
     description: "",
     language: "",
     gender: "",
@@ -29,19 +29,6 @@ const CreateEvent = ({ event }) => {
     kid_friendly: false,
     user_id: ""
   });
-
-  // const handleCreateEvent = async () => {
-  //   try {
-  //     await actions.createEvent(eventData);
-  //     console.log('Evento creado exitosamente');
-  //   } catch (error) {
-  //     console.error('Error al crear el evento:', error);
-  //   }
-  // };
-
-  // const [placeCoords, setPlaceCoords] = useState(null); // Estado para almacenar las coordenadas del lugar
-
-  // const apiKey = 'AIzaSyDB9WpSu4YZXGeyeD72uuxNKM-kBpDBaCI';
 
   const handleCreateEvent = async () => {
     try {
@@ -59,31 +46,7 @@ const CreateEvent = ({ event }) => {
       ...prevData,
       [name]: newValue
     }));
-
-    // if (name === 'place') {
-    //   // Si el campo que cambió es el de lugar, actualiza las coordenadas del lugar
-    //   getPlaceCoords(value);
-    // }
   };
-
-  // const getPlaceCoords = async (place) => {
-  //   try {
-  //     const apiUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(place)}&inputtype=textquery&fields=geometry&key=${apiKey}`;
-  //     const response = await fetch(apiUrl);
-  //     if (!response.ok) {
-  //       throw new Error('Failed to fetch place coordinates');
-  //     }
-  //     const data = await response.json();
-  //     if (data.candidates.length > 0) {
-  //       const location = data.candidates[0].geometry.location;
-  //       setPlaceCoords({ lat: location.lat, lng: location.lng });
-  //     } else {
-  //       setPlaceCoords(null); // Si no se encontraron resultados, borra las coordenadas
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching place coordinates:', error);
-  //   }
-  // };
 
   // JSX component: - ATLAS
   return (
@@ -269,17 +232,6 @@ const CreateEvent = ({ event }) => {
           value={eventData.user_id}
           onChange={handleInputChange}
         />        
-        
-        {/* <LoadScript googleMapsApiKey={apiKey}>
-          <GoogleMap
-            mapContainerStyle={{ height: "400px", width: "100%" }}
-            zoom={placeCoords ? 15 : 1} // Zoom más alto si hay coordenadas del lugar
-            center={placeCoords || { lat: 0, lng: 0 }} // Centro del mapa
-          > */}
-            {/* Marcador en las coordenadas del lugar */}
-            {/* {placeCoords && <Marker position={placeCoords} />}
-          </GoogleMap>
-        </LoadScript> */}
 
         <iframe
           width="600"

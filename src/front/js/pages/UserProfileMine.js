@@ -5,54 +5,72 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
-import { Link } from 'react-router-dom';
-
+import ProfileEdit from '../component/ProfileEdit';
 
 const UserProfileMine = () => {
   const { store, actions } = useContext(Context);
   const [userProfile, setUserProfile] = useState(null);
 
-  useEffect(() => {
-    // Fetch user profile information when component mounts
-    actions.fetchUserProfile()
-      .then(userProfileData => setUserProfile(userProfileData))
-      .catch(error => console.error('Error fetching user profile:', error));
-  }, []);
+  console.log("Store id:", store.session)
 
-  // Check if userProfile is null, if null, edit button can't be seen. ¿backend connection would fix it?
-  useEffect(() => {
-    if (userProfile === null) {
-      console.log("User Mine Page:", userProfile);
-      // Or display a message
-      // return <div>User profile is null</div>;
-    }
-  }, [userProfile]);
-
-  const handleEditProfile = async (updatedProfileData) => {
+  useEffect( async () => {
+    console.log("User profile effect triggered");
     try {
-      await actions.editUserProfile(userProfile.id, updatedProfileData);
+      console.log("Editing user profile...");
+      const userProfile = await actions.fetchUserProfile();
+      setUserProfile(userProfile); // Actualiza userProfile con los datos actualizados del perfil
       // Optionally, update state or show success message
+      console.log("User profile updated:", userProfile);
     } catch (error) {
       console.error('Error editing user profile:', error);
       // Handle error
     }
+    }, []);
+
+  // const handleEditProfile = async (updatedProfileData) => {
+  //   try {
+  //     console.log("Editing user profile...");
+  //     const updatedUserProfile = await actions.editUserProfile(updatedProfileData);
+  //     setUserProfile(updatedUserProfile); // Actualiza userProfile con los datos actualizados del perfil
+  //     // Optionally, update state or show success message
+  //     console.log("User profile updated:", updatedUserProfile);
+
+  //   } catch (error) {
+  //     console.error('Error editing user profile:', error);
+  //     // Handle error
+  //   }
+  // };
+  
+  console.log("UserProfile fuera:", userProfile);
+
+    // Estado para controlar si estamos en modo de edición o no
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Función para activar el modo de edición
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
   return (
     <div>
       <h1>User Profile</h1>
-      {userProfile && (
-        <div>
-          <p>Username: {userProfile.username}</p>
-          <p>Email: {userProfile.email}</p>
-          <Link to="/edit-profile">Edit Profile</Link>
-          {userProfile ? (
-            <button onClick={handleEditProfile}>Edit Profile</button>
-          ) : (
-            <div>User profile is null</div>
-          )}
+      {isEditing ? (
+        <ProfileEdit user={userProfile}/>
+      ) : (
+        userProfile && (
+          <div>
+            <p>Username: {userProfile.username}</p>
+            <p>Email: {userProfile.email}</p>
+            <p>First name: {userProfile.first_name}</p>
+            <p>Last name: {userProfile.last_name}</p>
+            <p>Created Events: {userProfile.created_events.name}</p>         
+               {/* COMPROBAR POR QUÉ DA ERROR */}
+            {/* <p>Signedup Events: {userProfile.signedup_event.name}</p> */}
+            <p>Favorite Events: {userProfile.favorite_event.name}</p>
 
-        </div>
+            <button onClick={handleEditClick}>Edit Profile</button>
+          </div>
+        )
       )}
     </div>
   );

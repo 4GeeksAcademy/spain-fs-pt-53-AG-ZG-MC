@@ -1,21 +1,20 @@
 Cosas a revisar/arreglar:
     - la página de home y el login
         - debe mantenerse la sesión iniciada PROBLEMA --> ¡¡SOLUCIONADO!!
-        - tiene que verse reflejado en la renderización NO ME ACUERDO DE QUÉ SIGNIFICA
+        - tiene que verse reflejado en la renderización --> ¡¡SOLUCIONADO!!
         - el navigate tiene que llevar a la home logged --> ¡¡SOLUCIONADO!!
-    - loggout tiene que cerrar sesión --> CREO QUE FUNCIONA (no sé si es porque recarga)
+    - loggout tiene que cerrar sesión ---> ¡¡SOLUCIONADO!!
     - ajustar con el login cuando ves tu perfil y cuando el de otros
         - arreglarlo en el layout
     - con eventos, que solo lo pueda editar el propietario falta tb
     - revisar que los filtros funcionan
     - revisar si la search bar funciona
-    - NECESITAS GUARDAR LA KEY DE LA API EN UN SITIO SEGURO
     - el problema al editar eventos
         - la fecha --> ¡¡SOLUCIONADO!!
         - no deja hacer submit/guardar (CORS) 
-        - hacer que el mapa tenga un sitio por defecto antes de cualquier input
+        - hacer que el mapa tenga un sitio por defecto antes de cualquier input --> ¡¡SOLUCIONADO!!
     - al ver eventos no se reflejan los campos de checkbox --> ¡¡SOLUCIONADO!!
-    - verificar si el fetch de events recommended (component) funciona
+    - verificar si el fetch de events recommended (component) funciona --> ¡¡SOLUCIONADO!!
     - comprobar si myevents renderiza los eventos (todos) y quitar mocks
     - los fetch continuos que no paran al escribir (al crear y editar)
     - comprobar el problema de minimo y máximo de people
@@ -24,10 +23,9 @@ Cosas a revisar/arreglar:
         - falta poder ver las asistencias
     - añadir popup de estás seguro de querar eliminar el evento o tu perfil
 
-
 Cambios a decir a Atlas:
     - hemos quitado la api de geolocalización
-        - mantenemos api google maps HECHO
+        - mantenemos api google maps --> ¡¡SOLUCIONADO!!
 
 
 

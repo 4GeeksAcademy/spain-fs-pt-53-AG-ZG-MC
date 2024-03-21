@@ -4,8 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const EventCard = ({ event }) => {
-    console.log("Event Card:", event); // Verifica el contenido del evento
-
     if (!event) {
         return null; // Si no hay evento, retorna null para evitar errores
     }

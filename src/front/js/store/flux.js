@@ -2,11 +2,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			users: [],
+			user: null,
 			events: [], // Add an empty array to store events
 			recommendedEvents: [],
 			session: {
 				isLoggedIn: false,
-				user: null,
+				username: null,
 				accessToken: null,
 				// Add other session-related data as needed
 			},
@@ -17,49 +19,104 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Other actions?...
-
-			fetchUserProfile: async (userId) => {
-				const actions = getActions();
-				console.log(localStorage.getItem("access_token"))
+			handleCreateUser: async (firstName, lastName, username, email, password, confirmPassword) => {
 				try {
-					//replace ${process.env.BACKEND_URL}/api/user/profile with our API
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
+					// Implement the logic to create a user in the backend
+					const userData = {
+						first_name: firstName,
+						last_name: lastName,
+						username,
+						email,
+						password,
+						confirm_password: confirmPassword
+					};
+
+					const response = await fetch(process.env.BACKEND_URL + "/api/users", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(userData),
+					});
+
+					if (!response.ok) {
+						throw new Error("Error creating user");
+					}
+
+					// Optionally, handle the response data or update the store
+					const data = await response.json();
+					console.log("User created successfully:", data);
+
+				} catch (error) {
+					console.error("Error creating user", error);
+					throw error; // Propagate the error to the caller if needed
+				}
+			},
+
+			fetchAllUsers: async () => {
+				try {
+					//replace API with ours
+					const response = await fetch(`${process.env.BACKEND_URL}/api/allusers`);
+					console.log("Response status fetchAllUsers:", response.status); // Agregar esto para verificar el estado de la respuesta
+					if (!response.ok) {
+						throw new Error('Failed to fetch users');
+					}
+					const data = await response.json();
+					console.log("Data from fetchAllUsers:", data); // Agregar este console.log para verificar los datos recibidos
+
+					// Update the store with the fetched events
+					setStore({
+						users: data
+					});
+				} catch (error) {
+					console.error('Error fetching events', error);
+					// Handle the error as needed
+				}
+			},
+
+			fetchUserProfile: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 						method: 'GET',
 						headers: {
-							// COMENTADO ALONDRA. Quita el token de acceso del localStorage y
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`, // Include authorization token if required
-							'Content-Type': 'application/json',
 						}
+					});
+
+					console.log("Request URL:", `${process.env.BACKEND_URL}/api/users`);
+					console.log("Request Headers:", {
+						'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 					});
 
 					if (!response.ok) {
 						throw new Error('Failed to fetch user profile');
 					}
 
-					const userProfileData = await response.json();
+					const data = await response.json();
+
+					console.log("User Profile Data:", data);
 
 					// Update the store with the fetched user profile data
-					setStore(prevState => ({
-						...prevState,
-						userProfile: userProfileData
-					}));
+					setStore({
+						user: data,
+						}
+					);
+					console.log("User Profile Data:", data);
 
-					return userProfileData;
+					return data;
 				} catch (error) {
 					console.error('Error fetching user profile:', error);
 					throw error;
 				}
 			},
 
-			editUserProfile: async (userId, updatedProfileData) => {
-				const actions = getActions();
+			editUserProfile: async (updatedProfileData) => {
 				try {
 					// Make a PUT request to update the user's profile in the backend
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 						method: 'PUT',
 						headers: {
 							// COMENTADO ALONDRA. 
-							// 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
@@ -81,6 +138,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+			
 			syncroniseToken: async () => {
 				const token = localStorage.getItem("access_token");
 
@@ -114,10 +172,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					console.log('Login successful. Data:', data); // Agregar un console.log para verificar los datos recibidos del backend
 
-				// GRAN LOGRO. Set session state if authentication is successful
+				// Set session state if authentication is successful
 					setStore({session: {
 						isLoggedIn: true,
-						user: { username },
+						username: data.username,
 						accessToken: data.token,
 					}}); 	
 				} catch (error) {
@@ -149,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// Actualiza el estado de la sesión
 					setStore({session: {
 						isLoggedIn: false,
-						user: null,
+						username: null,
 						accessToken: null,
 					}});    				
 				} catch (error) {
@@ -157,6 +215,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+
 			initiatePasswordRecovery: async (username) => {
 				try {
 					// Logic to initiate password recovery process
@@ -193,42 +252,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}));
 			},
 
-			handleCreateUser: async (firstName, lastName, username, email, password, confirmPassword) => {
-				try {
-					// Implement the logic to create a user in the backend
-					const userData = {
-						first_name: firstName,
-						last_name: lastName,
-						username,
-						email,
-						password,
-						confirm_password: confirmPassword
-					};
-
-					const response = await fetch(process.env.BACKEND_URL + "/api/users", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(userData),
-					});
-
-					if (!response.ok) {
-						throw new Error("Error creating user");
-					}
-
-					// Optionally, handle the response data or update the store
-					const data = await response.json();
-					console.log("User created successfully:", data);
-
-				} catch (error) {
-					console.error("Error creating user", error);
-					throw error; // Propagate the error to the caller if needed
-				}
-			},
-
 			createEvent: async (newEvent) => {
-				const actions = getActions();
+
 				try {
 					// Implement logic to create a new event in the backend
 					const response = await fetch(process.env.BACKEND_URL + "/api/events", {
@@ -246,7 +271,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					// Optionally, handle the response data or update the store
 					const data = await response.json();
-					console.log("Event created successfully:", data);
+					// console.log("Event created successfully:", data);
 
 					// Update the store to include the newly created event:
 					setStore(prevState => {
@@ -260,7 +285,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			editEvent: async (eventId, updatedEvent) => {
-				const actions = getActions();
 				try {
 					// logic to update the existing event in the backend, Replace API
 					console.log('Updating event:', eventId, updatedEvent); // Agregar este console.log()
@@ -311,7 +335,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			signUpForEvent: async (eventId) => {
-				const actions = getActions();
 				try {
 					//correct backend logic as needed to signup for event
 					//replace the placeholder URL (${process.env.BACKEND_URL}/api/user/profile) 
@@ -375,19 +398,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// AÑADIDO ALONDRA. He añadido userId en el async () 
 			cancelAssistance: async (eventId) => {
-				const actions = getActions();
 				try {
-					// correct backend logic to cancel assistance
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/signup`, {
-						// const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/cancel-assistance`, {
-						// debería ser DELETE según BBDD
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/signup`, {
 						method: 'DELETE',
-						// method: 'POST', ORIGINAL ZAIRA
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
-						//include any other data we may need
 					});
 					if (!response.ok) {
 						throw new Error('Failed to cancel assistance for the event');
@@ -400,7 +417,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			fetchEventDetails: async (eventId) => {
-				const actions = getActions();
 				try {
 					//correct backend logic as needed to fetch EventDetails
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
@@ -432,7 +448,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getAttendeesCount: async (eventId) => {
-				const actions = getActions();
 				try {
 					// coorect backend logic to fetch number of attendees for the event
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
@@ -460,13 +475,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					//correct backend logic as needed to see recommended events
 					const response = await fetch(process.env.BACKEND_URL + "/api/events/recommended");
-					console.log("Response status recommended events:", response.status); // Agregar esto para verificar el estado de la respuesta
+					// console.log("Response status recommended events:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch recommended events');
 					}
 					const data = await response.json();
 					// AÑADIDO ALONDRA.
-					console.log("Data from Event Recommended:", data); // Agregar este console.log para verificar los datos recibidos
+					// console.log("Data from Event Recommended:", data); // Agregar este console.log para verificar los datos recibidos
 					// CAMBIO ALONDRA 
 					setStore({ recommendedEvents: data }); // Set the fetched events in the store
 					// setStore({ events: data }); // Set the fetched events in the store
@@ -480,12 +495,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					//replace API with ours
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events`);
-					console.log("Response status:", response.status); // Agregar esto para verificar el estado de la respuesta
+					// console.log("Response status:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
+					// console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
 
 					// Update the store with the fetched events
 					setStore({
@@ -497,11 +512,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			deleteUser: async (userId) => {
-				const actions = getActions();
+			deleteUser: async () => {
 				try {
 					// Realiza una solicitud DELETE al backend para eliminar un usuario específico
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 						method: 'DELETE',
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
@@ -522,7 +536,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			deleteEvent: async (eventId) => {
-				const actions = getActions();
 				try {
 					// Realiza una solicitud DELETE al backend para eliminar un evento específico
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
@@ -545,10 +558,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getEventsByUser: async (userId) => {
-				const actions = getActions();
+			getEventsByUser: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events`, {
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
@@ -565,7 +577,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getUsersByEvent: async (eventId) => {
-				const actions = getActions();
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
 						headers: {
@@ -583,10 +594,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			addEventToFavorites: async (userId, eventId) => {
-				const actions = getActions();
+			addEventToFavorites: async (eventId) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
 						method: "POST",
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
@@ -603,10 +613,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			removeEventFromFavorites: async (userId, eventId) => {
-				const actions = getActions();
+			removeEventFromFavorites: async (eventId) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/events/${eventId}/favorite`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
 						method: "DELETE",
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
@@ -623,10 +632,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getUserFavoriteEvents: async (userId) => {
-				const actions = getActions();
+			getUserFavoriteEvents: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}/favorite_event`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/favorite_event`, {
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}

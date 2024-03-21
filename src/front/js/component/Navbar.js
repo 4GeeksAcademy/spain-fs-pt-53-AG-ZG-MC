@@ -8,8 +8,10 @@ import UserProfileMine from '../pages/UserProfileMine';
 
 const Navbar = () => {
   const { store } = useContext(Context);
-  const [storeLog, setStoreLog] = useState({ session: { isLoggedIn: true, user: {}, accessToken: '' } });
+  const [storeLog, setStoreLog] = useState({ session: { isLoggedIn: true, username: '', accessToken: '' } });
 
+  console.log("session: ", store.session)
+  
   return (
     <div>
       <h1>Navbar</h1>

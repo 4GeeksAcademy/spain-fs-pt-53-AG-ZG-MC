@@ -7,7 +7,7 @@ from api.models import db, User, Event, Signedup_event, Favorite_event
 from api.utils import generate_sitemap, APIException
 from sqlalchemy import func
 from flask_cors import CORS
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from api.email_utils import send_password_reset_email
 import secrets
 from datetime import datetime, timedelta, timezone
@@ -98,7 +98,7 @@ def create_user():
         return jsonify({"message": "Internal Server Error"}), 500
     
 # ADMI - Endpoint para obtener todos los usuarios con información sobre los eventos creados por cada uno
-@api.route('/users', methods=['GET'])
+@api.route('/allusers', methods=['GET'])
 # @jwt_required()
 def get_all_users():
     try:
@@ -134,11 +134,12 @@ def get_all_users():
         return jsonify({"message": "Internal Server Error"}), 500
  
 # Endpoint para obtener información de un usuario específico
-@api.route('/users/<int:user_id>', methods=['GET'])
-@jwt_required()
-def get_user(user_id):
+@api.route('/users', methods=['GET'])
+@jwt_required() 
+def get_user():
+    id = get_jwt_identity()
     try:
-        user = User.query.get(user_id)
+        user = User.query.get(id)
         if user:
             # Serializar la información básica del usuario
             user_info = user.serialize()
@@ -151,12 +152,13 @@ def get_user(user_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para actualizar información de un usuario específico
-@api.route('/users/<int:user_id>', methods=['PUT'])
+@api.route('/users', methods=['PUT'])
 @jwt_required()
-def update_user(user_id):
+def update_user():
+    id = get_jwt_identity()
     try:
         data = request.get_json()
-        user = User.query.get(user_id)
+        user = User.query.get(id)
         if user:
             if "username" in data:
                 user.username = data["username"]
@@ -265,11 +267,12 @@ def reset_password():
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para eliminar un usuario específico
-@api.route('/users/<int:user_id>', methods=['DELETE'])
+@api.route('/users', methods=['DELETE'])
 @jwt_required()
-def delete_user(user_id):
+def delete_user():
+    id = get_jwt_identity()
     try:
-        user = User.query.get(user_id)
+        user = User.query.get(id)
         if user:
             db.session.delete(user)  # Eliminar el objeto de la sesión
             db.session.commit()  # Confirmar la transacción
@@ -475,12 +478,13 @@ def signup_event(event_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para que un usuario cancele su inscripción a un evento
-@api.route('/users/<int:user_id>/events/<int:event_id>/signup', methods=['DELETE'])
+@api.route('/users/events/<int:event_id>/signup', methods=['DELETE'])
 @jwt_required()
-def cancel_signup_for_event(user_id, event_id):
+def cancel_signup_for_event(event_id):
+    id = get_jwt_identity()
     try:
         # Verificar si el usuario y el evento existen
-        user = User.query.get(user_id)
+        user = User.query.get(id)
         event = Event.query.get(event_id)
         if not user:
             return jsonify({"message": "User not found"}), 404
@@ -488,7 +492,7 @@ def cancel_signup_for_event(user_id, event_id):
             return jsonify({"message": "Event not found"}), 404
 
         # Verificar si el usuario está inscrito en el evento
-        signup = Signedup_event.query.filter_by(user_id=user_id, event_id=event_id).first()
+        signup = Signedup_event.query.filter_by(user_id=id, event_id=event_id).first()
         if not signup:
             return jsonify({"message": "User is not signed up for this event"}), 400
 
@@ -503,12 +507,13 @@ def cancel_signup_for_event(user_id, event_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para obtener todos los eventos a los que un usuario está inscrito
-@api.route('/users/<int:user_id>/events', methods=['GET'])
+@api.route('/users/events', methods=['GET'])
 @jwt_required()
-def get_user_events(user_id):
+def get_user_events():
+    id = get_jwt_identity()
     try:
         # Buscar eventos inscritos por el usuario
-        user_events = Event.query.join(Signedup_event, Event.id == Signedup_event.event_id).filter(Signedup_event.user_id == user_id).all()
+        user_events = Event.query.join(Signedup_event, Event.id == Signedup_event.event_id).filter(Signedup_event.user_id == id).all()
 
         # Serializar los eventos encontrados
         serialized_events = [event.serialize() for event in user_events]
@@ -535,12 +540,13 @@ def get_event_users(event_id):
         return jsonify({"message": "Internal Server Error"}), 500
     
 # Endpoint para agregar un evento a la lista de eventos favoritos de un usuario
-@api.route('/users/<int:user_id>/events/<int:event_id>/favorite', methods=['POST'])
+@api.route('/users/events/<int:event_id>/favorite', methods=['POST'])
 @jwt_required()
-def add_event_to_favorites(user_id, event_id):
+def add_event_to_favorites(event_id):
+    id = get_jwt_identity()
     try:
         # Verificar si el usuario y el evento existen
-        user = User.query.get(user_id)
+        user = User.query.get(id)
         event = Event.query.get(event_id)
         if not user:
             return jsonify({"message": "User not found"}), 404
@@ -548,11 +554,11 @@ def add_event_to_favorites(user_id, event_id):
             return jsonify({"message": "Event not found"}), 404
 
         # Verificar si el evento ya está en la lista de favoritos del usuario
-        if Favorite_event.query.filter_by(user_id=user_id, event_id=event_id).first():
+        if Favorite_event.query.filter_by(user_id=id, event_id=event_id).first():
             return jsonify({"message": "Event already in user's favorite list"}), 400
 
         # Agregar el evento a la lista de favoritos del usuario
-        favorite_event = Favorite_event(user_id=user_id, event_id=event_id)
+        favorite_event = Favorite_event(user_id=id, event_id=event_id)
         favorite_event.save()
 
         return jsonify(favorite_event.serialize()), 201
@@ -563,12 +569,13 @@ def add_event_to_favorites(user_id, event_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para eliminar un evento de la lista de eventos favoritos de un usuario
-@api.route('/users/<int:user_id>/events/<int:event_id>/favorite', methods=['DELETE'])
+@api.route('/users/events/<int:event_id>/favorite', methods=['DELETE'])
 @jwt_required()
-def remove_event_from_favorites(user_id, event_id):
+def remove_event_from_favorites(event_id):
+    id = get_jwt_identity()
     try:
         # Verificar si el evento favorito existe
-        favorite_event = Favorite_event.query.filter_by(user_id=user_id, event_id=event_id).first()
+        favorite_event = Favorite_event.query.filter_by(user_id=id, event_id=event_id).first()
         if not favorite_event:
             return jsonify({"message": "Favorite event not found"}), 404
 
@@ -581,12 +588,13 @@ def remove_event_from_favorites(user_id, event_id):
         return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para obtener todos los eventos favoritos de un usuario
-@api.route('/users/<int:user_id>/favorite_event', methods=['GET'])
+@api.route('/users/favorite_event', methods=['GET'])
 @jwt_required()
-def get_user_favorite_event(user_id):
+def get_user_favorite_event(id):
+    id = get_jwt_identity()
     try:
         # Obtener todos los eventos favoritos de un usuario
-        user_favorite_event = Favorite_event.query.filter_by(user_id=user_id).all()
+        user_favorite_event = Favorite_event.query.filter_by(user_id=id).all()
         favorite_event = [favorite_event.serialize() for favorite_event in user_favorite_event]
         return jsonify(favorite_event), 200
 

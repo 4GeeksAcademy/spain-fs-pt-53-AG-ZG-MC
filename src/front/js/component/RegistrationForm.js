@@ -19,7 +19,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform client-side validation?
+    console.log("Form data:", formData); // Agregar este console.log()
 
     try {
       // Call the action to create a user from the context

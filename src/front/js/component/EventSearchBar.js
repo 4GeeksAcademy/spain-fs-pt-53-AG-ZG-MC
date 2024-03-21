@@ -15,7 +15,7 @@ const EventSearchBar = ({ options, onSelect }) => {
                 <option value="">Select an option...</option>
                 {options && options.map((option, index) => (
                     <option key={index} value={option.value}>{option.label}</option>
-                ))}
+                ))} 
             </select>
         </div>
     );
