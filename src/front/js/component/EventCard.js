@@ -10,13 +10,17 @@ const EventCard = ({ event }) => {
 
     const { id, userId, username, name, date, place } = event; // Desestructura el evento para obtener sus propiedades
 
+    const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+
+
     return (
         <div className="event-card">
             <h1>Hola Card</h1>
             <h3>{name}</h3>
-            <p>Date: {date}</p>
+            <p>Date: {new Date(date).toDateString()}</p>
             <p>Place: {place}</p>
-            <Link to={`/profile/${userId}`}>View Profile ({username})</Link>
+            
+            {/* <Link to={`/profile/${username}`}>View Profile ({username})</Link> */}
         </div>
     );
 };

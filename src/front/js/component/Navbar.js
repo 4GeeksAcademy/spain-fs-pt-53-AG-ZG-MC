@@ -10,7 +10,7 @@ const Navbar = () => {
   const { store } = useContext(Context);
   const [storeLog, setStoreLog] = useState({ session: { isLoggedIn: true, username: '', accessToken: '' } });
 
-  console.log("session: ", store.session)
+  // console.log("session: ", store.session)
   
   return (
     <div>

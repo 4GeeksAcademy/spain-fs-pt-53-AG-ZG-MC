@@ -11,7 +11,13 @@ const ProfileEdit = ({ user }) => {
 
   const { actions } = useContext(Context);
 
-  const [userData, setUserData] = useState(user);
+  const [userData, setUserData] = useState({
+    username: user.username,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name
+  });
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,23 +65,25 @@ const ProfileEdit = ({ user }) => {
         />
 
         {/* Event Type input */}
-        <label htmlFor="firstName">First name:</label>
+        <label htmlFor="first_name">First name:</label>
         <input
           type="text"
-          id="firstName"
-          name="firstName"
+          id="first_name"
+          name="first_name"
           value={userData.first_name}
           onChange={handleInputChange}
+          // readOnly
         />
 
         {/* Event Place input */}
-        <label htmlFor="lastName">Last name:</label>
+        <label htmlFor="last_name">Last name:</label>
         <input
           type="text"
-          id="lastName"
-          name="lastName"
+          id="last_name"
+          name="last_name"
           value={userData.last_name}
           onChange={handleInputChange}
+          // readOnly
         />
 
         {/* Submit button */}

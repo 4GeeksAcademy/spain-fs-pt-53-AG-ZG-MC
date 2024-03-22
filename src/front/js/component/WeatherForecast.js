@@ -36,8 +36,8 @@ const WeatherForecast = ({ location, eventDate }) => {
     // Convertir el formato de la fecha del evento al formato utilizado en el pronóstico del tiempo
     const eventDateFormat = new Date(eventDate).toISOString().split('T')[0];
 
-    console.log('Event Date:', eventDateFormat);
-    console.log('Available Dates in Weather Forecast:', weatherForecast.forecast.forecastday.map(day => day.date));
+    // console.log('Event Date:', eventDateFormat);
+    // console.log('Available Dates in Weather Forecast:', weatherForecast.forecast.forecastday.map(day => day.date));
 
     // Buscar el pronóstico del tiempo para la fecha del evento
     const eventWeather = weatherForecast.forecast.forecastday.find(day => day.date === eventDateFormat);

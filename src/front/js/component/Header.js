@@ -1,9 +1,12 @@
 import React from 'react';
 
 const Header = () => {
-  return <header>This is the Header</header>;
+  return (
+    <header>
+      <p>This is the Header</p>
+    </header>
+  );
 };
 
 export default Header;
-{/* aqui va el buscador */}
 

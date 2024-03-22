@@ -57,12 +57,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					//replace API with ours
 					const response = await fetch(`${process.env.BACKEND_URL}/api/allusers`);
-					console.log("Response status fetchAllUsers:", response.status); // Agregar esto para verificar el estado de la respuesta
+					// console.log("Response status fetchAllUsers:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch users');
 					}
 					const data = await response.json();
-					console.log("Data from fetchAllUsers:", data); // Agregar este console.log para verificar los datos recibidos
+					// console.log("Data from fetchAllUsers:", data); // Agregar este console.log para verificar los datos recibidos
 
 					// Update the store with the fetched events
 					setStore({
@@ -83,10 +83,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 
-					console.log("Request URL:", `${process.env.BACKEND_URL}/api/users`);
-					console.log("Request Headers:", {
-						'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-					});
+					// console.log("Request URL:", `${process.env.BACKEND_URL}/api/users`);
+					// console.log("Request Headers:", {
+					// 	'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					// });
 
 					if (!response.ok) {
 						throw new Error('Failed to fetch user profile');
@@ -94,14 +94,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 
-					console.log("User Profile Data:", data);
+					// console.log("User Profile Data:", data);
 
 					// Update the store with the fetched user profile data
 					setStore({
 						user: data,
 						}
 					);
-					console.log("User Profile Data:", data);
+					// console.log("User Profile Data:", data);
 
 					return data;
 				} catch (error) {
@@ -271,7 +271,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					// Optionally, handle the response data or update the store
 					const data = await response.json();
-					// console.log("Event created successfully:", data);
+					console.log("Event created successfully:", data);
 
 					// Update the store to include the newly created event:
 					setStore(prevState => {
@@ -286,41 +286,66 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			editEvent: async (eventId, updatedEvent) => {
 				try {
-					// logic to update the existing event in the backend, Replace API
-					console.log('Updating event:', eventId, updatedEvent); // Agregar este console.log()
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
-						method: "PUT",
-						headers: {
-							"Content-Type": "application/json",
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						},
-						body: JSON.stringify(updatedEvent),
-					});
-
-					if (!response.ok) {
-						throw new Error("Error updating event");
-					}
-
-					// handle the response data or update the store
-					const data = await response.json();
-					console.log("Event updated successfully:", data);
-
-					// Update the store to reflect the updated event
-					setStore(prevState => {
-						const updatedEvents = prevState.events.map(event => {
-							if (event.id === eventId) {
-								return { ...event, ...data };
-							}
-							return event;
-						});
-						return { ...prevState, events: updatedEvents };
-					});
-
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
+					method: "PUT",
+					headers: {
+					  "Content-Type": "application/json",
+					  'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					},
+					body: JSON.stringify(updatedEvent),
+				  });
+			  
+				  if (!response.ok) {
+					throw new Error("Error updating event");
+				  }
+			  
+				  const data = await response.json();
+				  console.log("Event updated successfully:", data);
+			  
+				  return data; // Devuelve los datos actualizados del evento si es necesario
 				} catch (error) {
-					console.error("Error updating event", error);
-					throw error;
+				  console.error("Error updating event", error);
+				  throw error;
 				}
 			},
+			  
+			// editEvent: async (eventId, updatedEvent) => {
+			// 	try {
+			// 		// logic to update the existing event in the backend, Replace API
+			// 		console.log('Updating event:', eventId, updatedEvent); // Agregar este console.log()
+			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
+			// 			method: "PUT",
+			// 			headers: {
+			// 				"Content-Type": "application/json",
+			// 				'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+			// 			},
+			// 			body: JSON.stringify(updatedEvent),
+			// 		});
+
+			// 		if (!response.ok) {
+			// 			throw new Error("Error updating event");
+			// 		}
+
+			// 		// handle the response data or update the store
+			// 		const data = await response.json();
+			// 		console.log("Event updated successfully:", data);
+
+			// 		// Update the store to reflect the updated event
+			// 		setStore(prevState => {
+			// 			const updatedEvents = prevState.events.map(event => {
+			// 				if (event.id === eventId) {
+			// 					return { ...event, ...data };
+			// 				}
+			// 				return event;
+			// 			});
+			// 			return { ...prevState, events: updatedEvents };
+			// 		});
+
+			// 	} catch (error) {
+			// 		console.error("Error updating event", error);
+			// 		throw error;
+			// 	}
+			// },
 
 			getMessage: async () => {
 				try {
@@ -500,7 +525,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					// console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
+					console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
 
 					// Update the store with the fetched events
 					setStore({
@@ -650,16 +675,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			searchEventsByType: async (eventType) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/search?type=${eventType}`);
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error searching events by type:", error);
-					throw new Error("Error searching events by type");
-				}
-			},
+			// searchEventsByType: async (eventType) => {
+			// 	try {
+			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/events/search?type=${eventType}`);
+			// 		const data = await response.json();
+			// 		return data;
+			// 	} catch (error) {
+			// 		console.error("Error searching events by type:", error);
+			// 		throw new Error("Error searching events by type");
+			// 	}
+			// },
 
 			filterEvents: async (filters) => {
 				try {

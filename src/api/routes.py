@@ -601,25 +601,25 @@ def get_user_favorite_event(id):
     except Exception as e:
         return jsonify({"message": "Internal Server Error"}), 500
 
-# Endpoint para buscar eventos por tipo
-@api.route('/events/search', methods=['GET'])
-def search_events():
-    try:
-        # Obtener parámetros de búsqueda
-        query_parameters = request.args
+# # Endpoint para buscar eventos por tipo
+# @api.route('/events/search', methods=['GET'])
+# def search_events():
+#     try:
+#         # Obtener parámetros de búsqueda
+#         query_parameters = request.args
 
-        # Verificar si se proporciona un tipo de evento
-        event_type = query_parameters.get('type')
-        if not event_type:
-            return jsonify({"message": "No event type provided"}), 400
+#         # Verificar si se proporciona un tipo de evento
+#         event_type = query_parameters.get('type')
+#         if not event_type:
+#             return jsonify({"message": "No event type provided"}), 400
 
-        # Realizar la búsqueda de eventos por tipo
-        search_results = Event.query.filter(Event.type == event_type).all()
-        events = [event.serialize() for event in search_results]
-        return jsonify(events), 200
+#         # Realizar la búsqueda de eventos por tipo
+#         search_results = Event.query.filter(Event.type == event_type).all()
+#         events = [event.serialize() for event in search_results]
+#         return jsonify(events), 200
 
-    except Exception as e:
-            return jsonify({"message": "Internal Server Error"}), 500
+#     except Exception as e:
+#             return jsonify({"message": "Internal Server Error"}), 500
 
 # Endpoint para filtrar eventos por fecha, duración, precio, etc.
 @api.route('/events/filter', methods=['GET'])

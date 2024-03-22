@@ -27,8 +27,8 @@ const injectContext = PassedComponent => {
 				try {
 					await state.actions.fetchAllEvents();
 					await state.actions.fetchAllUsers();
-					console.log("fetched Users: ", state.actions.fetchAllUsers())
-					console.log("fetched Events: ", state.actions.fetchAllEvents() )
+					// console.log("fetched Users: ", state.actions.fetchAllUsers())
+					// console.log("fetched Events: ", state.actions.fetchAllEvents() )
 				} catch (error) {
 					console.error('Error fetching data:', error);
 				}

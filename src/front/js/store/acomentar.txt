@@ -7,8 +7,8 @@ Cosas a revisar/arreglar:
     - ajustar con el login cuando ves tu perfil y cuando el de otros
         - arreglarlo en el layout
     - con eventos, que solo lo pueda editar el propietario falta tb
-    - revisar que los filtros funcionan
-    - revisar si la search bar funciona
+    - revisar que los filtros funcionan ---> ¡¡SOLUCIONADO!!
+    - revisar si la search bar funciona ---> ¡¡SOLUCIONADO!!
     - el problema al editar eventos
         - la fecha --> ¡¡SOLUCIONADO!!
         - no deja hacer submit/guardar (CORS) 
@@ -22,6 +22,7 @@ Cosas a revisar/arreglar:
     - probar acciones de EventActions
         - falta poder ver las asistencias
     - añadir popup de estás seguro de querar eliminar el evento o tu perfil
+    - PROBLEMA ANOCHE, AL CREAR UN EVENTO DEBE AUTOASIGNARSE AL USUARIO (SU ID)
 
 Cambios a decir a Atlas:
     - hemos quitado la api de geolocalización

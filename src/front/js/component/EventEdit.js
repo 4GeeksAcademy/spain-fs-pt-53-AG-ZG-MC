@@ -2,9 +2,7 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 
 // REVISAR PORQUE RENDERIZA CADA INPUT
-// AÑADIR QUE SOLO EL PROPIETARIO DEL EVENTO PUEDA EDITAR (creo que ese es el problema)
 // añadido al form la parte que estaba en el boton, da menos problemas
-// creo que da error de cors porque solo el propietario puede hacerlo
 
 const EditEvent = ({ event }) => {
   console.log("Event edit:", event);
@@ -17,19 +15,27 @@ const EditEvent = ({ event }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log('Input changed:', name, value); // Agregar este console.log()
     const newValue = type === 'checkbox' ? checked : value;
     setEventData(prevData => ({
       ...prevData,
       [name]: newValue
     }));
   };
+  
+  const formatDateValue = (dateValue) => {
+    if (dateValue instanceof Date) {
+      return dateValue.toISOString().split('T')[0];
+    } else {
+      return dateValue; // O cualquier otro valor predeterminado que prefieras
+    }
+  };
 
   // Function to handle event update
   const handleUpdateEvent = async () => {
+    e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
     try {
       console.log('Updating event:', eventData); // Agregar este console.log()
-      await actions.editEvent(eventData);
+      await actions.editEvent(event.id, eventData);
       console.log('Evento editado exitosamente');
     } catch (error) {
       console.error('Error al editar el evento:', error);
@@ -42,180 +48,180 @@ const EditEvent = ({ event }) => {
       <h2>Edit Event</h2>
       <form onSubmit={handleUpdateEvent}>
         {/* Event Name input */}
-        <label htmlFor="eventName">Event Name:</label>
+        <label htmlFor="name">Event Name:</label>
         <input
           type="text"
-          id="eventName"
+          id="name"
           name="name"
           value={eventData.name}
           onChange={handleInputChange}
         />
 
         {/* Event Date input */}
-        <label htmlFor="eventDate">Event Date:</label>
+        <label htmlFor="date">Event Date:</label>
         <input
           type="date"
-          id="eventDate"
+          id="date"
           name="date"
-          value={eventData.date.toISOString().split('T')[0]}
+          value={formatDateValue(eventData.date)}
           onChange={handleInputChange}
         />
 
         {/* Event Duration input */}
-        <label htmlFor="eventDuration">Event Duration:</label>
+        <label htmlFor="duration">Event Duration:</label>
         <input
           type="text"
-          id="eventDuration"
+          id="duration"
           name="duration"
           value={eventData.duration}
           onChange={handleInputChange}
         />
 
         {/* Event Type input */}
-        <label htmlFor="eventType">Event Type:</label>
+        <label htmlFor="type">Event Type:</label>
         <input
           type="text"
-          id="eventType"
+          id="type"
           name="type"
           value={eventData.type}
           onChange={handleInputChange}
         />
 
         {/* Event Place input */}
-        <label htmlFor="eventPlace">Event Place:</label>
+        <label htmlFor="place">Event Place:</label>
         <input
           type="text"
-          id="eventPlace"
+          id="place"
           name="place"
           value={eventData.place}
           onChange={handleInputChange}
         />
 
         {/* Event Description input */}
-        <label htmlFor="eventDescription">Event Description:</label>
+        <label htmlFor="description">Event Description:</label>
         <input
           type="text"
-          id="eventDescription"
+          id="description"
           name="description"          
           value={eventData.description}
           onChange={handleInputChange}
         />
 
         {/* Event Language input */}
-        <label htmlFor="eventLanguage">Event Language:</label>
+        <label htmlFor="language">Event Language:</label>
         <input
           type="text"
-          id="eventLanguage"
+          id="language"
           name="language"
           value={eventData.language}
           onChange={handleInputChange}
         />
 
         {/* Event Gender input */}
-        <label htmlFor="eventGender">Event Gender:</label>
+        <label htmlFor="gender">Event Gender:</label>
         <input
           type="text"
-          id="eventGender"
+          id="gender"
           name="gender"
           value={eventData.gender}
           onChange={handleInputChange}
         />
 
         {/* Event Price Type input */}
-        <label htmlFor="eventPriceType">Event Price Type:</label>
+        <label htmlFor="price_type">Event Price Type:</label>
         <input
           type="text"
-          id="eventPriceType"
+          id="price_type"
           name="price_type"
           value={eventData.price_type}
           onChange={handleInputChange}
         />
 
         {/* Event Price input */}
-        <label htmlFor="eventPrice">Event Price:</label>
+        <label htmlFor="price">Event Price:</label>
         <input
           type="number"
-          id="eventPrice"
+          id="price"
           name="price"
           value={eventData.price}
           onChange={handleInputChange}
         />
 
         {/* Event Min Age input */}
-        <label htmlFor="eventMinAge">Event Min Age:</label>
+        <label htmlFor="min_age">Event Min Age:</label>
         <input
           type="number"
-          id="eventMinAge"
+          id="min_age"
           name="min_age"
           value={eventData.min_age}
           onChange={handleInputChange}
         />
 
         {/* Event Max Age input */}
-        <label htmlFor="eventMaxAge">Event Max Age:</label>
+        <label htmlFor="max_age">Event Max Age:</label>
         <input
           type="number"
-          id="eventMaxAge"
+          id="max_age"
           name="max_age"
           value={eventData.max_age}
           onChange={handleInputChange}
         />
 
         {/* Event Min People input */}
-        <label htmlFor="eventMinPeople">Event Min People:</label>
+        <label htmlFor="min_people">Event Min People:</label>
         <input
           type="number"
-          id="eventMinPeople"
+          id="min_people"
           name="min_people"
           value={eventData.min_people}
           onChange={handleInputChange}
         />
 
         {/* Event Max People input */}
-        <label htmlFor="eventMaxPeople">Event Max People:</label>
+        <label htmlFor="max_people">Event Max People:</label>
         <input
           type="number"
-          id="eventMaxPeople"
+          id="max_people"
           name="max_people"
           value={eventData.max_people}
           onChange={handleInputChange}
         />
 
         {/* Event Lgtbi input */}
-        <label htmlFor="eventLgtbi">Event Lgtbi:</label>
+        <label htmlFor="lgtbi">Event Lgtbi:</label>
         <input
           type="checkbox"
-          id="eventLgtbi"
+          id="lgtbi"
           name="lgtbi"
           checked={eventData.lgtbi}
           onChange={handleInputChange}
         />
 
         {/* Event Pet input */}
-        <label htmlFor="eventPet">Event Pet:</label>
+        <label htmlFor="pet_friendly">Event Pet:</label>
         <input
           type="checkbox"
-          id="eventPet"
+          id="pet_friendly"
           name="pet_friendly"
           checked={eventData.pet_friendly}
           onChange={handleInputChange}
         />
 
         {/* Event Kids input */}
-        <label htmlFor="eventKids">Event Kids:</label>
+        <label htmlFor="kid_friendly">Event Kids:</label>
         <input
           type="checkbox"
-          id="eventKids"
+          id="kid_friendly"
           name="kid_friendly"
           checked={eventData.kid_friendly}
           onChange={handleInputChange}
         />
 
         {/* Event UserId input */}
-        <label htmlFor="eventUserId">Event UserId:</label>
+        <label htmlFor="user_id">Event UserId:</label>
         <input
           type="text"
-          id="eventUserId"
+          id="user_id"
           name="user_id"
           value={eventData.user_id}
           onChange={handleInputChange}

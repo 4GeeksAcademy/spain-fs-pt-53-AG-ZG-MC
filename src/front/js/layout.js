@@ -11,12 +11,12 @@ import EventDetailsPage from './pages/EventDetailsPage';
 import EventsListAllPage from './pages/EventsListAllPage';
 import RegistrationPage from './pages/RegistrationPage';
 import UserProfileMine from './pages/UserProfileMine';
-import UserProfileOther from './pages/UserProfileOther';
 import LoginPasswordRecovery from './component/LoginPasswordRecovery';
 import Logout from './component/Logout';
 
 import NotFound from './component/NotFound';
 import ScrollToTop from './component/ScrollToTop';
+import MyEvents from './component/MyEvents';
 
 
 //create your first element
@@ -41,8 +41,7 @@ const Layout = () => {
                         <Route exact path="/events" element={<EventsListAllPage />} /> {/* DONE */}
                         <Route exact path="/events/:eventId" element={<EventDetailsPage />} /> {/* DONE */}
                         <Route exact path="/create-event" element={<CreateEventPage />} /> {/* DONE */}
-                        <Route exact path="/profile/mine" element={<UserProfileMine />} />
-                        <Route exact path="/profile/:userId" element={<UserProfileOther />} />
+                        <Route exact path="/profile" element={<UserProfileMine />} />
                         <Route exact path="/logout" element={<Logout />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
