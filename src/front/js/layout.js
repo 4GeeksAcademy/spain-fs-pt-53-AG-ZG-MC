@@ -11,13 +11,12 @@ import EventDetailsPage from './pages/EventDetailsPage';
 import EventsListAllPage from './pages/EventsListAllPage';
 import RegistrationPage from './pages/RegistrationPage';
 import UserProfileMine from './pages/UserProfileMine';
-import LoginPasswordRecovery from './component/LoginPasswordRecovery';
+import Login from './component/Login';
 import Logout from './component/Logout';
+import PasswordResetPage from './pages/PasswordResetPage';
 
 import NotFound from './component/NotFound';
 import ScrollToTop from './component/ScrollToTop';
-import MyEvents from './component/MyEvents';
-
 
 //create your first element
 const Layout = () => {
@@ -31,16 +30,17 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Header />
                     <Navbar />
+                    <Header />
                     <Routes>
                         {/* Pages */}
                         <Route exact path="/" element={<Home />} />
-                        <Route exact path="/login" element={<LoginPasswordRecovery />} /> {/* DONE */}
-                        <Route exact path="/register" element={<RegistrationPage />} /> {/* DONE */}
-                        <Route exact path="/events" element={<EventsListAllPage />} /> {/* DONE */}
-                        <Route exact path="/events/:eventId" element={<EventDetailsPage />} /> {/* DONE */}
-                        <Route exact path="/create-event" element={<CreateEventPage />} /> {/* DONE */}
+                        <Route exact path="/login" element={<Login />} /> 
+                        <Route exact path="/reset-password/:token" element={<PasswordResetPage />} />
+                        <Route exact path="/register" element={<RegistrationPage />} /> 
+                        <Route exact path="/events" element={<EventsListAllPage />} /> 
+                        <Route exact path="/events/:eventId" element={<EventDetailsPage />} /> 
+                        <Route exact path="/create-event" element={<CreateEventPage />} /> 
                         <Route exact path="/profile" element={<UserProfileMine />} />
                         <Route exact path="/logout" element={<Logout />} />
                         <Route path="*" element={<NotFound />} />

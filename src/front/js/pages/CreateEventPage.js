@@ -7,9 +7,6 @@ const CreateEventPage = () => {
   const { store, actions } = useContext(Context);
   const { events } = store
 
-  // console.log("Events Create Page:", events);
-
-
   return (
     <div>
       <h1>Create Event</h1>

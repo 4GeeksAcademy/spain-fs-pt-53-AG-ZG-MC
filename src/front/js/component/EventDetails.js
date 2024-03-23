@@ -1,14 +1,12 @@
 import React from "react";
 import WeatherForecast from "./WeatherForecast";
 
-//ver ubicacion del evento en mapa con api
-//VER Nº de asistentes
 
 const EventDetails = ({ event }) => {
   console.log("Event Details:", event)
 
   if (!event) {
-    return null; // Si no hay evento, retorna null para evitar errores
+    return null; 
   }
 
   const { 
@@ -30,12 +28,10 @@ const EventDetails = ({ event }) => {
     lgtbi,
     kid_friendly,
     pet_friendly,
-    user_id  
   } = event;
 
   const eventDateFormatted = new Date(date).toISOString().split('T')[0];
 
-  // JSX component - Atlas
   return (
     <div>
       <h2>Event Details</h2>
@@ -58,11 +54,8 @@ const EventDetails = ({ event }) => {
           <p>Lgtbi: {lgtbi ? 'Allowed' : 'Not Allowed'}</p>
           <p>Pets: {pet_friendly  ? 'Allowed' : 'Not Allowed'}</p>
           <p>Kids: {kid_friendly ? 'Allowed' : 'Not Allowed'}</p>
-          <p>User ID: {user_id}</p>
 
           <WeatherForecast location={event.place} eventDate={eventDateFormatted} />
-          {/* <p>Attendees Count: {attendeesCount}</p>
-          <EventActions eventId={eventId} /> */}
           <iframe
           width="600"
           height="450"

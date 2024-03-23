@@ -58,7 +58,7 @@ def sitemap():
 
 # Configura la extensión Flask-JWT-Extended
 app.config["JWT_SECRET_KEY"] = "xS5j#8Fp@L2n!9G"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400  # 24 horas en segundos
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 86400
 jwt = JWTManager(app)
 
 # Manejo de errores relacionados con la autenticación
@@ -104,8 +104,6 @@ def logout():
     try:
         # Obtiene el identificador del usuario del token
         current_user_id = get_jwt_identity()
-
-        # Aquí podrías realizar cualquier otra lógica de logout necesaria, como invalidar sesiones, etc.
 
         # Crear un nuevo token de acceso con una duración corta para evitar posibles reutilizaciones
         new_access_token = create_access_token(identity=current_user_id, expires_delta=False)

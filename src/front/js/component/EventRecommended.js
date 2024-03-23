@@ -1,8 +1,6 @@
 import React from 'react';
 import EventCard from './EventCard';
 
-// EVENTOS DESTACADOS EN HOME
-// diseño dentro card vertical
 
 const EventRecommended = ({ events }) => {
 

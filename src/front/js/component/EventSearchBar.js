@@ -1,6 +1,5 @@
-// EventSearchBar.js
 import React, { useState } from 'react';
-import { format } from 'date-fns'; // O la librería de manejo de fechas que estés utilizando
+
 
 const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
     const [showFilters, setShowFilters] = useState(false);
@@ -37,7 +36,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
             console.error("Events is not in the expected format.");
             return;
         }
-        let filteredEvents = [...events.events]; // Clone the events array
+        let filteredEvents = [...events.events]; 
 
         // Apply Date Filter
         if (filters.date_filter === 'custom') {
@@ -46,7 +45,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                 const eventDate = new Date(event.date);
                 return eventDate >= new Date(start_date) && eventDate <= new Date(end_date);
             });
-            filteredEvents = customFilteredEvents; // Update filteredEvents with customFilteredEvents
+            filteredEvents = customFilteredEvents; 
         } else {
             const today = new Date();
             let endOfWeek = new Date(today);
@@ -74,7 +73,6 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         const endOfWeek = new Date(today);
                         endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
 
-                        // Verificar si el evento está dentro de esta semana o es hoy
                         return (eventDate >= today && eventDate <= endOfWeek) || eventDate.toDateString() === today.toDateString();
                     });
                     break;
@@ -103,7 +101,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
             }
         }
 
-        // Apply other filters
+        // Apply duration Filter
         if (filters.duration_filter) {
             const durationFilters = filters.duration_filter.split(",");
             filteredEvents = filteredEvents.filter(event => {
@@ -154,6 +152,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
             }
             return true;
         });
+        
         // Apply Type Filter
         if (filters.event_type) {
             filteredEvents = filteredEvents.filter(event => event.type === filters.event_type);
@@ -374,7 +373,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                     {/* Apply Filters Button */}
                     <button onClick={() => {
                         console.log("Button clicked!"); // Add this console.log statement
-                        handleApplyFilters(); // Call the handleApplyFilters function
+                        handleApplyFilters();
                     }}>Apply Filter</button>
                     <button onClick={handleClearFilters}>Clear Filters</button>
                 </div>

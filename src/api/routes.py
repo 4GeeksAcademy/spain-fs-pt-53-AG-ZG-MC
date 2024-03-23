@@ -265,8 +265,7 @@ def reset_password():
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "Internal Server Error"}), 500
-
-# Endpoint para eliminar un usuario específico
+    
 @api.route('/users', methods=['DELETE'])
 @jwt_required()
 def delete_user():
@@ -274,10 +273,14 @@ def delete_user():
     try:
         user = User.query.get(id)
         if user:
-            db.session.delete(user)  # Eliminar el objeto de la sesión
+            # Eliminar todos los eventos asociados al usuario
+            events = Event.query.filter_by(user_id=id).all()
+            for event in events:
+                db.session.delete(event)
+            db.session.delete(user)
             db.session.commit()  # Confirmar la transacción
-            print("User deleted successfully")
-            return jsonify({"message": "User deleted"}), 200
+            print("User and associated events deleted successfully")
+            return jsonify({"message": "User and associated events deleted"}), 200
         else:
             print("User not found")
             return jsonify({"message": "User not found"}), 404

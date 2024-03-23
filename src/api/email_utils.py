@@ -11,6 +11,8 @@ def send_password_reset_email(receiver_email, username, reset_token):
         smtp_port = int(os.getenv("SMTP_PORT"))  # Obtén el puerto SMTP de las variables de entorno
         sender_email = os.getenv("SENDER_EMAIL")  # Obtén el correo electrónico del remitente de las variables de entorno
         sender_password = os.getenv("SENDER_PASSWORD")  # Obtén la contraseña del remitente de las variables de entorno
+        base_url = os.getenv("BACKEND_URL")  # Agrega esta variable de entorno con la URL base de tu aplicación
+
 
         msg = MIMEMultipart()
         msg['From'] = sender_email
@@ -18,7 +20,7 @@ def send_password_reset_email(receiver_email, username, reset_token):
         msg['Subject'] = "Password Reset Request"
 
         # Cuerpo del correo electrónico con el enlace de restablecimiento de contraseña
-        reset_link = url_for('api.reset_password', token=reset_token, _external=True)
+        reset_link = f"{base_url}/reset-password?token={reset_token}"
         body = f"Hi {username},\n\nYou requested a password reset. Please click on the following link to reset your password:\n\n{reset_link}\n\nThis link is valid for 1 hour.\n\nIf you didn't request this, please ignore this email."
         msg.attach(MIMEText(body, 'plain'))
 

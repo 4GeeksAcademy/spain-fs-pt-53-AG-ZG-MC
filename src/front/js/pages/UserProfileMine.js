@@ -1,42 +1,62 @@
-// UserProfileMine.js
-//actualizar perfil usuario
-//eliminar cuenta usuario
-//ver eventos que he creado
-
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom'; 
 import ProfileEdit from '../component/ProfileEdit';
 import MyEvents from '../component/MyEvents';
+
 
 const UserProfileMine = () => {
   const { store, actions } = useContext(Context);
   const [userProfile, setUserProfile] = useState(null);
-
-  // console.log("Store id:", store.session)
-
-  useEffect(async () => {
-    console.log("User profile effect triggered");
-    try {
-      console.log("Editing user profile...");
-      const userProfile = await actions.fetchUserProfile();
-      setUserProfile(userProfile); // Actualiza userProfile con los datos actualizados del perfil
-      // Optionally, update state or show success message
-      console.log("User profile updated:", userProfile);
-    } catch (error) {
-      console.error('Error editing user profile:', error);
-      // Handle error
-    }
-  }, []);
-
-
-  // console.log("UserProfile fuera:", userProfile);
-
-  // Estado para controlar si estamos en modo de edición o no
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const [isMounted, setIsMounted] = useState(true);
+  const navigate = useNavigate(); 
 
-  // Función para activar el modo de edición
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const userProfile = await actions.fetchUserProfile();
+        if (isMounted) { 
+          setUserProfile(userProfile);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        setError(error.message);
+      }
+    };
+
+    fetchUserProfile();
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, [isMounted, actions.fetchUserProfile]);
+
   const handleEditClick = () => {
     setIsEditing(true);
+  };
+
+
+  const handleDeleteClick = async () => {
+    try {
+      if (window.confirm("Are you sure you want to delete your profile?")) {
+        const deletedUserProfile = await actions.deleteUser();
+        if (deletedUserProfile) {
+          setIsEditing(false);
+          console.log('User deleted successfully');
+  
+          actions.clearUser();
+  
+          localStorage.removeItem("access_token");
+  
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setError(error.message);
+    }
   };
 
   return (
@@ -49,16 +69,12 @@ const UserProfileMine = () => {
           <div>
             <p>Username: {userProfile.username}</p>
             <p>Email: {userProfile.email}</p>
-            {/* FIRST Y LAST NAME NO SE DEJAN EDITAR BIEN */}
             <p>First name: {userProfile.first_name}</p>
             <p>Last name: {userProfile.last_name}</p>
             <MyEvents />
-            {/* <p>Created Events: {userProfile.created_events.name}</p>          */}
-            {/* COMPROBAR POR QUÉ DA ERROR */}
-            {/* <p>Signedup Events: {userProfile.signedup_event.name}</p> */}
-            {/* <p>Favorite Events: {userProfile.favorite_event.name}</p> */}
 
             <button onClick={handleEditClick}>Edit Profile</button>
+            <button onClick={handleDeleteClick}>Delete Profile</button>
           </div>
         )
       )}

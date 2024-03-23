@@ -1,13 +1,12 @@
-// HomePageNotLoggedIn.js
-// header, footer, searchEvents, eventos destacados, hero-info
-
 import React, { useContext, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Context } from '../store/appContext';
-import EventSearchBar from '../component/EventSearchBar';
 import EventRecommended from '../component/EventRecommended';
 import HeroSection from '../component/HeroSection';
-import LoginPasswordRecovery from '../component/LoginPasswordRecovery';
+import Login from '../component/Login';
 import Logout from '../component/Logout';
+import RegistrationForm from '../component/RegistrationForm';
+
 
 const Home = () => {
   const { actions, store } = useContext(Context);
@@ -18,7 +17,6 @@ const Home = () => {
     const fetchRecommendedEvents = async () => {
       try {
         const response = await actions.fetchEventRecommended();
-        // console.log('Recommended events response:', response); // Agrega un console.log para verificar los datos
         setRecommendedEvents(response);
       } catch (error) {
         console.error('Error fetching recommended events:', error);
@@ -28,6 +26,7 @@ const Home = () => {
     fetchRecommendedEvents();
   }, []);
 
+
   return (
     <div>
       <h1>Página de inicio</h1>
@@ -36,14 +35,21 @@ const Home = () => {
         <>
           <h3>Página de inicio sin estar loggeado</h3>
           <EventRecommended events={recommendedEvents} />
-          {/* <LoginPasswordRecovery /> */}
-          {/* <RegistrationForm /> */}
+          <Login />
+          <RegistrationForm />
         </>
       ) : (
         // Si el usuario está loggeado, mostrar componentes para loggeado
         <>
           <h3>Pagina loggeado</h3>
-          <EventSearchBar />
+          {/* <EventSearchBar /> */}
+          {/* El EventSearchBar solo funciona en EvetListAllPage */}
+          {/* Vamos a dejarlo fuera de la home!! */}
+          <Link to="/events" >
+            <button>
+              Find out the available events!
+            </button>
+          </Link>
           <EventRecommended events={recommendedEvents} />
           <HeroSection />
           <Logout setStoreLog={setStoreLog} />

@@ -1,16 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 
-// REVISAR PORQUE RENDERIZA CADA INPUT
-// AÑADIR QUE SOLO EL PROPIETARIO DEL EVENTO PUEDA EDITAR (creo que ese es el problema)
-// añadido al form la parte que estaba en el boton, da menos problemas
-// creo que da error de cors porque solo el propietario puede hacerlo
 
 const ProfileEdit = ({ user }) => {
-  console.log("Profile edit:", user);
-
   const { actions } = useContext(Context);
-
   const [userData, setUserData] = useState({
     username: user.username,
     email: user.email,
@@ -18,10 +11,8 @@ const ProfileEdit = ({ user }) => {
     last_name: user.last_name
   });
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log('Input changed:', name, value); // Agregar este console.log()
     setUserData(prevData => ({
       ...prevData,
       [name]: value
@@ -31,7 +22,6 @@ const ProfileEdit = ({ user }) => {
   // Function to handle event update
   const handleUpdateUser = async () => {
     try {
-      console.log('Updating user:', userData); // Agregar este console.log()
       await actions.editUserProfile(userData);
       console.log('Evento editado exitosamente');
     } catch (error) {
@@ -39,7 +29,6 @@ const ProfileEdit = ({ user }) => {
     }
   };
 
-  // JSX - ATLAS
   return (
     <div>
       <h2>Edit User</h2>

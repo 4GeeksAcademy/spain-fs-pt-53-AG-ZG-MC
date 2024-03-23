@@ -4,13 +4,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			users: [],
 			user: null,
-			events: [], // Add an empty array to store events
+			events: [],
 			recommendedEvents: [],
 			session: {
 				isLoggedIn: false,
 				username: null,
 				accessToken: null,
-				// Add other session-related data as needed
 			},
 			passwordRecovery: {
 				isPasswordRecoverySent: false,
@@ -18,10 +17,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 		},
 		actions: {
-			// Other actions?...
 			handleCreateUser: async (firstName, lastName, username, email, password, confirmPassword) => {
 				try {
-					// Implement the logic to create a user in the backend
 					const userData = {
 						first_name: firstName,
 						last_name: lastName,
@@ -43,34 +40,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error("Error creating user");
 					}
 
-					// Optionally, handle the response data or update the store
 					const data = await response.json();
 					console.log("User created successfully:", data);
 
 				} catch (error) {
 					console.error("Error creating user", error);
-					throw error; // Propagate the error to the caller if needed
+					throw error; 
 				}
 			},
 
 			fetchAllUsers: async () => {
 				try {
-					//replace API with ours
 					const response = await fetch(`${process.env.BACKEND_URL}/api/allusers`);
-					// console.log("Response status fetchAllUsers:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch users');
 					}
 					const data = await response.json();
-					// console.log("Data from fetchAllUsers:", data); // Agregar este console.log para verificar los datos recibidos
+					// console.log("Data from fetchAllUsers:", data);
 
-					// Update the store with the fetched events
 					setStore({
 						users: data
 					});
 				} catch (error) {
 					console.error('Error fetching events', error);
-					// Handle the error as needed
 				}
 			},
 
@@ -79,14 +71,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 						method: 'GET',
 						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`, // Include authorization token if required
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`, 
 						}
 					});
-
-					// console.log("Request URL:", `${process.env.BACKEND_URL}/api/users`);
-					// console.log("Request Headers:", {
-					// 	'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-					// });
 
 					if (!response.ok) {
 						throw new Error('Failed to fetch user profile');
@@ -94,14 +81,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 
-					// console.log("User Profile Data:", data);
-
-					// Update the store with the fetched user profile data
 					setStore({
 						user: data,
 						}
 					);
-					// console.log("User Profile Data:", data);
 
 					return data;
 				} catch (error) {
@@ -112,11 +95,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			editUserProfile: async (updatedProfileData) => {
 				try {
-					// Make a PUT request to update the user's profile in the backend
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 						method: 'PUT',
 						headers: {
-							// COMENTADO ALONDRA. 
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
@@ -127,12 +108,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to edit user profile');
 					}
 
-					// AÑADIDO ALONDRA. Estaba el comentario ya. Optionally, parse the response JSON and return any updated profile data
 					const data = await response.json();
 					console.log('User profile updated successfully:', data);
 
-					// AÑADIDO ALONDRA
-					return data; // Devuelve los datos actualizados del perfil si es necesario
+					return data; 
 				} catch (error) {
 					console.error('Error editing user profile:', error);
 					throw error;
@@ -151,7 +130,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 				}
 			},
-			// AÑADIDO ALONDRA PARCIAL. Función para realizar el login
+
 			login: async (username, password) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/login`, {
@@ -170,9 +149,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					localStorage.setItem("access_token", data.token)
 
-					console.log('Login successful. Data:', data); // Agregar un console.log para verificar los datos recibidos del backend
+					console.log('Login successful. Data:', data);
 
-				// Set session state if authentication is successful
 					setStore({session: {
 						isLoggedIn: true,
 						username: data.username,
@@ -184,10 +162,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// AÑADIDO ALONDRA. Función para realizar el logout
 			logout: async () => {
 				try {
-					// Llama al endpoint de logout
 					const response = await fetch(`${process.env.BACKEND_URL}/logout`, {
 						method: 'POST',
 						headers: {
@@ -200,11 +176,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to logout');
 					}
 
-					// Elimina el token de acceso del almacenamiento local
 					localStorage.removeItem('access_token');
 
 					console.log('Logout successful.');
-					// Actualiza el estado de la sesión
 					setStore({session: {
 						isLoggedIn: false,
 						username: null,
@@ -216,46 +190,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			initiatePasswordRecovery: async (username) => {
+			initiatePasswordRecovery: async (email) => {
 				try {
-					// Logic to initiate password recovery process
-					// Update passwordRecovery state based on the outcome
-					setStore(prevState => ({
-						...prevState,
-						passwordRecovery: {
-							isPasswordRecoverySent: true,
-							error: null,
-						},
-					}));
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/forgot-password`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email }),
+				  });
+			
+				  if (!response.ok) {
+					throw new Error('Failed to initiate password recovery');
+				  }
+			
+				  return await response.json();
 				} catch (error) {
-					console.error('Error initiating password recovery:', error);
-					// Update passwordRecovery state with error information if needed
-					setStore(prevState => ({
-						...prevState,
-						passwordRecovery: {
-							isPasswordRecoverySent: false,
-							error: error.message,
-						},
-					}));
-					throw error;
+				  console.error('Error initiating password recovery:', error);
+				  throw error;
 				}
 			},
 
-			clearPasswordRecoveryState: () => {
-				// Clear passwordRecovery state after password recovery process is complete or cancelled
-				setStore(prevState => ({
-					...prevState,
-					passwordRecovery: {
-						isPasswordRecoverySent: false,
-						error: null,
+			resetPassword: async (token, newPassword) => {
+				try {
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/reset-password`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
 					},
-				}));
+					body: JSON.stringify({ token, new_password: newPassword }),
+				  });
+			
+				  if (!response.ok) {
+					throw new Error('Failed to reset password');
+				  }
+			
+				  return await response.json();
+				} catch (error) {
+				  console.error('Error resetting password:', error);
+				  throw error;
+				}
 			},
 
 			createEvent: async (newEvent) => {
-
 				try {
-					// Implement logic to create a new event in the backend
 					const response = await fetch(process.env.BACKEND_URL + "/api/events", {
 						method: "POST",
 						headers: {
@@ -269,11 +247,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error("Error creating event");
 					}
 
-					// Optionally, handle the response data or update the store
 					const data = await response.json();
 					console.log("Event created successfully:", data);
 
-					// Update the store to include the newly created event:
 					setStore(prevState => {
 						return { ...prevState, events: [...prevState.events, data] };
 					});
@@ -302,126 +278,48 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  const data = await response.json();
 				  console.log("Event updated successfully:", data);
 			  
-				  return data; // Devuelve los datos actualizados del evento si es necesario
+				  return data; 
 				} catch (error) {
 				  console.error("Error updating event", error);
 				  throw error;
 				}
 			},
 			  
-			// editEvent: async (eventId, updatedEvent) => {
-			// 	try {
-			// 		// logic to update the existing event in the backend, Replace API
-			// 		console.log('Updating event:', eventId, updatedEvent); // Agregar este console.log()
-			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
-			// 			method: "PUT",
-			// 			headers: {
-			// 				"Content-Type": "application/json",
-			// 				'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-			// 			},
-			// 			body: JSON.stringify(updatedEvent),
-			// 		});
-
-			// 		if (!response.ok) {
-			// 			throw new Error("Error updating event");
-			// 		}
-
-			// 		// handle the response data or update the store
-			// 		const data = await response.json();
-			// 		console.log("Event updated successfully:", data);
-
-			// 		// Update the store to reflect the updated event
-			// 		setStore(prevState => {
-			// 			const updatedEvents = prevState.events.map(event => {
-			// 				if (event.id === eventId) {
-			// 					return { ...event, ...data };
-			// 				}
-			// 				return event;
-			// 			});
-			// 			return { ...prevState, events: updatedEvents };
-			// 		});
-
-			// 	} catch (error) {
-			// 		console.error("Error updating event", error);
-			// 		throw error;
-			// 	}
-			// },
-
 			getMessage: async () => {
 				try {
-					// Implement the logic to fetch the message from the backend
 					const response = await fetch(process.env.BACKEND_URL + "/api/hello");
 					const data = await response.json();
-					setStore({ message: data }); // Set the fetched message in the store
+					setStore({ message: data }); 
 					return data;
 				} catch (error) {
 					console.error("Error fetching message from backend", error);
 				}
 			},
 
-			signUpForEvent: async (eventId) => {
+			signUpForEvent: async (eventId, userId) => {
 				try {
-					//correct backend logic as needed to signup for event
-					//replace the placeholder URL (${process.env.BACKEND_URL}/api/user/profile) 
-					// with the actual endpoint of backend API that handles user profile updates.
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/signup`, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						},
-						// include any other data we need
-					});
-
-					//checks if request was successful:
-					if (!response.ok) {
-						throw new Error('Failed to sign up for the event');
-					}
-
-					// handle the response data if needed
-					//console.log(`Signed up for event ${eventId}`);
-					const responseData = await response.json();
-					console.log('Sign up response:', responseData);
-
-					// Update the database or other needed actions to save the sign-up info
-					// Placeholder code to update the database and perform other actions
-					// Example: Update the user's profile or event attendance status
-					const userData = await fetch(`${process.env.BACKEND_URL}/api/users/${userId}`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						},
-						body: JSON.stringify({
-							eventId,
-							status: 'attending' // User's status updated to: 'attending' for the event
-						})
-					});
-					if (!userData.ok) {
-						throw new Error('Failed to update user profile');
-					}
-					console.log('User profile updated successfully');
-
-					// Update the store to reflect the user's sign-up status for the event
-					setStore(prevState => {
-						// Find the event in the events array and update its sign-up status
-						const updatedEvents = prevState.events.map(event => {
-							if (event.id === eventId) {
-								return { ...event, isSignedUp: true };
-							}
-							return event;
-						});
-						return { ...prevState, events: updatedEvents };
-					});
-
-
+				  console.log('Signing up for event. Event ID:', eventId, 'User ID:', userId);
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/signup`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					  'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					},
+					body: JSON.stringify({ user_id: userId })
+				  });
+			  
+				  if (!response.ok) {
+					throw new Error('Failed to sign up for the event');
+				  }
+			  
+				  console.log('Signed up for event successfully');
+			  
 				} catch (error) {
-					console.error('Error signing up for the event', error);
-					throw error;
+				  console.error('Error signing up for the event', error);
+				  throw error;
 				}
-			},
-
-			// AÑADIDO ALONDRA. He añadido userId en el async () 
+			  },
+			
 			cancelAssistance: async (eventId) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/signup`, {
@@ -443,28 +341,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchEventDetails: async (eventId) => {
 				try {
-					//correct backend logic as needed to fetch EventDetails
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
-						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
 					});
 
-					// AÑADIDO ALONDRA. 
 					if (!response.ok) {
 						throw new Error('Failed to fetch event details');
 					}
 
 					const data = await response.json();
 
-					// AÑADIDO ALONDRA.
-					// Verificar si el cuerpo de la respuesta contiene datos válidos
 					if (!data || Object.keys(data).length === 0) {
 						throw new Error('Empty or unexpected response data');
 					}
 
-					setStore({ eventDetails: data }); // Set the fetched event details in the store
+					setStore({ eventDetails: data }); 
 
 					return data;
 				} catch (error) {
@@ -474,9 +367,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getAttendeesCount: async (eventId) => {
 				try {
-					// coorect backend logic to fetch number of attendees for the event
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
-						// AÑADIDO ALONDRA. Faltaba la autentificación por token
 						headers: {
 							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						}
@@ -485,32 +376,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch event attendees');
 					}
 					const data = await response.json();
-					// COMENTADO ALONDRA
-					// console.log(`Attendees count for event ${eventId}:`, data.count);
-					// return data.count;
 					console.log(`Attendees for event ${eventId}:`, data);
 					return data;
 				} catch (error) {
 					console.error("Error fetching attendees count", error);
-					throw error; // Propagate the error to the caller if needed
+					throw error; 
 				}
 			},
 
 			fetchEventRecommended: async () => {
 				try {
-					//correct backend logic as needed to see recommended events
 					const response = await fetch(process.env.BACKEND_URL + "/api/events/recommended");
-					// console.log("Response status recommended events:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch recommended events');
 					}
 					const data = await response.json();
-					// AÑADIDO ALONDRA.
-					// console.log("Data from Event Recommended:", data); // Agregar este console.log para verificar los datos recibidos
-					// CAMBIO ALONDRA 
-					setStore({ recommendedEvents: data }); // Set the fetched events in the store
-					// setStore({ events: data }); // Set the fetched events in the store
-					return data; // Devolver los datos obtenidos
+					setStore({ recommendedEvents: data }); 
+					return data; 
 				} catch (error) {
 					console.error("Error fetching events from backend", error);
 				}
@@ -518,51 +400,70 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchAllEvents: async () => {
 				try {
-					//replace API with ours
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events`);
-					// console.log("Response status:", response.status); // Agregar esto para verificar el estado de la respuesta
 					if (!response.ok) {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					console.log("Data from fetchAllEvents:", data); // Agregar este console.log para verificar los datos recibidos
+					console.log("Data from fetchAllEvents:", data); 
 
-					// Update the store with the fetched events
 					setStore({
 						events: data
 					});
 				} catch (error) {
 					console.error('Error fetching events', error);
-					// Handle the error as needed
 				}
 			},
 
 			deleteUser: async () => {
+				const actions = getActions();
 				try {
-					// Realiza una solicitud DELETE al backend para eliminar un usuario específico
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
-						method: 'DELETE',
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-
-					if (!response.ok) {
-						throw new Error('Failed to delete user');
+					// Obtener el usuario actualmente autenticado
+					const userProfile = await actions.fetchUserProfile();
+					if (!userProfile) {
+					throw new Error('User profile not found');
 					}
-
-					// Maneja la respuesta si es necesario
-					console.log('User deleted successfully');
-
+				  
+					// Eliminar todos los eventos asociados al usuario si existen
+					if (userProfile.events !== undefined) {
+					for (const event of userProfile.events) {
+						await actions.deleteEvent(event.id);
+					}
+				}
+				  
+				// Después de eliminar los eventos, eliminar el usuario
+				const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
+					method: 'DELETE',
+					headers: {
+						'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					}
+				});
+			  
+				if (!response.ok) {
+					throw new Error('Failed to delete user');
+				}
+				
+				// Actualizar el estado de la sesión para reflejar que el usuario ya no está autenticado
+				setStore({
+					session: {
+						isLoggedIn: false,
+						username: null,
+						accessToken: null
+					}
+				});
+				
+				// Limpiar el token de acceso del almacenamiento local
+				localStorage.removeItem("access_token");
+			  
+				console.log('User deleted successfully');
 				} catch (error) {
-					console.error('Error deleting user:', error);
-					throw error;
+				console.error('Error deleting user:', error);
+				throw error;
 				}
 			},
-
+			
 			deleteEvent: async (eventId) => {
 				try {
-					// Realiza una solicitud DELETE al backend para eliminar un evento específico
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
 						method: 'DELETE',
 						headers: {
@@ -574,7 +475,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to delete event');
 					}
 
-					// Maneja la respuesta si es necesario
 					console.log('Event deleted successfully');
 
 				} catch (error) {
@@ -674,17 +574,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
-
-			// searchEventsByType: async (eventType) => {
-			// 	try {
-			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/events/search?type=${eventType}`);
-			// 		const data = await response.json();
-			// 		return data;
-			// 	} catch (error) {
-			// 		console.error("Error searching events by type:", error);
-			// 		throw new Error("Error searching events by type");
-			// 	}
-			// },
 
 			filterEvents: async (filters) => {
 				try {

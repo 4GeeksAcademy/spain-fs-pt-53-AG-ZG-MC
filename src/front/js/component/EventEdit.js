@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 
-// REVISAR PORQUE RENDERIZA CADA INPUT
-// añadido al form la parte que estaba en el boton, da menos problemas
 
 const EditEvent = ({ event }) => {
   console.log("Event edit:", event);
@@ -26,15 +24,15 @@ const EditEvent = ({ event }) => {
     if (dateValue instanceof Date) {
       return dateValue.toISOString().split('T')[0];
     } else {
-      return dateValue; // O cualquier otro valor predeterminado que prefieras
+      return dateValue; 
     }
   };
 
   // Function to handle event update
   const handleUpdateEvent = async () => {
-    e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
+    e.preventDefault(); 
     try {
-      console.log('Updating event:', eventData); // Agregar este console.log()
+      console.log('Updating event:', eventData); 
       await actions.editEvent(event.id, eventData);
       console.log('Evento editado exitosamente');
     } catch (error) {
@@ -42,7 +40,6 @@ const EditEvent = ({ event }) => {
     }
   };
 
-  // JSX - ATLAS
   return (
     <div>
       <h2>Edit Event</h2>

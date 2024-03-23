@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Context } from '../store/appContext';
 
-// REVISAR PORQUE RENDERIZA CADA INPUT
-// REVISAR EL PROBLEMA DE MAX Y MIN PEOPLE
   
-const CreateEvent = ({ event }) => {
-  const { actions } = useContext(Context);
+const CreateEvent = () => {
+  const { actions, store } = useContext(Context); 
 
-  const defaultLocation = "Barcelona"; // Ubicación predeterminada
+  const defaultLocation = "Barcelona";
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -27,12 +25,24 @@ const CreateEvent = ({ event }) => {
     lgtbi: false,
     pet_friendly: false,
     kid_friendly: false,
-    // user_id: user ? user.id : ""
   });
 
   const handleCreateEvent = async () => {
     try {
-      await actions.createEvent(eventData);
+      // Verifica si hay un usuario autenticado
+      if (!store.session.isLoggedIn) {
+        throw new Error("No user authenticated");
+      }
+
+      // Agrega el ID del usuario al evento
+      const eventDataWithUserId = {
+        ...eventData,
+        user_id: store.user.id
+      };
+
+      // Envía el evento con el ID del usuario al backend
+      await actions.createEvent(eventDataWithUserId);
+
       console.log('Evento creado exitosamente');
       // Limpiar los campos después de la creación del evento
       setEventData({
@@ -53,8 +63,9 @@ const CreateEvent = ({ event }) => {
         lgtbi: false,
         pet_friendly: false,
         kid_friendly: false,
-        // user_id: user ? user.id : ""
       });
+
+      await actions.fetchAllEvents();
     } catch (error) {
       console.error('Error al crear el evento:', error);
     }
@@ -69,7 +80,6 @@ const CreateEvent = ({ event }) => {
     }));
   };
 
-  // JSX component: - ATLAS
   return (
     <div>
       <h2>Create Event</h2>
@@ -243,16 +253,6 @@ const CreateEvent = ({ event }) => {
           checked={eventData.kid_friendly}
           onChange={handleInputChange}
         />
-
-        {/* Event UserId input */}
-        {/* <label htmlFor="user_id">Event UserId:</label>
-        <input
-          type="text"
-          id="user_id"
-          name="user_id"
-          value={eventData.user_id}
-          onChange={handleInputChange}
-        />         */}
 
         <iframe
           width="600"

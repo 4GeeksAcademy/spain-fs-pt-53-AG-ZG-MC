@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { Context } from '../store/appContext'; // Import your app context
+import { Context } from '../store/appContext';
 
 const RegistrationForm = () => {
-  const { actions } = useContext(Context); // Access the context and its actions
+  const { actions } = useContext(Context); 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -19,7 +19,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data:", formData); // Agregar este console.log()
+    console.log("Form data:", formData);
 
     try {
       // Call the action to create a user from the context
@@ -40,7 +40,6 @@ const RegistrationForm = () => {
         confirmPassword: ''
       });
     } catch (error) {
-      // Handle error if registration fails
       if (error.response && error.response.data) {
         console.error('Registration failed:', error.response.data);
       } else {
@@ -49,7 +48,6 @@ const RegistrationForm = () => {
     }
   };
 
-  // JSX
   return (
     <form onSubmit={handleSubmit}>
       <div>

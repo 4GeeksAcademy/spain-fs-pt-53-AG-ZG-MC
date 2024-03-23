@@ -1,5 +1,3 @@
-// EventsAll.js
-
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
 import EventCard from '../component/EventCard';
@@ -10,7 +8,7 @@ const EventsListAll = () => {
   const { store } = useContext(Context);
   const { events } = store
   const [filteredEvents, setFilteredEvents] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchEvents();
@@ -41,19 +39,17 @@ const EventsListAll = () => {
   
   return (
     <div>
-      {/* Render the event search bar */}
       <div>
         <EventSearchBar
           events={events}
-          setFilteredEvents={setFilteredEvents}// Pass setFilteredEvents as a prop
-          onFilterClick={handleFilterClick} // Pass handleFilterClick as a prop
+          setFilteredEvents={setFilteredEvents}
+          onFilterClick={handleFilterClick}
         />
       </div>
 
-      {/* Render the list of events */}
       <div>
         <h1>All Events</h1>
-        {loading ? ( // Render loading message while fetching events
+        {loading ? ( 
           <p>Loading...</p>
         ) : (
           <div className="event-list">

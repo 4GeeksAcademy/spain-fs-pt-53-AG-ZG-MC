@@ -1,39 +1,59 @@
-// EventView.js
-
-// LA FECHA NO SE TRAE, SALE VACIA
-// NO SE PUEDEN GUARDAR LOS CAMBIOS DEL EVENTO POR CORS
-
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import EventDetails from '../component/EventDetails';
 
 const EventDetailsPage = () => {
-  const { eventId } = useParams(); // Get the event ID from URL params
+  const { eventId } = useParams(); 
   const { store, actions } = useContext(Context);
-  const { eventDetails } = store
+  const { eventDetails, user } = store
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  console.log("User: ", user);
+  const { signedup_events, id } = user || {};
+
+  useEffect(() => {
+    setIsLoggedIn(!!store.session.isLoggedIn); 
+  }, [store.session.isLoggedIn]);
 
   useEffect(() => {
     actions.fetchEventDetails(eventId)
-      .then(eventData => console.log('Event fetched:', eventData))
+      .then(eventData => {
+        console.log('Event fetched:', eventData);
+      })
       .catch(error => console.error('Error fetching event:', error));
   }, [eventId]);
 
-  // console.log("Events Details Page:", eventDetails);
-
-  // // Estado para controlar si estamos en modo de edición o no
-  // const [isEditing, setIsEditing] = useState(false);
-
-  // // Función para activar el modo de edición
-  // const handleEditClick = () => {
-  //   setIsEditing(true);
-  // };
-
+  // Función para manejar la inscripción en el evento
+  const handleSignUp = async () => {
+    try {
+      console.log('Starting handleSignUp...');
+      if (!isLoggedIn) {
+        alert('You need to log in first.');
+        return;
+      }
+      if (signedup_events && signedup_events.find(event => event.event_id == eventId)) {
+        await actions.cancelAssistance(eventId)
+      } else {
+        await actions.signUpForEvent(eventId, id);
+      }
+      await actions.fetchUserProfile();
+      console.log('Signed up for event successfully');
+    } catch (error) {
+      console.error('Error signing up for the event', error);
+    }
+  };
+  console.log("Signedup Events: ", signedup_events)
   return (
     <div>
       <h1>Event Details Page</h1>
         {eventDetails && (
-          <EventDetails event={eventDetails} />
+          <div>
+              <EventDetails event={eventDetails} />
+              <button onClick={handleSignUp}> 
+              {signedup_events && signedup_events.find(event => event.event_id == eventId) ? "Cancel" : "Sign up"}
+              </button>
+          </div>
         )}
     </div>
   );

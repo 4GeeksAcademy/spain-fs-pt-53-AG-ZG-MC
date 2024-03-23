@@ -1,16 +1,12 @@
-//vista no detallada del evento
-//diseño dentro card horizontal
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const EventCard = ({ event }) => {
     if (!event) {
-        return null; // Si no hay evento, retorna null para evitar errores
+        return null;
     }
 
-    const { id, userId, username, name, date, place } = event; // Desestructura el evento para obtener sus propiedades
-
-    const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+    const { id, userId, username, name, date, place } = event;
 
 
     return (
@@ -19,8 +15,10 @@ const EventCard = ({ event }) => {
             <h3>{name}</h3>
             <p>Date: {new Date(date).toDateString()}</p>
             <p>Place: {place}</p>
+            <Link to={`/events/${id}`}>
+                <button>View Details</button>
+            </Link>
             
-            {/* <Link to={`/profile/${username}`}>View Profile ({username})</Link> */}
         </div>
     );
 };

@@ -336,13 +336,13 @@ class Event(db.Model):
     def validate_age_range(self):
         # Verifica que min_age sea menor o igual que max_age
         if self.min_age is not None and self.max_age is not None:
-            if self.min_age > self.max_age:
+            if int(self.min_age) > int(self.max_age):
                 raise ValueError("min_age must be less than or equal to max_age")
 
     def validate_people_range(self):
         # Verifica que min_people sea menor o igual que max_people
         if self.min_people is not None and self.max_people is not None:
-            if self.min_people > self.max_people:
+            if int(self.min_people) > int(self.max_people):
                 raise ValueError("min_people must be less than or equal to max_people")
 
     def save(self):

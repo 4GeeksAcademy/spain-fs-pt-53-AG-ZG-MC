@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const Logout = ({ setStoreLog }) => {
     const [logoutMessage, setLogoutMessage] = useState('');
 
@@ -39,11 +40,10 @@ const Logout = ({ setStoreLog }) => {
     
             // Redirect the user to the home page after logout
             setTimeout(() => {
-                window.location.replace('/'); // Redirect to home page
-            }, 2000); // Redirect after 2 seconds
+                window.location.replace('/');
+            }, 2000);
         } catch (error) {
             console.error('Error logging out:', error);
-            // Handle logout failure
         }
     };
     

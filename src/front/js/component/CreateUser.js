@@ -1,4 +1,3 @@
-// CreateUser.js
 import React, { useContext, useState } from "react";
 import { Context } from "./appContext";
 
@@ -9,10 +8,8 @@ const CreateUser = () => {
 
     const handleCreateUser = async () => {
         try {
-            // Call the createUser action from flux.js
             await actions.createUser(username, password);
 
-            // we can reset the form or perform other actions upon successful user creation
             setUsername("");
             setPassword("");
         } catch (error) {
