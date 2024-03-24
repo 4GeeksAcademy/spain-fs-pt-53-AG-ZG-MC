@@ -30,7 +30,7 @@ const EditEvent = ({ event }) => {
 
   // Function to handle event update
   const handleUpdateEvent = async () => {
-    e.preventDefault(); 
+    // preventDefault(); 
     try {
       console.log('Updating event:', eventData); 
       await actions.editEvent(event.id, eventData);
