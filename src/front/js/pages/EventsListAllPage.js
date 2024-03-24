@@ -1,26 +1,72 @@
-// EventsAll.js
-
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
 import EventCard from '../component/EventCard';
+import EventSearchBar from '../component/EventSearchBar';
+
 
 const EventsListAll = () => {
-  const { store, actions } = useContext(Context);
+  const { store } = useContext(Context);
+  const { events } = store
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    actions.fetchAllEvents(); // Fetch all events when the component mounts
+    fetchEvents();
   }, []);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [filteredEvents]);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/events`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch events');
+      }
+      const data = await response.json();
+      setFilteredEvents(data.events || []);
+    } catch (error) {
+      console.error('Error fetching events:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterClick = (filters) => {
+    setFilteredEvents(events.events);
+  };
+  
   return (
     <div>
-      <h1>All Events</h1>
-      <div className="event-list">
-        {store.events.map(event => (
-          <EventCard key={event.id} event={event} />
-        ))}
+      <div>
+        <EventSearchBar
+          events={events}
+          setFilteredEvents={setFilteredEvents}
+          onFilterClick={handleFilterClick}
+        />
+      </div>
+
+      <div>
+        <h1>All Events</h1>
+        {loading ? ( 
+          <p>Loading...</p>
+        ) : (
+          <div className="event-list">
+            {filteredEvents.length > 0 ? (
+              filteredEvents.map(event => (
+                <EventCard key={event.id} event={event} />
+              ))
+            ) : (
+              <p>No events found.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
+
 };
 
 export default EventsListAll;
+

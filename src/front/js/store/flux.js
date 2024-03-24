@@ -1,66 +1,15 @@
-const fetchUserProfile = async () => {
-	try {
-		//replace ${process.env.BACKEND_URL}/api/user/profile with our API
-		const response = await fetch(`${process.env.BACKEND_URL}/api/user/profile`, {
-			method: 'GET',
-			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Include authorization token if required
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('Failed to fetch user profile');
-		}
-
-		const userProfileData = await response.json();
-
-		// Update the store with the fetched user profile data
-		setStore(prevState => ({
-			...prevState,
-			userProfile: userProfileData
-		}));
-
-		return userProfileData;
-	} catch (error) {
-		console.error('Error fetching user profile:', error);
-		throw error;
-	}
-};
-
-const editUserProfile = async (userId, updatedProfileData) => {
-	try {
-		// Make a PUT request to update the user's profile in the backend
-		const response = await fetch(`${process.env.BACKEND_URL}/api/user/profile/${userId}`, {
-			method: 'PUT',
-			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(updatedProfileData)
-		});
-
-		if (!response.ok) {
-			throw new Error('Failed to edit user profile');
-		}
-
-		// Optionally, parse the response JSON and return any updated profile data
-	} catch (error) {
-		console.error('Error editing user profile:', error);
-		throw error;
-	}
-};
-
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			events: [], // Add an empty array to store events
+			users: [],
+			user: null,
+			events: [],
+			recommendedEvents: [],
 			session: {
 				isLoggedIn: false,
-				user: null,
+				username: null,
 				accessToken: null,
-				// Add other session-related data as needed
 			},
 			passwordRecovery: {
 				isPasswordRecoverySent: false,
@@ -68,14 +17,123 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 		},
 		actions: {
-			// Other actions?...
+			handleCreateUser: async (firstName, lastName, username, email, password, confirmPassword) => {
+				try {
+					const userData = {
+						first_name: firstName,
+						last_name: lastName,
+						username,
+						email,
+						password,
+						confirm_password: confirmPassword
+					};
+
+					const response = await fetch(process.env.BACKEND_URL + "/api/users", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(userData),
+					});
+
+					if (!response.ok) {
+						throw new Error("Error creating user");
+					}
+
+					const data = await response.json();
+					console.log("User created successfully:", data);
+
+				} catch (error) {
+					console.error("Error creating user", error);
+					throw error; 
+				}
+			},
+
+			fetchAllUsers: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/allusers`);
+					if (!response.ok) {
+						throw new Error('Failed to fetch users');
+					}
+					const data = await response.json();
+					// console.log("Data from fetchAllUsers:", data);
+
+					setStore({
+						users: data
+					});
+				} catch (error) {
+					console.error('Error fetching events', error);
+				}
+			},
+
+			fetchUserProfile: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`, 
+						}
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to fetch user profile');
+					}
+
+					const data = await response.json();
+
+					setStore({
+						user: data,
+						}
+					);
+
+					return data;
+				} catch (error) {
+					console.error('Error fetching user profile:', error);
+					throw error;
+				}
+			},
+
+			editUserProfile: async (updatedProfileData) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						},
+						body: JSON.stringify(updatedProfileData)
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to edit user profile');
+					}
+
+					const data = await response.json();
+					console.log('User profile updated successfully:', data);
+
+					return data; 
+				} catch (error) {
+					console.error('Error editing user profile:', error);
+					throw error;
+				}
+			},
+			
+			syncroniseToken: async () => {
+				const token = localStorage.getItem("access_token");
+
+				if (token) {
+					setStore({
+						session: {
+							isLoggedIn: true,
+							accessToken: token,
+						}
+					})
+				}
+			},
 
 			login: async (username, password) => {
 				try {
-					// Implement logic to authenticate user
-					// Set session state if authentication is successful
-					//Replace the placeholder URL (process.env.BACKEND_URL) with the actual endpoints 
-					const response = await fetch(`${process.env.BACKEND_URL}/api/auth/login`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/login`, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
@@ -88,108 +146,99 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					const accessToken = data.accessToken; // Assuming the token is returned as 'accessToken'
 
-					// Store the access token in local storage or a secure location
-					localStorage.setItem('accessToken', accessToken);
+					localStorage.setItem("access_token", data.token)
 
-					// Set session state if authentication is successful
-					setStore(prevState => ({
-						...prevState,
-						session: {
-							isLoggedIn: true,
-							user: { username }, // Store user data as needed
-							accessToken: accessToken,
-							// Add other user-related data as needed
-						}
-					}));
+					console.log('Login successful. Data:', data);
+
+					setStore({session: {
+						isLoggedIn: true,
+						username: data.username,
+						accessToken: data.token,
+					}}); 	
 				} catch (error) {
 					console.error('Error logging in:', error);
 					throw error;
 				}
 			},
 
-			logout: () => {
-				// Logic to clear session state upon logout
-				setStore(prevState => ({
-					...prevState,
-					session: {
-						isLoggedIn: false,
-						user: null,
-						accessToken: null,
-					},
-				}));
-			},
-
-			initiatePasswordRecovery: async (username) => {
+			logout: async () => {
 				try {
-					// Logic to initiate password recovery process
-					// Update passwordRecovery state based on the outcome
-					setStore(prevState => ({
-						...prevState,
-						passwordRecovery: {
-							isPasswordRecoverySent: true,
-							error: null,
+					const response = await fetch(`${process.env.BACKEND_URL}/logout`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
-					}));
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to logout');
+					}
+
+					localStorage.removeItem('access_token');
+
+					console.log('Logout successful.');
+					setStore({session: {
+						isLoggedIn: false,
+						username: null,
+						accessToken: null,
+					}});    				
 				} catch (error) {
-					console.error('Error initiating password recovery:', error);
-					// Update passwordRecovery state with error information if needed
-					setStore(prevState => ({
-						...prevState,
-						passwordRecovery: {
-							isPasswordRecoverySent: false,
-							error: error.message,
-						},
-					}));
+					console.error('Error logging out:', error);
 					throw error;
 				}
 			},
 
-			clearPasswordRecoveryState: () => {
-				// Clear passwordRecovery state after password recovery process is complete or cancelled
-				setStore(prevState => ({
-					...prevState,
-					passwordRecovery: {
-						isPasswordRecoverySent: false,
-						error: null,
+			initiatePasswordRecovery: async (email) => {
+				try {
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/forgot-password`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
 					},
-				}));
+					body: JSON.stringify({ email }),
+				  });
+			
+				  if (!response.ok) {
+					throw new Error('Failed to initiate password recovery');
+				  }
+			
+				  return await response.json();
+				} catch (error) {
+				  console.error('Error initiating password recovery:', error);
+				  throw error;
+				}
 			},
 
-			handleCreateUser: async (username, password) => {
+			resetPassword: async (token, newPassword) => {
 				try {
-					// Implement the logic to create a user in the backend
-					//replace API url with correct one
-					const response = await fetch(process.env.BACKEND_URL + "/api/createUser", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({ username, password }),
-					});
-
-					if (!response.ok) {
-						throw new Error("Error creating user");
-					}
-
-					// Optionally, handle the response data or update the store
-					const data = await response.json();
-					console.log("User created successfully:", data);
-
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/reset-password`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ token, new_password: newPassword }),
+				  });
+			
+				  if (!response.ok) {
+					throw new Error('Failed to reset password');
+				  }
+			
+				  return await response.json();
 				} catch (error) {
-					console.error("Error creating user", error);
-					throw error; // Propagate the error to the caller if needed
+				  console.error('Error resetting password:', error);
+				  throw error;
 				}
 			},
 
 			createEvent: async (newEvent) => {
 				try {
-					// Implement logic to create a new event in the backend
-					const response = await fetch(process.env.BACKEND_URL + "/api/createEvent", {
+					const response = await fetch(process.env.BACKEND_URL + "/api/events", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
 						body: JSON.stringify(newEvent),
 					});
@@ -198,11 +247,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error("Error creating event");
 					}
 
-					// Optionally, handle the response data or update the store
 					const data = await response.json();
 					console.log("Event created successfully:", data);
 
-					// Update the store to include the newly created event:
 					setStore(prevState => {
 						return { ...prevState, events: [...prevState.events, data] };
 					});
@@ -215,121 +262,72 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			editEvent: async (eventId, updatedEvent) => {
 				try {
-					// logic to update the existing event in the backend, Replace API
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
-						method: "PUT",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(updatedEvent),
-					});
-
-					if (!response.ok) {
-						throw new Error("Error updating event");
-					}
-
-					// handle the response data or update the store
-					const data = await response.json();
-					console.log("Event updated successfully:", data);
-
-					// Update the store to reflect the updated event
-					setStore(prevState => {
-						const updatedEvents = prevState.events.map(event => {
-							if (event.id === eventId) {
-								return { ...event, ...data };
-							}
-							return event;
-						});
-						return { ...prevState, events: updatedEvents };
-					});
-
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
+					method: "PUT",
+					headers: {
+					  "Content-Type": "application/json",
+					  'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					},
+					body: JSON.stringify(updatedEvent),
+				  });
+			  
+				  if (!response.ok) {
+					throw new Error("Error updating event");
+				  }
+			  
+				  const data = await response.json();
+				  console.log("Event updated successfully:", data);
+			  
+				  return data; 
 				} catch (error) {
-					console.error("Error updating event", error);
-					throw error;
+				  console.error("Error updating event", error);
+				  throw error;
 				}
 			},
-
+			  
 			getMessage: async () => {
 				try {
-					// Implement the logic to fetch the message from the backend
-					const response = await fetch(process.env.BACKEND_URL + "/api/message");
+					const response = await fetch(process.env.BACKEND_URL + "/api/hello");
 					const data = await response.json();
-					setStore({ message: data }); // Set the fetched message in the store
+					setStore({ message: data }); 
 					return data;
 				} catch (error) {
 					console.error("Error fetching message from backend", error);
 				}
 			},
 
-			signUpForEvent: async (eventId) => {
+			signUpForEvent: async (eventId, userId) => {
 				try {
-					//correct backend logic as needed to signup for event
-					//replace the placeholder URL (${process.env.BACKEND_URL}/api/user/profile) 
-					// with the actual endpoint of backend API that handles user profile updates.
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/signup`, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						// include any other data we need
-					});
-
-					//checks if request was successful:
-					if (!response.ok) {
-						throw new Error('Failed to sign up for the event');
-					}
-
-					// handle the response data if needed
-					//console.log(`Signed up for event ${eventId}`);
-					const responseData = await response.json();
-					console.log('Sign up response:', responseData);
-
-					// Update the database or other needed actions to save the sign-up info
-					// Placeholder code to update the database and perform other actions
-					// Example: Update the user's profile or event attendance status
-					const userData = await fetch(`${process.env.BACKEND_URL}/api/user/profile`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							eventId,
-							status: 'attending' // User's status updated to: 'attending' for the event
-						})
-					});
-					if (!userData.ok) {
-						throw new Error('Failed to update user profile');
-					}
-					console.log('User profile updated successfully');
-
-					// Update the store to reflect the user's sign-up status for the event
-					setStore(prevState => {
-						// Find the event in the events array and update its sign-up status
-						const updatedEvents = prevState.events.map(event => {
-							if (event.id === eventId) {
-								return { ...event, isSignedUp: true };
-							}
-							return event;
-						});
-						return { ...prevState, events: updatedEvents };
-					});
-
-
+				  console.log('Signing up for event. Event ID:', eventId, 'User ID:', userId);
+				  const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/signup`, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json',
+					  'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					},
+					body: JSON.stringify({ user_id: userId })
+				  });
+			  
+				  if (!response.ok) {
+					throw new Error('Failed to sign up for the event');
+				  }
+			  
+				  console.log('Signed up for event successfully');
+			  
 				} catch (error) {
-					console.error('Error signing up for the event', error);
-					throw error;
+				  console.error('Error signing up for the event', error);
+				  throw error;
 				}
-			},
-
+			  },
+			
 			cancelAssistance: async (eventId) => {
 				try {
-					// correct backend logic to cancel assistance
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/cancel-assistance`, {
-						method: 'POST',
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/signup`, {
+						method: 'DELETE',
 						headers: {
-							'Content-Type': 'application/json'
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
 						},
-						//include any other data we may need
 					});
 					if (!response.ok) {
 						throw new Error('Failed to cancel assistance for the event');
@@ -341,21 +339,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			shareEvent: async (eventId) => {
-				try {
-					// do we need backend logic to share event??
-					console.log(`Shared event ${eventId}`);
-				} catch (error) {
-					console.error("Error sharing the event", error);
-				}
-			},
-
 			fetchEventDetails: async (eventId) => {
 				try {
-					//correct backend logic as needed to fetch EventDetails
-					const response = await fetch(process.env.BACKEND_URL + `/api/events/${eventId}`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to fetch event details');
+					}
+
 					const data = await response.json();
-					setStore({ eventDetails: data }); // Set the fetched event details in the store
+
+					if (!data || Object.keys(data).length === 0) {
+						throw new Error('Empty or unexpected response data');
+					}
+
+					setStore({ eventDetails: data }); 
+
 					return data;
 				} catch (error) {
 					console.error(`Error fetching event details for event ${eventId}`, error);
@@ -364,27 +367,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getAttendeesCount: async (eventId) => {
 				try {
-					// coorect backend logic to fetch number of attendees for the event
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/attendees/count`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
 					if (!response.ok) {
-						throw new Error('Failed to fetch attendees count');
+						throw new Error('Failed to fetch event attendees');
 					}
 					const data = await response.json();
-					console.log(`Attendees count for event ${eventId}:`, data.count);
-					return data.count;
+					console.log(`Attendees for event ${eventId}:`, data);
+					return data;
 				} catch (error) {
 					console.error("Error fetching attendees count", error);
-					throw error; // Propagate the error to the caller if needed
+					throw error; 
 				}
 			},
 
 			fetchEventRecommended: async () => {
 				try {
-					//correct backend logic as needed to see recommended events
-					const response = await fetch(process.env.BACKEND_URL + "/api/events");
+					const response = await fetch(process.env.BACKEND_URL + "/api/events/recommended");
+					if (!response.ok) {
+						throw new Error('Failed to fetch recommended events');
+					}
 					const data = await response.json();
-					setStore({ events: data }); // Set the fetched events in the store
-					return data;
+					setStore({ recommendedEvents: data }); 
+					return data; 
 				} catch (error) {
 					console.error("Error fetching events from backend", error);
 				}
@@ -392,32 +400,196 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchAllEvents: async () => {
 				try {
-					//replace API with ours
 					const response = await fetch(`${process.env.BACKEND_URL}/api/events`);
 					if (!response.ok) {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					// Update the store with the fetched events
-					setStore(prevState => ({
-						...prevState,
+					console.log("Data from fetchAllEvents:", data); 
+
+					setStore({
 						events: data
-					}));
+					});
 				} catch (error) {
 					console.error('Error fetching events', error);
-					// Handle the error as needed
 				}
 			},
 
+			deleteUser: async () => {
+				const actions = getActions();
+				try {
+					// Obtener el usuario actualmente autenticado
+					const userProfile = await actions.fetchUserProfile();
+					if (!userProfile) {
+					throw new Error('User profile not found');
+					}
+				  
+					// Eliminar todos los eventos asociados al usuario si existen
+					if (userProfile.events !== undefined) {
+					for (const event of userProfile.events) {
+						await actions.deleteEvent(event.id);
+					}
+				}
+				  
+				// Después de eliminar los eventos, eliminar el usuario
+				const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
+					method: 'DELETE',
+					headers: {
+						'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+					}
+				});
+			  
+				if (!response.ok) {
+					throw new Error('Failed to delete user');
+				}
+				
+				// Actualizar el estado de la sesión para reflejar que el usuario ya no está autenticado
+				setStore({
+					session: {
+						isLoggedIn: false,
+						username: null,
+						accessToken: null
+					}
+				});
+				
+				// Limpiar el token de acceso del almacenamiento local
+				localStorage.removeItem("access_token");
+			  
+				console.log('User deleted successfully');
+				} catch (error) {
+				console.error('Error deleting user:', error);
+				throw error;
+				}
+			},
+			
+			deleteEvent: async (eventId) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}`, {
+						method: 'DELETE',
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to delete event');
+					}
+
+					console.log('Event deleted successfully');
+
+				} catch (error) {
+					console.error('Error deleting event:', error);
+					throw error;
+				}
+			},
+
+			getEventsByUser: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events`, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+					if (!response.ok) {
+						throw new Error('Failed to fetch events by user');
+					}
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error fetching events by user:", error);
+					throw error;
+				}
+			},
+
+			getUsersByEvent: async (eventId) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+					if (!response.ok) {
+						throw new Error('Failed to fetch users by event');
+					}
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error fetching users by event:", error);
+					throw error;
+				}
+			},
+
+			addEventToFavorites: async (eventId) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
+						method: "POST",
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+					if (!response.ok) {
+						throw new Error('Failed to add event to favorites');
+					}
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error adding event to favorites:", error);
+					throw error;
+				}
+			},
+
+			removeEventFromFavorites: async (eventId) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
+						method: "DELETE",
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+					if (!response.ok) {
+						throw new Error('Failed to remove event from favorites');
+					}
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error removing event from favorites:", error);
+					throw error;
+				}
+			},
+
+			getUserFavoriteEvents: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/users/favorite_event`, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+						}
+					});
+					if (!response.ok) {
+						throw new Error('Failed to fetch user favorite events');
+					}
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error fetching user favorite events:", error);
+					throw error;
+				}
+			},
+
+			filterEvents: async (filters) => {
+				try {
+					const queryString = new URLSearchParams(filters).toString();
+					const response = await fetch(`${process.env.BACKEND_URL}/api/events/filter?${queryString}`);
+					const data = await response.json();
+					return data;
+				} catch (error) {
+					console.error("Error filtering events:", error);
+					throw new Error("Error filtering events");
+				}
+			},
 		},
-
-		fetchUserProfile: fetchUserProfile, // Exporting the fetchUserProfile function
-		editUserProfile: editUserProfile
-
 	};
 };
 
 export default getState;
-// Export the fetchUserProfile function separately
-export { fetchUserProfile };
-export { editUserProfile };
+
+

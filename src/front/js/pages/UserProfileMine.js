@@ -1,54 +1,82 @@
-// UserProfileMine.js
-//actualizar perfil usuario
-//eliminar cuenta usuario
-//ver eventos que he creado
-
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../store/appContext';
-import { fetchUserProfile } from '../store/flux'; // Import the fetchUserProfile action
-import { editUserProfile } from '../store/flux';
+import { useNavigate } from 'react-router-dom'; 
+import ProfileEdit from '../component/ProfileEdit';
+import MyEvents from '../component/MyEvents';
+
 
 const UserProfileMine = () => {
-  const { actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
   const [userProfile, setUserProfile] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const [isMounted, setIsMounted] = useState(true);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Fetch user profile information when component mounts
-    fetchUserProfile()
-      .then(userProfileData => setUserProfile(userProfileData))
-      .catch(error => console.error('Error fetching user profile:', error));
-  }, [actions]);
+    const fetchUserProfile = async () => {
+      try {
+        const userProfile = await actions.fetchUserProfile();
+        if (isMounted) { 
+          setUserProfile(userProfile);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        setError(error.message);
+      }
+    };
 
-  // Check if userProfile is null, if null, edit button can't be seen. ¿backend connection would fix it?
-  useEffect(() => {
-    if (userProfile === null) {
-      console.log('userProfile is null');
-      // Or display a message
-      // return <div>User profile is null</div>;
-    }
-  }, [userProfile]);
+    fetchUserProfile();
 
-  const handleEditProfile = async (updatedProfileData) => {
+    return () => {
+      setIsMounted(false);
+    };
+  }, [isMounted, actions.fetchUserProfile]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+
+  const handleDeleteClick = async () => {
     try {
-      await editUserProfile(userProfile.id, updatedProfileData);
-      // Optionally, update state or show success message
+      if (window.confirm("Are you sure you want to delete your profile?")) {
+        const deletedUserProfile = await actions.deleteUser();
+        if (deletedUserProfile) {
+          setIsEditing(false);
+          console.log('User deleted successfully');
+  
+          actions.clearUser();
+  
+          localStorage.removeItem("access_token");
+  
+          navigate('/');
+        }
+      }
     } catch (error) {
-      console.error('Error editing user profile:', error);
-      // Handle error
+      console.error('Error deleting user:', error);
+      setError(error.message);
     }
   };
 
   return (
     <div>
       <h1>User Profile</h1>
-      {userProfile && (
-        <div>
-          <p>Username: {userProfile.username}</p>
-          <p>Email: {userProfile.email}</p>
-          <Link to="/edit-profile">Edit Profile</Link>
-          <button onClick={handleEditProfile}>Edit Profile</button>
-          {/* Render other user profile information */}
-        </div>
+      {isEditing ? (
+        <ProfileEdit user={userProfile} />
+      ) : (
+        userProfile && (
+          <div>
+            <p>Username: {userProfile.username}</p>
+            <p>Email: {userProfile.email}</p>
+            <p>First name: {userProfile.first_name}</p>
+            <p>Last name: {userProfile.last_name}</p>
+            <MyEvents />
+
+            <button onClick={handleEditClick}>Edit Profile</button>
+            <button onClick={handleDeleteClick}>Delete Profile</button>
+          </div>
+        )
       )}
     </div>
   );

@@ -1,63 +1,70 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Context } from "../store/appContext";
-import EventActions from "./EventActions";
-
-//ver ubicacion del evento en mapa con api
-//ver el clima API - componente separado
-//VER Nº de asistentes
-
-const EventDetails = ({ eventId }) => {
-  const { store, actions } = useContext(Context);
-
-  // Access the events from the store
-  const { events } = store;
-
-  // State to manage selected event details
-  const [eventDetails, setEventDetails] = useState(null);
-  const [attendeesCount, setAttendeesCount] = useState(0);
-
-  // UseEffect to update event details when component mounts or eventId changes
-  useEffect(() => {
-    // Find the event with the specified eventId
-    const selectedEvent = events.find((event) => event.id === eventId);
-
-    // Update the eventDetails state
-    setEventDetails(selectedEvent);
-
-    // Fetch weather forecast (we need function to fetch it from an external API)
-    fetchWeatherForecast(selectedEvent.location);
-
-    // Fetch number of attendees
-    fetchAttendeesCount(selectedEvent.id);
-
-  }, [events, eventId]);
+import React from "react";
+import WeatherForecast from "./WeatherForecast";
 
 
-  // Function to fetch number of attendees
-  const fetchAttendeesCount = async (eventId) => {
-    try {
-      // Call the function to fetch number of attendees from the backend
-      const count = await actions.getAttendeesCount(eventId);
-      setAttendeesCount(count);
-    } catch (error) {
-      console.error("Error fetching attendees count", error);
-    }
-  };
+const EventDetails = ({ event }) => {
+  console.log("Event Details:", event)
 
-  // JSX component - Atlas
+  if (!event) {
+    return null; 
+  }
+
+  const { 
+    id, 
+    name, 
+    date, 
+    duration, 
+    type, 
+    place, 
+    description,
+    language,
+    gender,
+    price_type,
+    price,
+    min_age,
+    max_age,
+    min_people,
+    max_people,
+    lgtbi,
+    kid_friendly,
+    pet_friendly,
+  } = event;
+
+  const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+
   return (
     <div>
       <h2>Event Details</h2>
-      {eventDetails && (
+      {event && (
         <div>
-          <h3>{eventDetails.name}</h3>
-          <p>Date: {eventDetails.date}</p>
-          <p>Location: {eventDetails.location}</p>
-          {/* assuming weather forecast needs location to fetch weather, 
-          from separate component */}
-          <WeatherForecast location={eventDetails.location} />
-          <p>Attendees Count: {attendeesCount}</p>
-          <EventActions eventId={eventId} />
+          <h3>{id}, {name}</h3>
+          <p>Date: {new Date(date).toDateString()}</p>
+          <p>Duration: {duration}</p>
+          <p>Type: {type}</p>
+          <p>Place: {place}</p>
+          <p>Description: {description}</p>
+          <p>Language: {language}</p>
+          <p>Gender: {gender}</p>
+          <p>Price type: {price_type}</p>
+          <p>Price: {price}</p>
+          <p>Minimum age: {min_age}</p>
+          <p>Maximun age: {max_age}</p>
+          <p>Minimum people: {min_people}</p>
+          <p>Maximum people: {max_people}</p>
+          <p>Lgtbi: {lgtbi ? 'Allowed' : 'Not Allowed'}</p>
+          <p>Pets: {pet_friendly  ? 'Allowed' : 'Not Allowed'}</p>
+          <p>Kids: {kid_friendly ? 'Allowed' : 'Not Allowed'}</p>
+
+          <WeatherForecast location={event.place} eventDate={eventDateFormatted} />
+          <iframe
+          width="600"
+          height="450"
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDB9WpSu4YZXGeyeD72uuxNKM-kBpDBaCI&q=${encodeURIComponent(event.place)}`}
+          title="Event map"
+        ></iframe>
         </div>
       )}
     </div>
