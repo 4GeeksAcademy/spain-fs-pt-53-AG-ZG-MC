@@ -379,6 +379,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                 </div>
             )}
         </div>
+        
+        //INTERCAMBIAR SECTION SEARCHBAR DEL HEADER.JS*
+        
     );
 };
 

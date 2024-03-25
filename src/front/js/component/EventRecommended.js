@@ -19,6 +19,54 @@ const EventRecommended = ({ events }) => {
         ))}
       </div>
     </div>
+
+
+
+
+
+<section className="sectionSpace">
+<div className="centeredWebContent">
+    <div className="miniCardSectionHeader">
+        <h2 className="tittleHeaderWrap">¡Sal de tu zona de Comfort!</h2>
+        <h4 className="subtittleHeaderWrap">Aquí te dejamos algunas opciones:</h4>
+    </div>
+    <div className="miniCardSectionWrap">
+        <div className="miniCardLog">
+            <div className="imgMiniCard"></div>
+            <p className="tittleMiniCard">Titulo</p>
+            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+            <button className="buttonMiniCard">Ver Evento</button>
+        </div>
+        <div className="miniCardLog">
+            <div className="imgMiniCard"></div>
+            <p className="tittleMiniCard">Titulo</p>
+            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+            <button className="buttonMiniCard">Ver Evento</button>
+        </div>
+        <div className="miniCardLog">
+            <div className="imgMiniCard"></div>
+            <p className="tittleMiniCard">Titulo</p>
+            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+            <button className="buttonMiniCard">Ver Evento</button>
+        </div>
+        <div className="miniCardLog">
+            <div className="imgMiniCard"></div>
+            <p className="tittleMiniCard">Titulo</p>
+            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+            <button className="buttonMiniCard">Ver Evento</button>
+        </div>
+        <div className="miniCardLog">
+            <div className="imgMiniCard"></div>
+            <p className="tittleMiniCard">Titulo</p>
+            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+            <button className="buttonMiniCard">Ver Evento</button>
+        </div>
+    </div>
+    <div className="miniCardSectionButton">
+        <button className="buttonMiniCard2">Registrate para ver y apuntarte a todos los eventos</button>
+    </div>
+</div>
+</section>
   );
 };
 

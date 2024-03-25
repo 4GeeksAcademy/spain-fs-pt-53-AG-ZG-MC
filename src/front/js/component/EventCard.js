@@ -20,6 +20,15 @@ const EventCard = ({ event }) => {
             </Link>
             
         </div>
+
+
+
+        <div class="miniCardLog">
+        <div class="imgMiniCard"></div>
+        <p class="tittleMiniCard">Titulo</p>
+        <p class="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
+        <button class="buttonMiniCard">Ver Evento</button>
+        </div>
     );
 };
 

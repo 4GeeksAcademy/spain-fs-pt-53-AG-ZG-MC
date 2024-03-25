@@ -80,17 +80,24 @@ const Login = () => {
       )}
 
       {/* Formulario de inicio de sesión */}
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} /> {/* Usar setUsername */}
-        
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-        <button type="button" onClick={handleLoginSubmit}>
-          Log In
-        </button>
-      </form>
+      <div class="sectionSpace">
+        <form class="modalForm">
+            <div class="tittlePositionForm">
+                <h3 class="formTittle">INICIO SESIÓN</h3>
+            </div>
+            <label htmlFor="username">Username:</label>
+            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} /> {/* Usar setUsername */}
+            <br></br>
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <br></br>
+            <div class="buttonPosition">
+            <button id="registerButtonForm" type="button" onClick={handleLoginSubmit}>
+            Iniciar Sesión
+            </button>
+            </div>
+        </form>
+      </div>
 
       {error && <p className="error">{error}</p>}
 

@@ -1,0 +1,121 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+/*Event Mini Card*/
+.sectionSpace{
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: 540px;
+    display: flex;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+.centeredWebContent{
+    background-color: transparent;
+    width: 980px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.miniCardSectionHeader{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.miniCardSectionWrap{
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+}
+.tittleHeaderWrap{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 38px;
+    font-weight: 600;
+    font-style: normal;
+    color: #6F5149;
+}
+.subtittleHeaderWrap{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    color: #A77B70;
+}
+.miniCardLog{
+    width: 180px;
+    height: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.imgMiniCard{
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    background-image: url(../evento2.jpeg);
+    object-fit: cover;
+    margin-bottom: 2px;
+}
+.tittleMiniCard{
+    font-size: normal;
+    font-weight: 600;
+    margin-bottom: 0px;
+    color: #6F5149;
+}
+.subtittleMiniCard{
+    width: 160px;
+    height: 60px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #A77B70;
+    line-height:1.3em;
+    margin-bottom: 0px;
+
+}
+.buttonMiniCard{
+    width: 160px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #ffffff;
+    border-color: #FFCA7A;
+    padding: 0;
+}
+.buttonMiniCard2{
+    width: 380px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 0;
+}
+
+.miniCardSectionButton{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
