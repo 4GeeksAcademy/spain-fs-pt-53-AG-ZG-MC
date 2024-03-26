@@ -76,6 +76,11 @@
     display: flex;
     justify-content: center;
 }
+.tittleCenteredE{
+    display: flex;
+    justify-content: center;
+    background-color: #FFCA7A;
+}
 .subtittleHeaderWrap{
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -113,6 +118,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 .subtittleMiniCard{
     width: 160px;
     height: 20px;

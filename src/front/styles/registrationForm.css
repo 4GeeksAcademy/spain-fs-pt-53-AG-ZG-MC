@@ -40,6 +40,7 @@
     border-color: #FFCA7A;
     border-width: 2px;
     background-color: #FFCA7A;
+    padding: 5px;
 }
 .recoverButton{
     font-family: "Montserrat", sans-serif;
@@ -53,6 +54,9 @@
     border-width: 2px;
     background-color: #FFCA7A;
     margin-top: 10px;
+    padding: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 .EditButton{
     font-family: "Montserrat", sans-serif;
@@ -66,6 +70,20 @@
     border-width: 2px;
     background-color: #FFCA7A;
     margin-left: 10px;
+}
+.EditButton2{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    padding: 0;
+    color: white;
+    border-radius: 10px;
+    border-color: #FFCA7A;
+    border-width: 2px;
+    background-color: #FFCA7A;
+    margin-left: 10px;
+    padding: 5px;
 }
 .space{
     margin-left: 10px;
@@ -200,6 +218,14 @@ select{
 .filterContainer{
  margin: 5px;
 }
+.filterContainerE{
+    margin: 5px;
+    width: 308px;
+}
+.filterContainerR{
+    margin: 5px;
+    width: 616px;
+}
 .filterButtonsContainer{
     width: 100%;
     display: flex;
@@ -310,4 +336,61 @@ li{
 .FontSize30{
     font-size: 40px;
     font-weight: 500;
+}
+.labelSpace{
+    margin-right: 5px;
+}
+.eventEditProfile{
+    width: 150px;
+    padding: 5px;
+    border: 2px solid #ffb67a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.profileButtons{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    padding: 0;
+    color: white;
+    border-radius: 10px;
+    border-color: #FFCA7A;
+    border-width: 2px;
+    background-color: #FFCA7A;
+    margin-top: 5px;
+}
+.TextProfileEvent{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 20px;
+    color: #77544b;
+}
+.TextProfileEvent2{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 18px;
+    color: #A77B70;
+}
+.bg-w{
+    background-color: white;
+}
+
+.w-t{
+    color: white;
+    text-decoration: none;
+}
+.WeatherBox{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.WeatherLine{
+    width: 100% !important;
 }

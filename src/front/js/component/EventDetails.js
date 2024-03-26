@@ -48,7 +48,7 @@ const EventDetails = ({ event }) => {
             </div>
           
           <div>
-          <h3>{id}, {name}</h3>
+          <h3>{name}</h3>
           <p className="pMargin0 subtittleMiniCard">Date: {new Date(date).toDateString()}</p>
           <p className="pMargin0 subtittleMiniCard">Duration: {duration}</p>
           <p className="pMargin0 subtittleMiniCard">Type: {type}</p>

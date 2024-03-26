@@ -68,6 +68,8 @@ const MyEvents = () => {
     }
   };
 
+  //const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+
   return (
     <div className="my-events">
       <div className='tittleCentered'>
@@ -84,12 +86,14 @@ const MyEvents = () => {
         ) : (
           <ul>
             {myCreatedEvents.map(event => (
-              <li key={event.id}>
-                {event.name}
-                <button onClick={() => handleViewDetails(event.id)}>View Details</button>
-                <button onClick={() => setSelectedEvent(event)}>Edit</button>
-                <button onClick={() => handleDeleteEvent(event.id)}>Delete</button>
+              <li className='eventEditProfile bg-w' key={event.id}>
+                <div className='TextProfileEvent'>{event.name}</div>
+                <div className='TextProfileEvent2'>{new Date(event.date).toLocaleDateString()}</div>
+                <button className='profileButtons' onClick={() => handleViewDetails(event.id)}>View Details</button>
+                <button className='profileButtons' onClick={() => setSelectedEvent(event)}>Edit</button>
+                <button className='profileButtons' onClick={() => handleDeleteEvent(event.id)}>Delete</button>
               </li>
+            
             ))}
           </ul>
         )}
@@ -108,10 +112,11 @@ const MyEvents = () => {
         ) : (
           <ul>
             {mySignedupEvents.map(event => (
-              <li key={event.id}>
-                {event.name}
-                <button onClick={() => handleViewDetails(event.id)}>View Details</button>
-                <button onClick={() => handleCancelAssistence(event.id)}>Unsubscribe</button>
+              <li className='eventEditProfile bg-w' key={event.id}>
+                <div className='TextProfileEvent'>{event.name}</div>
+                <div className='TextProfileEvent2'>{new Date(event.date).toLocaleDateString()}</div>
+                <button className='profileButtons' onClick={() => handleViewDetails(event.id)}>View Details</button>
+                <button className='profileButtons' onClick={() => handleCancelAssistence(event.id)}>Unsubscribe</button>
               </li>
             ))}
           </ul>

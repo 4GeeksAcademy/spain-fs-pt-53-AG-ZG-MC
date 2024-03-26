@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const { actions } = useContext(Context);
-  
+  const navigate = useNavigate();
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState(''); 
   const [recoverySent, setRecoverySent] = useState(false);
@@ -48,6 +49,7 @@ const Login = () => {
         setUsername('');
         setPassword('');
         setError(null);
+        navigate('/');
       } else {
         throw new Error('Login action is not available');
       }
@@ -87,21 +89,21 @@ const Login = () => {
       <div className="sectionSpace">
         <form className="modalForm">
             <div className="tittlePositionForm">
-                <h3 className="formTittle">INICIO SESIÓN</h3>
+                <h3 className="formTittle">LOG IN</h3>
             </div>
             <div className="inputMargin">
-            <label htmlFor="username">Username:</label>
+            <label htmlFor="username">Username</label>
             <input className='space' type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} /> {/* Usar setUsername */}
             </div>
             
             <div className="inputMargin">
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="password">Password</label>
             <input className='space' type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             
             <div className="buttonPosition">
             <button id="registerButtonForm" type="button" onClick={handleLoginSubmit}>
-            Iniciar Sesión
+            LOG IN
             </button>
             </div>
             <p className='pStyle'>Or if you don't remember your password you should...</p>
@@ -114,7 +116,7 @@ const Login = () => {
             )}
             {showEmailInput && (
               <form className='inputMargin'>
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email">Email</label>
                 <input className='space' type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <button className='recoverButton space' type="button" onClick={handlePasswordRecovery}>
                   Submit

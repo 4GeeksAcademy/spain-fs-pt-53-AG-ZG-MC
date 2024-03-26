@@ -82,12 +82,12 @@ const CreateEvent = () => {
   return (
     <div className="createbarPosition">
       <div className="createbarContainer centeredWebContent">
-      <div className="tittleCentered"><h2 className="tittleHeaderWrap">Create Event</h2></div>
+      <div className="tittleCenteredE"><h2 className="tittleHeaderWrap">Create Event</h2></div>
       <div>
       <form className="filterContainerWrap2">
         {/* Event Name input */}
-        <div className="filterContainer">
-        <label htmlFor="name">Event Name:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="name">Title</label>
         <input
           type="text"
           id="name"
@@ -97,8 +97,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Date input */}
-        <div className="filterContainer">
-        <label htmlFor="date">Event Date:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="date">Date</label>
         <input
           type="date"
           id="date"
@@ -108,8 +108,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Duration input */}
-        <div className="filterContainer">
-        <label htmlFor="duration">Event Duration:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="duration">Duration</label>
         <input
           type="text"
           id="duration"
@@ -118,20 +118,27 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Type input */}
-        <div className="filterContainer">
-        <label htmlFor="type">Event Type:</label>
-        <input
+        {/* Event Type input SECTION */}
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="type">Type</label>
+        <select
           type="text"
           id="type"
           name="type"
           value={eventData.type}
           onChange={handleInputChange}
-        />
+        >
+          <option value="nature">Nature</option>
+          <option value="party">Party</option>
+          <option value="culture">Culture</option>
+          <option value="relax">Relax</option>
+          <option value="family">Family</option>
+          <option value="sport">Sport</option>
+        </select>
         </div>
         {/* Event Place input */}
-        <div className="filterContainer">
-        <label htmlFor="place">Event Place:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="place">Place</label>
         <input
           type="text"
           id="place"
@@ -141,8 +148,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Description input */}
-        <div className="filterContainer">
-        <label htmlFor="description">Event Description:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="description">Description</label>
         <input
           type="text"
           id="description"
@@ -152,41 +159,54 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Language input */}
-        <div className="filterContainer">
-        <label htmlFor="language">Event Language:</label>
-        <input
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="language">Language</label>
+        <select
           type="text"
           id="language"
           name="language"
           value={eventData.language}
           onChange={handleInputChange}
-        />
+        >
+          <option value="spanish">Spanish</option>
+          <option value="catalan">Catalan</option>
+          <option value="english">English</option>
+          <option value="german">German</option>
+          <option value="french">French</option>
+        </select>
         </div>
         {/* Event Gender input */}
-        <div className="filterContainer">
-        <label htmlFor="gender">Event Gender:</label>
-        <input
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="gender">Gender</label>
+        <select
           type="text"
           id="gender"
           name="gender"
           value={eventData.gender}
           onChange={handleInputChange}
-        />
+        >
+          <option value="all_genders">All genders</option>
+          <option value="female_only">Female only</option>
+          <option value="queer_only">Queer only</option>
+        </select>
         </div>
         {/* Event Price Type input */}
-        <div className="filterContainer">
-        <label htmlFor="price_type">Event Price Type:</label>
-        <input
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="price_type">Price Type</label>
+        <select
           type="text"
           id="price_type"
           name="price_type"
           value={eventData.price_type}
           onChange={handleInputChange}
-        />  
+        >
+          <option value="free">Free</option>
+          <option value="paid">Paid</option>
+        </select>  
         </div>
         {/* Event Price input */}
-        <div className="filterContainer">
-        <label htmlFor="price">Event Price:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="price">Price</label>
         <input
           type="number"
           id="price"
@@ -196,8 +216,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Min Age input */}
-        <div className="filterContainer">
-        <label htmlFor="min_age">Event Min Age:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="min_age">Min Age</label>
         <input
           type="number"
           id="min_age"
@@ -207,8 +227,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Max Age input */}
-        <div className="filterContainer">
-        <label htmlFor="max_age">Event Max Age:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="max_age">Max Age</label>
         <input
           type="number"
           id="max_age"
@@ -218,8 +238,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Min People input */}
-        <div className="filterContainer">
-        <label htmlFor="min_people">Event Min People:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="min_people">Min People</label>
         <input
           type="number"
           id="min_people"
@@ -229,8 +249,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Max People input */}
-        <div className="filterContainer">
-        <label htmlFor="max_people">Event Max People:</label>
+        <div className="filterContainerR">
+        <label className="labelSpace" htmlFor="max_people">Max People</label>
         <input
           type="number"
           id="max_people"
@@ -240,8 +260,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Lgtbi input */}
-        <div className="filterContainer">
-        <label htmlFor="lgtbi">Event Lgtbi:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="lgtbi">LGTBI</label>
         <input
           type="checkbox"
           id="lgtbi"
@@ -251,8 +271,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Pet input */}
-        <div className="filterContainer">
-        <label htmlFor="pet_friendly">Event Pet:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="pet_friendly">Pet friendly</label>
         <input
           type="checkbox"
           id="pet_friendly"
@@ -262,8 +282,8 @@ const CreateEvent = () => {
         />
         </div>
         {/* Event Kids input */}
-        <div className="filterContainer">
-        <label htmlFor="kid_friendly">Event Kids:</label>
+        <div className="filterContainerE">
+        <label className="labelSpace" htmlFor="kid_friendly">Kids friendly</label>
         <input
           type="checkbox"
           id="kid_friendly"

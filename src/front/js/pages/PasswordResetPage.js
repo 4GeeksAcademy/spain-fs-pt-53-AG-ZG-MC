@@ -23,11 +23,11 @@ const PasswordResetPage = ({ actions }) => {
         <h2 className='tittlePositionForm'>Password Reset</h2>
         <form>
           <div className='inputMargin'>
-            <label htmlFor="newPassword">New Password:</label>
+            <label className='labelSpace' htmlFor="newPassword">New Password</label>
             <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
           </div>
           <div className='buttonPosition'>
-          <button className='registerButton' type="button" onClick={handleResetPassword}>Reset Password</button>
+          <button className='EditButton' type="button" onClick={handleResetPassword}>Reset Password</button>
           </div>
         </form>
       </div>
