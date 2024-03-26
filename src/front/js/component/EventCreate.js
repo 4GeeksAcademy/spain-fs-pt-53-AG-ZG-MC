@@ -111,7 +111,7 @@ const CreateEvent = () => {
         <div className="filterContainer">
         <label htmlFor="duration">Event Duration:</label>
         <input
-          type="number"
+          type="text"
           id="duration"
           name="duration"
           value={eventData.duration}

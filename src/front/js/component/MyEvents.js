@@ -70,10 +70,15 @@ const MyEvents = () => {
 
   return (
     <div className="my-events">
-      <h2>My Events</h2>
+      <div className='tittleCentered'>
+      <h2 className='tittleHeaderWrap'>My Events</h2>
+      </div>
 
       <div>
-        <h3>Events Created by You</h3>
+        <h3 className='tittleMiniCard'>Events Created by You</h3>
+        <div className='sectionSpaceList'>
+        <div className='centeredWebContent'>
+        <div className="event-list miniCardSectionWrapList">
         {myCreatedEvents.length === 0 ? (
           <p>No events created yet.</p>
         ) : (
@@ -88,10 +93,16 @@ const MyEvents = () => {
             ))}
           </ul>
         )}
+        </div>
+        </div>
+        </div>
       </div>
 
       <div>
-        <h3>Signedup Events</h3>
+        <h3 className='tittleMiniCard'>Signedup Events</h3>
+        <div className='sectionSpaceList'>
+        <div className='centeredWebContent'>
+        <div className="event-list miniCardSectionWrapList">
         {mySignedupEvents.length === 0 ? (
           <p>No events signed up yet.</p>
         ) : (
@@ -105,6 +116,10 @@ const MyEvents = () => {
             ))}
           </ul>
         )}
+        </div>
+        </div>
+        </div>
+
       </div>
 
       {selectedEvent && <EditEvent event={selectedEvent} />}

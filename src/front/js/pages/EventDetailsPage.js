@@ -49,16 +49,19 @@ const EventDetailsPage = () => {
 
   return (
     <div>
-      <h1>Event Details Page</h1>
       {eventDetails && (
         <div>
           <EventDetails event={eventDetails} />
-          <button onClick={handleSignUp}>
+          <div className='SBC'>
+          <div className='SeparationButtons'>
+          <button className='buttonMiniCard3' onClick={handleSignUp}>
             {signedup_events && signedup_events.find(event => event.event_id == eventId) ? "Cancel" : "Sign up"}
           </button>
-          <button>
+          <button className='buttonMiniCard3'>
             <a href={`https:api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">Compartir en WhatsApp</a>
           </button>
+          </div>
+          </div>
         </div>
       )}
     </div>

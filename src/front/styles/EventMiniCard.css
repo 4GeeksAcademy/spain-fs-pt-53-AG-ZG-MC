@@ -135,6 +135,25 @@
     border-color: #FFCA7A;
     padding: 0;
 }
+.buttonMiniCard3{
+    width: 100%px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+.SeparationButtons{
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin: 20px;
+    
+}
 .buttonMiniCard2{
     width: 380px;
     height: 30px;
@@ -144,6 +163,11 @@
     background-color: #FFCA7A;
     border-color: #FFCA7A;
     padding: 0;
+}
+.SBC{
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.057);
 }
 
 .miniCardSectionButton{

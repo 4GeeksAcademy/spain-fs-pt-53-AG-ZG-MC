@@ -54,6 +54,19 @@
     background-color: #FFCA7A;
     margin-top: 10px;
 }
+.EditButton{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    padding: 0;
+    color: white;
+    border-radius: 10px;
+    border-color: #FFCA7A;
+    border-width: 2px;
+    background-color: #FFCA7A;
+    margin-left: 10px;
+}
 .space{
     margin-left: 10px;
 }
@@ -123,6 +136,16 @@ input{
     border-radius: 10px;
     background-color: rgb(255, 234, 207);
     display: flex;
+    justify-content: center;
+}
+.searchbarContainer2{
+    
+    padding: 10px;
+    border: 2px solid #FFCA7A;
+    border-radius: 10px;
+    background-color: rgb(255, 234, 207);
+    display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 .buttonContainer{
@@ -210,4 +233,81 @@ iframe{
     height: 400px;
     border-radius: 10px;
     border: 2px solid #FFCA7A;
+    margin-bottom: 20px;
+}
+.MarginTop20{
+    margin-top: 20px;
+}
+.imgUserProfile{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+.UserInfoFlex{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.InfoUserProfile{
+    font-size: 20px;
+    font-weight: 600;
+    color: #A77B70;
+    line-height:1.3em;
+    margin-bottom: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: 20px;
+}
+.InfoUserProfile2{
+    font-size: 20px;
+    font-weight: 600;
+    color: #77544b;
+    line-height:1.3em;
+    margin-bottom: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: px;
+}
+.EditProfileText{
+    font-size: 20px;
+    font-weight: 500;
+    color: #77544b;
+    line-height:1.3em;
+    margin-bottom: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: px;
+}
+.FlexColumn{
+    display: flex;
+    flex-direction: column;
+}
+.CenteredText{
+    display: flex;
+    justify-content: center;
+}
+.EventDetailsContainer{
+    margin-left: 20px;
+}
+.pMargin0{
+    margin: 0;
+}
+.ImgEventDetail{
+    width: 300px;
+    height: 450px;
+    margin-right: 10px;
+}
+.WrapDivs{
+    display: flex;
+    flex-wrap: wrap;
+}
+li{
+    list-style: none;
+}
+.FontSize30{
+    font-size: 40px;
+    font-weight: 500;
 }
