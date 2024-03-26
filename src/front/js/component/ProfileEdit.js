@@ -31,7 +31,7 @@ const ProfileEdit = ({ user }) => {
 
   return (
     <div>
-      <h2>Edit User</h2>
+      <h2 className="EditProfileText">Edit User</h2>
       <form onSubmit={handleUpdateUser}>
         {/* User Name input */}
         <label htmlFor="username">Name:</label>
@@ -76,7 +76,7 @@ const ProfileEdit = ({ user }) => {
         />
 
         {/* Submit button */}
-        <button type="submit">
+        <button className="EditButton" type="submit">
           Update Profile
         </button>
 

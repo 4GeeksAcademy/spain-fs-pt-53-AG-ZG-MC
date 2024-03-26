@@ -38,20 +38,20 @@ const WeatherForecast = ({ location, eventDate }) => {
     const eventWeather = weatherForecast.forecast.forecastday.find(day => day.date === eventDateFormat);
 
     return (
-        <div>
-            <h2>Weather Forecast for {eventDate}</h2>
+        <div className='MarginTop20'>
+            <div className="tittleHeaderWrap CenteredText"><h2 >Weather Forecast for {eventDate}</h2></div>
             {eventWeather ? (
-                <ul>
-                    <li>
-                        <div>Condition: {eventWeather.day.condition.text}</div>
-                        <div>Temperature (C): {eventWeather.day.avgtemp_c}</div>
-                        <div>Precipitation (mm): {eventWeather.day.totalprecip_mm}</div>
-                        <div>Wind Speed (kph): {eventWeather.day.maxwind_kph}</div>
-                        <div>Snowfall (cm): {eventWeather.day.totalsnow_cm}</div>
-                        <div>Humidity: {eventWeather.day.avghumidity}</div>
-                        <div>Feels Like (C): {eventWeather.day.avgtemp_c}</div>
-                        <div>Chance of Rain: {eventWeather.day.daily_chance_of_rain}</div>
-                        <div>Chance of Snow: {eventWeather.day.daily_chance_of_snow}</div>
+                <ul className='CenteredText'>
+                    <li className='WeatherBox'>
+                        <div className="pMargin0 WeatherLine subtittleMiniCard">Condition: {eventWeather.day.condition.text}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Temperature (C): {eventWeather.day.avgtemp_c}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Precipitation (mm): {eventWeather.day.totalprecip_mm}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Wind Speed (kph): {eventWeather.day.maxwind_kph}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Snowfall (cm): {eventWeather.day.totalsnow_cm}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Humidity: {eventWeather.day.avghumidity}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Feels Like (C): {eventWeather.day.avgtemp_c}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Chance of Rain: {eventWeather.day.daily_chance_of_rain}</div>
+                        <div className="pMargin0 subtittleMiniCard WeatherLine">Chance of Snow: {eventWeather.day.daily_chance_of_snow}</div>
                     </li>
                 </ul>
             ) : (

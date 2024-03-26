@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const { actions } = useContext(Context);
-  
+  const navigate = useNavigate();
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState(''); 
   const [recoverySent, setRecoverySent] = useState(false);
@@ -48,6 +49,7 @@ const Login = () => {
         setUsername('');
         setPassword('');
         setError(null);
+        navigate('/');
       } else {
         throw new Error('Login action is not available');
       }
@@ -59,16 +61,19 @@ const Login = () => {
 
   return (
     <div className="login-password-recovery">
-      <h2>Login</h2>
+      {/*<h2>Login</h2>*/}
       
       {/* Mostrar el botón de recuperación de contraseña si no se está mostrando el campo de entrada para el correo electrónico */}
+      {/*
       {!showEmailInput && (
         <button type="button" onClick={handleShowEmailInput}>
           Recover Password
         </button>
       )}
+      */}
 
       {/* Mostrar el campo de entrada para el correo electrónico si showEmailInput es verdadero */}
+      {/*
       {showEmailInput && (
         <form>
           <label htmlFor="email">Email:</label>
@@ -78,19 +83,48 @@ const Login = () => {
           </button>
         </form>
       )}
+      */}
 
       {/* Formulario de inicio de sesión */}
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} /> {/* Usar setUsername */}
-        
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-        <button type="button" onClick={handleLoginSubmit}>
-          Log In
-        </button>
-      </form>
+      <div className="sectionSpace">
+        <form className="modalForm">
+            <div className="tittlePositionForm">
+                <h3 className="formTittle">LOG IN</h3>
+            </div>
+            <div className="inputMargin">
+            <label htmlFor="username">Username</label>
+            <input className='space' type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} /> {/* Usar setUsername */}
+            </div>
+            
+            <div className="inputMargin">
+            <label htmlFor="password">Password</label>
+            <input className='space' type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            
+            <div className="buttonPosition">
+            <button id="registerButtonForm" type="button" onClick={handleLoginSubmit}>
+            LOG IN
+            </button>
+            </div>
+            <p className='pStyle'>Or if you don't remember your password you should...</p>
+            {!showEmailInput && (
+            <div className="buttonPosition">
+            <button className='recoverButton' type="button" onClick={handleShowEmailInput}>
+              Recover Password
+            </button>
+            </div>
+            )}
+            {showEmailInput && (
+              <form className='inputMargin'>
+                <label htmlFor="email">Email</label>
+                <input className='space' type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <button className='recoverButton space' type="button" onClick={handlePasswordRecovery}>
+                  Submit
+                </button>
+              </form>
+            )}
+        </form>
+      </div>
 
       {error && <p className="error">{error}</p>}
 

@@ -3,6 +3,8 @@ import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom'; 
 import ProfileEdit from '../component/ProfileEdit';
 import MyEvents from '../component/MyEvents';
+import './../../styles/registrationForm.css';
+import paisaje from './../../img/paisaje.jpeg';
 
 
 const UserProfileMine = () => {
@@ -60,24 +62,38 @@ const UserProfileMine = () => {
   };
 
   return (
-    <div>
-      <h1>User Profile</h1>
+    <div className='searchbarPosition'>
+    <div className='searchbarContainer2'>
+      
+      <div className='tittleHeaderWrap'><h1>User Profile</h1></div>
       {isEditing ? (
         <ProfileEdit user={userProfile} />
       ) : (
         userProfile && (
           <div>
-            <p>Username: {userProfile.username}</p>
-            <p>Email: {userProfile.email}</p>
-            <p>First name: {userProfile.first_name}</p>
-            <p>Last name: {userProfile.last_name}</p>
+            <div className='UserInfoFlex'>
+            <div className='imgUserProfile' style={{backgroundImage: `url(${paisaje})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+                }}>
+            </div>
+              <div>
+                <p className='InfoUserProfile'>Username:<p className='InfoUserProfile2'>{userProfile.username}</p></p>
+                <p className='InfoUserProfile'>Email:<p className='InfoUserProfile2'>{userProfile.email}</p></p>
+                <p className='InfoUserProfile'>First name:<p className='InfoUserProfile2'> {userProfile.first_name}</p></p>
+                <p className='InfoUserProfile'>Last name:<p className='InfoUserProfile2'>{userProfile.last_name}</p></p> 
+              </div>
+            </div>
             <MyEvents />
-
-            <button onClick={handleEditClick}>Edit Profile</button>
-            <button onClick={handleDeleteClick}>Delete Profile</button>
+            <div className='buttonContainer'>
+            <button className='showFilterButton' onClick={handleEditClick}>Edit Profile</button>
+            <button className='showFilterButton' onClick={handleDeleteClick}>Delete Profile</button>
+            </div>
           </div>
         )
       )}
+    </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Context } from '../store/appContext';
 
 const RegistrationForm = () => {
-  const { actions } = useContext(Context); 
+  const { actions } = useContext(Context);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -49,33 +49,84 @@ const RegistrationForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" value={formData.first_name} onChange={handleChange} required />
-      </div>
-      <div>
-        <label htmlFor="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" value={formData.last_name} onChange={handleChange} required />
-      </div>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
-      </div>
-      <button type="submit">Register</button>
-    </form>
+    <div className="sectionSpace">
+      <form className="modalForm" id="registration-form" onSubmit={handleSubmit}>
+        <div className="tittlePositionForm">
+          <h3 className="formTittle">REGISTRO</h3>
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="first_name">Primer Nombre:</label>
+          <input className='space'
+            type="text"
+            id="first_name"
+            name="first_name"
+            value={formData.first_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="last_name">Ultimo Nombre:</label>
+          <input className='space'
+            type="text"
+            id="last_name"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="username">Nombre de Usuario:</label>
+          <input className='space'
+            type="text"
+            id="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="email">Email:</label>
+          <input className='space'
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="password">Contraseña:</label>
+          <input className='space'
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="inputMargin">
+          <label htmlFor="confirmPassword">Confirmar Contraseña:</label>
+          <input className='space'
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="buttonPosition">
+          <button id="registerButtonForm" className="btn btn-primary" type="submit">
+            Registrarse
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

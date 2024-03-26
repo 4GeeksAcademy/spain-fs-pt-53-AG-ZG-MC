@@ -18,12 +18,20 @@ const PasswordResetPage = ({ actions }) => {
 
   return (
     <div className="password-reset-page">
-      <h2>Password Reset</h2>
-      <form>
-        <label htmlFor="newPassword">New Password:</label>
-        <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-        <button type="button" onClick={handleResetPassword}>Reset Password</button>
-      </form>
+      <div className='sectionSpace'>
+      <div className='modalForm'>
+        <h2 className='tittlePositionForm'>Password Reset</h2>
+        <form>
+          <div className='inputMargin'>
+            <label className='labelSpace' htmlFor="newPassword">New Password</label>
+            <input type="password" id="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+          </div>
+          <div className='buttonPosition'>
+          <button className='EditButton' type="button" onClick={handleResetPassword}>Reset Password</button>
+          </div>
+        </form>
+      </div>
+      </div>
     </div>
   );
 };
