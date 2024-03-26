@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import EventCreate from '../component/EventCreate'; // Assuming EventCreate.js is located in the components folder
+import EventCreate from '../component/EventCreate';
 import { Context } from '../store/appContext';
 
 

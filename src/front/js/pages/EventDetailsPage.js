@@ -44,6 +44,9 @@ const EventDetailsPage = () => {
     }
   };
   console.log("Signedup Events: ", signedup_events)
+
+  const whatsappMessage = `¡Check out this event! ${window.location.href}`;
+
   return (
     <div>
       <h1>Event Details Page</h1>
@@ -52,6 +55,9 @@ const EventDetailsPage = () => {
               <EventDetails event={eventDetails} />
               <button onClick={handleSignUp}> 
               {signedup_events && signedup_events.find(event => event.event_id == eventId) ? "Cancel" : "Sign up"}
+              </button>
+              <button>
+                <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer" >Compartir en WhatsApp</a>
               </button>
           </div>
         )}
