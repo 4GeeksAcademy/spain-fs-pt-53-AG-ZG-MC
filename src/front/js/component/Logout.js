@@ -49,9 +49,9 @@ const Logout = ({ setStoreLog }) => {
     
     
     return (
-        <div>
+        <div className="form-check">
             {logoutMessage && <p>{logoutMessage}</p>}
-            <button onClick={handleLogout}>Logout</button>
+            <button id="cerrarSesion" onClick={handleLogout}>Logout</button>
         </div>
     );
 };

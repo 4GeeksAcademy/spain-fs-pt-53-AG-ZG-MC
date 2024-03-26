@@ -81,10 +81,13 @@ const CreateEvent = () => {
   };
 
   return (
-    <div>
-      <h2>Create Event</h2>
-      <form>
+    <div className="createbarPosition">
+      <div className="createbarContainer centeredWebContent">
+      <div className="tittleCentered"><h2 className="tittleHeaderWrap">Create Event</h2></div>
+      <div>
+      <form className="filterContainerWrap2">
         {/* Event Name input */}
+        <div className="filterContainer">
         <label htmlFor="name">Event Name:</label>
         <input
           type="text"
@@ -93,8 +96,9 @@ const CreateEvent = () => {
           value={eventData.name}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Date input */}
+        <div className="filterContainer">
         <label htmlFor="date">Event Date:</label>
         <input
           type="date"
@@ -103,18 +107,20 @@ const CreateEvent = () => {
           value={eventData.date}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Duration input */}
+        <div className="filterContainer">
         <label htmlFor="duration">Event Duration:</label>
         <input
-          type="text"
+          type="number"
           id="duration"
           name="duration"
           value={eventData.duration}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Type input */}
+        <div className="filterContainer">
         <label htmlFor="type">Event Type:</label>
         <input
           type="text"
@@ -123,8 +129,9 @@ const CreateEvent = () => {
           value={eventData.type}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Place input */}
+        <div className="filterContainer">
         <label htmlFor="place">Event Place:</label>
         <input
           type="text"
@@ -133,8 +140,9 @@ const CreateEvent = () => {
           value={eventData.place}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Description input */}
+        <div className="filterContainer">
         <label htmlFor="description">Event Description:</label>
         <input
           type="text"
@@ -143,8 +151,9 @@ const CreateEvent = () => {
           value={eventData.description}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Language input */}
+        <div className="filterContainer">
         <label htmlFor="language">Event Language:</label>
         <input
           type="text"
@@ -153,8 +162,9 @@ const CreateEvent = () => {
           value={eventData.language}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Gender input */}
+        <div className="filterContainer">
         <label htmlFor="gender">Event Gender:</label>
         <input
           type="text"
@@ -163,8 +173,9 @@ const CreateEvent = () => {
           value={eventData.gender}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Price Type input */}
+        <div className="filterContainer">
         <label htmlFor="price_type">Event Price Type:</label>
         <input
           type="text"
@@ -172,9 +183,10 @@ const CreateEvent = () => {
           name="price_type"
           value={eventData.price_type}
           onChange={handleInputChange}
-        />
-
+        />  
+        </div>
         {/* Event Price input */}
+        <div className="filterContainer">
         <label htmlFor="price">Event Price:</label>
         <input
           type="number"
@@ -183,8 +195,9 @@ const CreateEvent = () => {
           value={eventData.price}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Min Age input */}
+        <div className="filterContainer">
         <label htmlFor="min_age">Event Min Age:</label>
         <input
           type="number"
@@ -193,8 +206,9 @@ const CreateEvent = () => {
           value={eventData.min_age}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Max Age input */}
+        <div className="filterContainer">
         <label htmlFor="max_age">Event Max Age:</label>
         <input
           type="number"
@@ -203,8 +217,9 @@ const CreateEvent = () => {
           value={eventData.max_age}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Min People input */}
+        <div className="filterContainer">
         <label htmlFor="min_people">Event Min People:</label>
         <input
           type="number"
@@ -213,8 +228,9 @@ const CreateEvent = () => {
           value={eventData.min_people}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Max People input */}
+        <div className="filterContainer">
         <label htmlFor="max_people">Event Max People:</label>
         <input
           type="number"
@@ -223,8 +239,9 @@ const CreateEvent = () => {
           value={eventData.max_people}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Lgtbi input */}
+        <div className="filterContainer">
         <label htmlFor="lgtbi">Event Lgtbi:</label>
         <input
           type="checkbox"
@@ -233,8 +250,9 @@ const CreateEvent = () => {
           checked={eventData.lgtbi}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Pet input */}
+        <div className="filterContainer">
         <label htmlFor="pet_friendly">Event Pet:</label>
         <input
           type="checkbox"
@@ -243,8 +261,9 @@ const CreateEvent = () => {
           checked={eventData.pet_friendly}
           onChange={handleInputChange}
         />
-
+        </div>
         {/* Event Kids input */}
+        <div className="filterContainer">
         <label htmlFor="kid_friendly">Event Kids:</label>
         <input
           type="checkbox"
@@ -253,7 +272,8 @@ const CreateEvent = () => {
           checked={eventData.kid_friendly}
           onChange={handleInputChange}
         />
-
+        </div>
+        <div className="centeredMap">
         <iframe
           width="600"
           height="450"
@@ -263,11 +283,17 @@ const CreateEvent = () => {
           src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDB9WpSu4YZXGeyeD72uuxNKM-kBpDBaCI&q=${encodeURIComponent(eventData.place)}`}
           title="Event map"
         ></iframe>
+        </div>
+        
         {/* Submit button */}
-        <button type="button" onClick={handleCreateEvent}>
+        <div className="filterButtonContainer">
+        <button className="showFilterButton" type="button" onClick={handleCreateEvent}>
           Create Event
         </button>
+        </div>
       </form>
+      </div>
+      </div>
     </div>
   );
 };

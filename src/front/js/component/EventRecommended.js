@@ -1,6 +1,6 @@
 import React from 'react';
 import EventCard from './EventCard';
-
+import { Link } from 'react-router-dom';
 
 const EventRecommended = ({ events }) => {
 
@@ -11,62 +11,30 @@ const EventRecommended = ({ events }) => {
   const limitedEvents = events.slice(0, 5);
 
   return (
-    <div className="event-recommended">
-      <h2>Recommended Events</h2>
-      <div className="event-card-container">
+
+
+    <section className="sectionSpace event-recommended">
+    <div className="centeredWebContent">
+        <div className="miniCardSectionHeader">
+            <h2 className="tittleHeaderWrap">Get out of your comfort zone!</h2>
+            <h4 className="subtittleHeaderWrap">Here we leave you some options:</h4>
+        </div>
+        <div className="miniCardSectionWrap sectionCardMargin">
+        <div className="event-card-container miniCardSectionWrap">
         {limitedEvents.map(event => (
           <EventCard key={event.event.id} event={event.event} />
         ))}
       </div>
-    </div>
-
-
-
-
-
-<section className="sectionSpace">
-<div className="centeredWebContent">
-    <div className="miniCardSectionHeader">
-        <h2 className="tittleHeaderWrap">¡Sal de tu zona de Comfort!</h2>
-        <h4 className="subtittleHeaderWrap">Aquí te dejamos algunas opciones:</h4>
-    </div>
-    <div className="miniCardSectionWrap">
-        <div className="miniCardLog">
-            <div className="imgMiniCard"></div>
-            <p className="tittleMiniCard">Titulo</p>
-            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
-            <button className="buttonMiniCard">Ver Evento</button>
         </div>
-        <div className="miniCardLog">
-            <div className="imgMiniCard"></div>
-            <p className="tittleMiniCard">Titulo</p>
-            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
-            <button className="buttonMiniCard">Ver Evento</button>
-        </div>
-        <div className="miniCardLog">
-            <div className="imgMiniCard"></div>
-            <p className="tittleMiniCard">Titulo</p>
-            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
-            <button className="buttonMiniCard">Ver Evento</button>
-        </div>
-        <div className="miniCardLog">
-            <div className="imgMiniCard"></div>
-            <p className="tittleMiniCard">Titulo</p>
-            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
-            <button className="buttonMiniCard">Ver Evento</button>
-        </div>
-        <div className="miniCardLog">
-            <div className="imgMiniCard"></div>
-            <p className="tittleMiniCard">Titulo</p>
-            <p className="subtittleMiniCard">Subtitulo masomenos pe pa probar saes aja ja ja</p>
-            <button className="buttonMiniCard">Ver Evento</button>
+        <div className="miniCardSectionButton">
+        <Link to="/events" >
+        <button className="buttonMiniCard2">Find out the available events!</button>
+          </Link>
         </div>
     </div>
-    <div className="miniCardSectionButton">
-        <button className="buttonMiniCard2">Registrate para ver y apuntarte a todos los eventos</button>
-    </div>
-</div>
-</section>
+    </section>
+
+
   );
 };
 

@@ -18,7 +18,7 @@ api = Blueprint('api', __name__)
 
 @api.after_request
 def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = 'https://stunning-space-trout-pjrppqwgj77gc6j45-3000.app.github.dev'
+    response.headers['Access-Control-Allow-Origin'] = 'https://solid-couscous-q7qgqw6r5xv5f9pqx-3000.app.github.dev'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
     response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
     return response

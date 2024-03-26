@@ -56,7 +56,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="first_name">Primer Nombre:</label>
-          <input
+          <input className='space'
             type="text"
             id="first_name"
             name="first_name"
@@ -67,7 +67,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="last_name">Ultimo Nombre:</label>
-          <input
+          <input className='space'
             type="text"
             id="last_name"
             name="last_name"
@@ -78,7 +78,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="username">Nombre de Usuario:</label>
-          <input
+          <input className='space'
             type="text"
             id="username"
             name="username"
@@ -89,7 +89,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="email">Email:</label>
-          <input
+          <input className='space'
             type="email"
             id="email"
             name="email"
@@ -100,7 +100,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="password">Contraseña:</label>
-          <input
+          <input className='space'
             type="password"
             id="password"
             name="password"
@@ -111,7 +111,7 @@ const RegistrationForm = () => {
         </div>
         <div className="inputMargin">
           <label htmlFor="confirmPassword">Confirmar Contraseña:</label>
-          <input
+          <input className='space'
             type="password"
             id="confirmPassword"
             name="confirmPassword"

@@ -1,4 +1,5 @@
 import React from 'react';
+import LOGO from './../../img/LOOGO.png';
 
 
 const Footer = () => {
@@ -7,19 +8,17 @@ const Footer = () => {
       <div className="footerCentered">
         <div className="footerLeftContent">
           <div>
-            <img src="../LOGO.png" alt="..." className="logoFooter" />
-            <h4 style={{ color: "white" }}>Nuestras Redes</h4>
-            <a href=""><p>Alondra</p></a>
-            <a href=""><p>Zaira</p></a>
-            <a href=""><p>Atlas</p></a>
+            <img id='footerLogo' src={LOGO} alt="..." className="logoFooter" />
+            <h4 style={{ color: "white" }}>Our social media</h4>
+            <a className='a ah' href=""><p>Alondra</p></a>
+            <a className='a ah' href=""><p>Zaira</p></a>
+            <a className='a ah' href="https://www.instagram.com/atlasraw.az/"><p>Atlas</p></a>
           </div>
           <div>
-            <p className="a">Este sitio es propiedad de “” , S.L. -Calle Tres islas nº 23, 08045, Barcelona - (España) </p>
+            <p className="a">This site is property of “”, S.L. -Calle Tres Islas nº 23, 08045, Barcelona - (Spain)</p>
           </div>
         </div>
         <div className="footerRightContent">
-          <a href=""><img src="../entypo-social_instagram-with-circle.svg" alt="" /></a>
-          <a href=""><img src="../entypo-social_facebook.svg" alt="" /></a>
         </div>
       </div>
     </section>

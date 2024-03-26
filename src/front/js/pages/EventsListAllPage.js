@@ -48,11 +48,15 @@ const EventsListAll = () => {
       </div>
 
       <div>
-        <h1>All Events</h1>
         {loading ? ( 
           <p>Loading...</p>
         ) : (
-          <div className="event-list">
+          <div className='sectionSpaceList'>
+          <div className='centeredWebContent'>
+          <div className='tittleCentered'>
+            <h1 className='tittleHeaderWrap'>All Events</h1>
+          </div>
+          <div className="event-list miniCardSectionWrapList">
             {filteredEvents.length > 0 ? (
               filteredEvents.map(event => (
                 <EventCard key={event.id} event={event} />
@@ -60,6 +64,8 @@ const EventsListAll = () => {
             ) : (
               <p>No events found.</p>
             )}
+          </div>
+          </div>
           </div>
         )}
       </div>

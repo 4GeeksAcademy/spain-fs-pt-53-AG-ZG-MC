@@ -1,5 +1,4 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "bootstrap/scss/bootstrap";
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .sectionSpaceCarousel{
@@ -45,4 +44,13 @@
 #carouselExampleFade{
     width: 780px;
     height: 340px;
+}
+.carouselInner2{
+    height: 100%;
+}
+.carouselShadow{
+    box-shadow: 0px 0px 20px gray;
+}
+.carouselBorder{
+    border-radius: 10px;
 }

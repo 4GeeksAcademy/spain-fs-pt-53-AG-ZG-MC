@@ -4,7 +4,7 @@ import { Context } from '../store/appContext';
 import EventDetails from '../component/EventDetails';
 
 const EventDetailsPage = () => {
-  const { eventId } = useParams(); 
+  const { eventId } = useParams();
   const { store, actions } = useContext(Context);
   const { eventDetails, user } = store
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,7 +13,7 @@ const EventDetailsPage = () => {
   const { signedup_events, id } = user || {};
 
   useEffect(() => {
-    setIsLoggedIn(!!store.session.isLoggedIn); 
+    setIsLoggedIn(!!store.session.isLoggedIn);
   }, [store.session.isLoggedIn]);
 
   useEffect(() => {
@@ -44,17 +44,23 @@ const EventDetailsPage = () => {
     }
   };
   console.log("Signedup Events: ", signedup_events)
+
+  const whatsappMessage = `¡Check out this event!! ${window.location.href}`;
+
   return (
     <div>
       <h1>Event Details Page</h1>
-        {eventDetails && (
-          <div>
-              <EventDetails event={eventDetails} />
-              <button onClick={handleSignUp}> 
-              {signedup_events && signedup_events.find(event => event.event_id == eventId) ? "Cancel" : "Sign up"}
-              </button>
-          </div>
-        )}
+      {eventDetails && (
+        <div>
+          <EventDetails event={eventDetails} />
+          <button onClick={handleSignUp}>
+            {signedup_events && signedup_events.find(event => event.event_id == eventId) ? "Cancel" : "Sign up"}
+          </button>
+          <button>
+            <a href={`https:api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer">Compartir en WhatsApp</a>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

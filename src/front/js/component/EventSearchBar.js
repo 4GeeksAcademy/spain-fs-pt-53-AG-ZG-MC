@@ -208,16 +208,18 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
     
 
     return (
-        <div>
+        <div className='searchbarPosition'>
+        <div className='searchbarContainer'>
             {/* Filter Button */}
-            <div>
-                <button onClick={() => setShowFilters(!showFilters)}>Show Filters</button>
+            <div className='buttonContainer'>
+                <button className='showFilterButton' onClick={() => setShowFilters(!showFilters)}>Show Filters</button>
             </div>
 
             {/* Filter button filters */}
             {showFilters && (
-                <div>
+                <div className='filterContainerWrap'>
                     {/* Type filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="event_type">Type Filter:</label>
                     <select id="event_type" onChange={(e) => handleFilterChange("event_type", e.target.value)}>
                         <option value="">Select Type Filter</option>
@@ -228,7 +230,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="family">Family</option>
                         <option value="sport">Sport</option>
                     </select>
+                    </div>
                     {/* Date Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="date_filter">Date Filter:</label>
                     <select id="date_filter" onChange={(e) => handleFilterChange("date_filter", e.target.value)}>
                         <option value="">Select Date Filter</option>
@@ -257,8 +261,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                             />
                         </>
                     )}
-
+                    </div>
                     {/* Duration Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="duration_filter">Duration Filter:</label>
                     <select
                         id="duration_filter"
@@ -269,8 +274,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="medium">Medium</option>
                         <option value="long">Long</option>
                     </select>
-
+                    </div>
                     {/* Age Range Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="age_range_filter">Age Range:</label>
                     <input
                         type="number"
@@ -278,14 +284,15 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         placeholder="Min Age"
                         onChange={(e) => handleFilterChange("age_range_filter_min", e.target.value)}
                     />
-                    <input
+                    <input className='space'
                         type="number"
                         id="age_range_filter_max"
                         placeholder="Max Age"
                         onChange={(e) => handleFilterChange("age_range_filter_max", e.target.value)}
                     />
-
+                    </div>
                     {/* People Range Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="people_range_filter">People Range:</label>
                     <input
                         type="number"
@@ -293,14 +300,15 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         placeholder="Min People"
                         onChange={(e) => handleFilterChange("people_range_filter_min", e.target.value)}
                     />
-                    <input
+                    <input className='space'
                         type="number"
                         id="people_range_filter_max"
                         placeholder="Max People"
                         onChange={(e) => handleFilterChange("people_range_filter_max", e.target.value)}
                     />
-
+                    </div>
                     {/* Gender Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="gender_filter">Gender:</label>
                     <select
                         id="gender_filter"
@@ -311,8 +319,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="queer_only">Queer Only</option>
                         <option value="all_genders">All Genders</option>
                     </select>
-
+                    </div>
                     {/* Language Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="language_filter">Language:</label>
                     <select
                         id="language_filter"
@@ -325,8 +334,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="german">German</option>
                         <option value="french">French</option>
                     </select>
-
+                    </div>
                     {/* Price Type Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="price_type_filter">Price Type:</label>
                     <select
                         id="price_type_filter"
@@ -336,8 +346,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="free">Free</option>
                         <option value="paid">Paid</option>
                     </select>
-
+                    </div>
                     {/* LGTBI Friendly Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="lgtbi">LGTBI Friendly:</label>
                     <select
                         id="lgtbi"
@@ -347,8 +358,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
-
+                    </div>
                     {/* Kid Friendly Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="kid_friendly">Kid Friendly:</label>
                     <select
                         id="kid_friendly"
@@ -358,8 +370,9 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
-
+                    </div>
                     {/* Pet Friendly Filter */}
+                    <div className='filterContainer'>
                     <label htmlFor="pet_friendly">Pet Friendly:</label>
                     <select
                         id="pet_friendly"
@@ -369,17 +382,19 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
-
+                    </div>
                     {/* Apply Filters Button */}
-                    <button onClick={() => {
+                    <div className='filterButtonsContainer'>
+                    <button className='showFilterButton' onClick={() => {
                         console.log("Button clicked!"); // Add this console.log statement
                         handleApplyFilters();
                     }}>Apply Filter</button>
-                    <button onClick={handleClearFilters}>Clear Filters</button>
+                    <button className='showFilterButton space' onClick={handleClearFilters}>Clear Filters</button>
+                    </div>
                 </div>
             )}
         </div>
-        
+        </div>
         //INTERCAMBIAR SECTION SEARCHBAR DEL HEADER.JS*
         
     );

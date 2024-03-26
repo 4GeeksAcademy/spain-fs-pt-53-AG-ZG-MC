@@ -1,6 +1,6 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "bootstrap/scss/bootstrap";
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 /*HeaderNavNoLog Style*/
 /*Text*/
 #webHeader{
@@ -10,10 +10,6 @@
     font-size: 12px;
     font-style: normal;
     color: white;
-    background-image: url(../BCNINICIO.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
 }
 #webHeader2{
     font-family: "Montserrat", sans-serif;
@@ -44,6 +40,11 @@
     justify-content: center;
     background-color: rgba(127, 255, 212, 0);
 }
+/*EN PRUEBA*/
+.navAbsolute{
+    width: 100%;
+    position: fixed;
+}
 #webHeader2{
     width: 100%;
     height: 90px;
@@ -57,6 +58,7 @@
     height: 100%;
     display: flex;
     flex-flow: column;
+    justify-content: center;
 }
 /*Section1*/
 #navbarNoLog1{
@@ -64,7 +66,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 20%;
+    height: 100%;
     background-color: rgba(137, 43, 226, 0);
 }
 #navbarNoLog2{
@@ -76,7 +78,14 @@
     background-color: rgba(137, 43, 226, 0);
 }
 #buttonsNavbar{
-    width: 480px;
+    width: 280px;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#buttonsNavbar2{
+    width: 380px;
     height: 30px;
     display: flex;
     justify-content: space-between;
@@ -227,7 +236,7 @@
 }
 #logo{
     width: 110px;
-    height: 40px;
+    height: 80px;
 }
 /*Section2*/
 #quotes{
