@@ -122,6 +122,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const token = localStorage.getItem("access_token");
 
 				if (token) {
+					await getActions().fetchUserProfile();
 					setStore({
 						session: {
 							isLoggedIn: true,

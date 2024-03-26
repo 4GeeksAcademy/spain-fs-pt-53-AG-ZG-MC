@@ -39,7 +39,6 @@ const CreateEvent = () => {
         ...eventData,
         user_id: store.user.id
       };
-
       // Envía el evento con el ID del usuario al backend
       await actions.createEvent(eventDataWithUserId);
 
@@ -65,7 +64,7 @@ const CreateEvent = () => {
         kid_friendly: false,
       });
 
-      await actions.fetchAllEvents();
+      // await actions.fetchAllEvents();
     } catch (error) {
       console.error('Error al crear el evento:', error);
     }
