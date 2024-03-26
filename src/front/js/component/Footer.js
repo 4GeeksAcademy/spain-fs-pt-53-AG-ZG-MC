@@ -15,7 +15,7 @@ const Footer = () => {
             <a className='a ah' href="https://github.com/atlasraw"><p>Atlas</p></a>
           </div>
           <div>
-            <p className="a">This site is property of “”, S.L. -Calle Tres Islas nº 23, 08045, Barcelona - (Spain)</p>
+            <p className="a">This site is property of VIBING, S.L. -Calle Tres Islas nº 23, 08045, Barcelona - (Spain)</p>
           </div>
         </div>
         <div className="footerRightContent">
