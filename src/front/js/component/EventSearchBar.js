@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
+const EventSearchBar = ({ events, setFilteredEvents, onFilterClick }) => {
     const [showFilters, setShowFilters] = useState(false);
     const initialFilters = {
         event_type: "",
@@ -32,11 +32,11 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
 
     const handleApplyFilters = () => {
         console.log("Applying filters...");
-        if (!events || !Array.isArray(events.events)) {
+        if (!events || !Array.isArray(events)) {
             console.error("Events is not in the expected format.");
             return;
         }
-        let filteredEvents = [...events.events]; 
+        let filteredEvents = [...events];
 
         // Apply Date Filter
         if (filters.date_filter === 'custom') {
@@ -45,7 +45,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
                 const eventDate = new Date(event.date);
                 return eventDate >= new Date(start_date) && eventDate <= new Date(end_date);
             });
-            filteredEvents = customFilteredEvents; 
+            filteredEvents = customFilteredEvents;
         } else {
             const today = new Date();
             let endOfWeek = new Date(today);
@@ -152,7 +152,7 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
             }
             return true;
         });
-        
+
         // Apply Type Filter
         if (filters.event_type) {
             filteredEvents = filteredEvents.filter(event => event.type === filters.event_type);
@@ -195,209 +195,216 @@ const EventSearchBar = ({ events, setFilteredEvents, onFilterClick  }) => {
         setFilters(initialFilters);
         // Llama a la función onFilterClick con los filtros iniciales para limpiar los filtros en el componente padre
         onFilterClick(initialFilters);
-    
+
         // Deseleccionar todas las opciones de los select
         const selectElements = document.querySelectorAll("select");
         selectElements.forEach(select => {
             select.value = "";
         });
-    
+
         // Actualiza los eventos filtrados con todos los eventos disponibles
-        setFilteredEvents(events.events);
+        setFilteredEvents(events);
     };
-    
 
     return (
         <div className='searchbarPosition'>
-        <div className='searchbarContainer'>
-            {/* Filter Button */}
-            <div className='buttonContainer'>
-                <button className='showFilterButton' onClick={() => setShowFilters(!showFilters)}>Show Filters</button>
-            </div>
-
-            {/* Filter button filters */}
-            {showFilters && (
-                <div className='filterContainerWrap'>
-                    {/* Type filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="event_type">Type Filter:</label>
-                    <select id="event_type" onChange={(e) => handleFilterChange("event_type", e.target.value)}>
-                        <option value="">Select Type Filter</option>
-                        <option value="nature">Nature</option>
-                        <option value="party">Party</option>
-                        <option value="culture">Culture</option>
-                        <option value="relax">Relax</option>
-                        <option value="family">Family</option>
-                        <option value="sport">Sport</option>
-                    </select>
-                    </div>
-                    {/* Date Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="date_filter">Date Filter:</label>
-                    <select id="date_filter" onChange={(e) => handleFilterChange("date_filter", e.target.value)}>
-                        <option value="">Select Date Filter</option>
-                        <option value="today">Today</option>
-                        <option value="tomorrow">Tomorrow</option>
-                        <option value="this_week">This Week</option>
-                        <option value="next_week">Next Week</option>
-                        <option value="this_weekend">This Weekend</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                    {filters.date_filter === 'custom' && (
-                        <>
-                            <label htmlFor="start_date">Start Date:</label>
-                            <input
-                                type="date"
-                                id="start_date"
-                                value={filters.start_date}
-                                onChange={(e) => handleFilterChange("start_date", e.target.value)}
-                            />
-                            <label htmlFor="end_date">End Date:</label>
-                            <input
-                                type="date"
-                                id="end_date"
-                                value={filters.end_date}
-                                onChange={(e) => handleFilterChange("end_date", e.target.value)}
-                            />
-                        </>
-                    )}
-                    </div>
-                    {/* Duration Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="duration_filter">Duration Filter:</label>
-                    <select
-                        id="duration_filter"
-                        onChange={(e) => handleFilterChange("duration_filter", e.target.value)}
-                    >
-                        <option value="">All Durations</option>
-                        <option value="short">Short</option>
-                        <option value="medium">Medium</option>
-                        <option value="long">Long</option>
-                    </select>
-                    </div>
-                    {/* Age Range Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="age_range_filter">Age Range:</label>
-                    <input
-                        type="number"
-                        id="age_range_filter_min"
-                        placeholder="Min Age"
-                        onChange={(e) => handleFilterChange("age_range_filter_min", e.target.value)}
-                    />
-                    <input className='space'
-                        type="number"
-                        id="age_range_filter_max"
-                        placeholder="Max Age"
-                        onChange={(e) => handleFilterChange("age_range_filter_max", e.target.value)}
-                    />
-                    </div>
-                    {/* People Range Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="people_range_filter">People Range:</label>
-                    <input
-                        type="number"
-                        id="people_range_filter_min"
-                        placeholder="Min People"
-                        onChange={(e) => handleFilterChange("people_range_filter_min", e.target.value)}
-                    />
-                    <input className='space'
-                        type="number"
-                        id="people_range_filter_max"
-                        placeholder="Max People"
-                        onChange={(e) => handleFilterChange("people_range_filter_max", e.target.value)}
-                    />
-                    </div>
-                    {/* Gender Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="gender_filter">Gender:</label>
-                    <select
-                        id="gender_filter"
-                        onChange={(e) => handleFilterChange("gender_filter", e.target.value)}
-                    >
-                        <option value="">No preferences</option>
-                        <option value="female_only">Female Only</option>
-                        <option value="queer_only">Queer Only</option>
-                        <option value="all_genders">All Genders</option>
-                    </select>
-                    </div>
-                    {/* Language Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="language_filter">Language:</label>
-                    <select
-                        id="language_filter"
-                        onChange={(e) => handleFilterChange("language_filter", e.target.value)}
-                    >
-                        <option value="">All Languages</option>
-                        <option value="spanish">Spanish</option>
-                        <option value="catalan">Catalan</option>
-                        <option value="english">English</option>
-                        <option value="german">German</option>
-                        <option value="french">French</option>
-                    </select>
-                    </div>
-                    {/* Price Type Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="price_type_filter">Price Type:</label>
-                    <select
-                        id="price_type_filter"
-                        onChange={(e) => handleFilterChange("price_type_filter", e.target.value)}
-                    >
-                        <option value="">All Price Types</option>
-                        <option value="free">Free</option>
-                        <option value="paid">Paid</option>
-                    </select>
-                    </div>
-                    {/* LGTBI Friendly Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="lgtbi">LGTBI Friendly:</label>
-                    <select
-                        id="lgtbi"
-                        onChange={(e) => handleFilterChange("lgtbi", e.target.value)}
-                    >
-                        <option value="">All</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    </div>
-                    {/* Kid Friendly Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="kid_friendly">Kid Friendly:</label>
-                    <select
-                        id="kid_friendly"
-                        onChange={(e) => handleFilterChange("kid_friendly", e.target.value)}
-                    >
-                        <option value="">All</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    </div>
-                    {/* Pet Friendly Filter */}
-                    <div className='filterContainer'>
-                    <label htmlFor="pet_friendly">Pet Friendly:</label>
-                    <select
-                        id="pet_friendly"
-                        onChange={(e) => handleFilterChange("pet_friendly", e.target.value)}
-                    >
-                        <option value="">All</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    </div>
-                    {/* Apply Filters Button */}
-                    <div className='filterButtonsContainer'>
-                    <button className='showFilterButton' onClick={() => {
-                        console.log("Button clicked!"); // Add this console.log statement
-                        handleApplyFilters();
-                    }}>Apply Filter</button>
-                    <button className='showFilterButton space' onClick={handleClearFilters}>Clear Filters</button>
-                    </div>
+            <div className='searchbarContainer'>
+                {/* Filter Button */}
+                <div className='buttonContainer'>
+                    <button className='showFilterButton' onClick={() => setShowFilters(!showFilters)}>Show Filters</button>
                 </div>
-            )}
+
+                {/* Filter button filters */}
+                {showFilters && (
+                    <div className='filterContainerWrap'>
+                        {/* Type filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="event_type">Type Filter:</label>
+                            <select id="event_type" onChange={(e) => handleFilterChange("event_type", e.target.value)}>
+                                <option value="">Select Type Filter</option>
+                                <option value="nature">Nature</option>
+                                <option value="party">Party</option>
+                                <option value="culture">Culture</option>
+                                <option value="relax">Relax</option>
+                                <option value="family">Family</option>
+                                <option value="sport">Sport</option>
+                            </select>
+                        </div>
+                        {/* Date Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="date_filter">Date Filter:</label>
+                            <select id="date_filter" onChange={(e) => handleFilterChange("date_filter", e.target.value)}>
+                                <option value="">Select Date Filter</option>
+                                <option value="today">Today</option>
+                                <option value="tomorrow">Tomorrow</option>
+                                <option value="this_week">This Week</option>
+                                <option value="next_week">Next Week</option>
+                                <option value="this_weekend">This Weekend</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                            {filters.date_filter === 'custom' && (
+                                <>
+                                    <label htmlFor="start_date">Start Date:</label>
+                                    <input
+                                        type="date"
+                                        id="start_date"
+                                        value={filters.start_date}
+                                        onChange={(e) => handleFilterChange("start_date", e.target.value)}
+                                    />
+                                    <label htmlFor="end_date">End Date:</label>
+                                    <input
+                                        type="date"
+                                        id="end_date"
+                                        value={filters.end_date}
+                                        onChange={(e) => handleFilterChange("end_date", e.target.value)}
+                                    />
+                                </>
+                            )}
+                        </div>
+                        {/* Duration Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="duration_filter">Duration Filter:</label>
+                            <select
+                                id="duration_filter"
+                                onChange={(e) => handleFilterChange("duration_filter", e.target.value)}
+                            >
+                                <option value="">All Durations</option>
+                                <option value="short">Short</option>
+                                <option value="medium">Medium</option>
+                                <option value="long">Long</option>
+                            </select>
+                        </div>
+                        {/* Age Range Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="age_range_filter">Age Range:</label>
+                            <input
+                                type="number"
+                                id="age_range_filter_min"
+                                placeholder="Min Age"
+                                onChange={(e) => handleFilterChange("age_range_filter_min", e.target.value)}
+                            />
+                            <input className='space'
+                                type="number"
+                                id="age_range_filter_max"
+                                placeholder="Max Age"
+                                onChange={(e) => handleFilterChange("age_range_filter_max", e.target.value)}
+                            />
+                        </div>
+                        {/* People Range Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="people_range_filter">People Range:</label>
+                            <input
+                                type="number"
+                                id="people_range_filter_min"
+                                placeholder="Min People"
+                                onChange={(e) => handleFilterChange("people_range_filter_min", e.target.value)}
+                            />
+                            <input className='space'
+                                type="number"
+                                id="people_range_filter_max"
+                                placeholder="Max People"
+                                onChange={(e) => handleFilterChange("people_range_filter_max", e.target.value)}
+                            />
+                        </div>
+                        {/* Gender Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="gender_filter">Gender:</label>
+                            <select
+                                id="gender_filter"
+                                onChange={(e) => handleFilterChange("gender_filter", e.target.value)}
+                            >
+                                <option value="">No preferences</option>
+                                <option value="female_only">Female Only</option>
+                                <option value="queer_only">Queer Only</option>
+                                <option value="all_genders">All Genders</option>
+                            </select>
+                        </div>
+                        {/* Language Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="language_filter">Language:</label>
+                            <select
+                                id="language_filter"
+                                onChange={(e) => handleFilterChange("language_filter", e.target.value)}
+                            >
+                                <option value="">All Languages</option>
+                                <option value="spanish">Spanish</option>
+                                <option value="catalan">Catalan</option>
+                                <option value="english">English</option>
+                                <option value="german">German</option>
+                                <option value="french">French</option>
+                            </select>
+                        </div>
+                        {/* Price Type Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="price_type_filter">Price Type:</label>
+                            <select
+                                id="price_type_filter"
+                                onChange={(e) => handleFilterChange("price_type_filter", e.target.value)}
+                            >
+                                <option value="">All Price Types</option>
+                                <option value="free">Free</option>
+                                <option value="paid">Paid</option>
+                            </select>
+                        </div>
+                        {/* LGTBI Friendly Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="lgtbi">LGTBI Friendly:</label>
+                            <select
+                                id="lgtbi"
+                                onChange={(e) => handleFilterChange("lgtbi", e.target.value)}
+                            >
+                                <option value="">All</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        {/* Kid Friendly Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="kid_friendly">Kid Friendly:</label>
+                            <select
+                                id="kid_friendly"
+                                onChange={(e) => handleFilterChange("kid_friendly", e.target.value)}
+                            >
+                                <option value="">All</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        {/* Pet Friendly Filter */}
+                        <div className='filterContainer'>
+                            <label htmlFor="pet_friendly">Pet Friendly:</label>
+                            <select
+                                id="pet_friendly"
+                                onChange={(e) => handleFilterChange("pet_friendly", e.target.value)}
+                            >
+                                <option value="">All</option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        {/* Apply Filters Button */}
+                        <div className='filterButtonsContainer'>
+                            <button className='showFilterButton' onClick={() => {
+                                console.log("Button clicked!"); // Add this console.log statement
+                                handleApplyFilters();
+                            }}>Apply Filter</button>
+                            <button className='showFilterButton space' onClick={handleClearFilters}>Clear Filters</button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
-        </div>
-        //INTERCAMBIAR SECTION SEARCHBAR DEL HEADER.JS*
-        
+
     );
 };
 
 export default EventSearchBar;
+
+
+
+
+
+
+
+
+
