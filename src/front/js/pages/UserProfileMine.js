@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfileEdit from '../component/ProfileEdit';
 import MyEvents from '../component/MyEvents';
 import './../../styles/registrationForm.css';
-import paisaje from './../../img/paisaje.jpeg';
+import paisaje from './../../img/paisaje.webp';
 
 
 const UserProfileMine = () => {
