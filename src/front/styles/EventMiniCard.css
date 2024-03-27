@@ -1,0 +1,204 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+/*Event Mini Card*/
+.sectionSpace{
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: 540px;
+    display: flex;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+.sectionSpaceList{
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+.centeredWebContent{
+    background-color: transparent;
+    width: 980px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.miniCardSectionHeader{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.miniCardSectionWrap{
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+}
+.miniCardSectionWrapList{
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background-color: transparent;
+    flex-wrap: wrap;
+}
+.sectionCardMargin{
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.tittleHeaderWrap{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 38px;
+    font-weight: 600;
+    font-style: normal;
+    color: #6F5149;
+}
+.tittleCentered{
+    display: flex;
+    justify-content: center;
+}
+.tittleCenteredE{
+    display: flex;
+    justify-content: center;
+    background-color: #FFCA7A;
+}
+.subtittleHeaderWrap{
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    color: #A77B70;
+}
+.miniCardLog{
+    width: 180px;
+    height: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.imgMiniCard{
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    background-image: url(../img/how-to.png);
+    object-fit: cover;
+    margin-bottom: 2px;
+}
+.tittleMiniCard{
+    font-size: normal;
+    font-weight: 600;
+    margin-bottom: 0px;
+    color: #6F5149;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.subtittleMiniCard{
+    width: 160px;
+    height: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #A77B70;
+    line-height:1.3em;
+    margin-bottom: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.buttonMiniCard{
+    width: 160px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #ffffff;
+    border-color: #FFCA7A;
+    padding: 0;
+}
+.buttonMiniCard3{
+    width: 100%px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+.SeparationButtons{
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin: 20px;
+    
+}
+.buttonMiniCard2{
+    width: 380px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 0;
+}
+.SBC{
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.057);
+}
+
+.miniCardSectionButton{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+.paginationButtonContainer{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.paginationButtons{
+    
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+}
