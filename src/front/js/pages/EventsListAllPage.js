@@ -10,7 +10,7 @@ const EventsListAll = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(store);
+  
 
   useEffect(() => {
     fetchEvents();

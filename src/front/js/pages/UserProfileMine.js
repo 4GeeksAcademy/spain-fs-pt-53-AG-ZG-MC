@@ -46,7 +46,7 @@ const UserProfileMine = () => {
         const deletedUserProfile = await actions.deleteUser();
         if (deletedUserProfile) {
           setIsEditing(false);
-          console.log('User deleted successfully');
+          
   
           actions.clearUser();
   

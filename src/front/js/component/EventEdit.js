@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 
 
 const EditEvent = ({ event }) => {
-  console.log("Event edit:", event);
+  
 
   const { actions } = useContext(Context);
 
@@ -28,13 +28,13 @@ const EditEvent = ({ event }) => {
     }
   };
 
-  // Function to handle event update
+  
   const handleUpdateEvent = async () => {
-    // preventDefault(); 
+    
     try {
-      console.log('Updating event:', eventData); 
+      
       await actions.editEvent(event.id, eventData);
-      console.log('Evento editado exitosamente');
+      
     } catch (error) {
       console.error('Error al editar el evento:', error);
     }
@@ -44,7 +44,7 @@ const EditEvent = ({ event }) => {
     <div>
       <h2>Edit Event</h2>
       <form onSubmit={handleUpdateEvent}>
-        {/* Event Name input */}
+       
         <label htmlFor="name">Event Name:</label>
         <input
           type="text"
@@ -54,7 +54,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Date input */}
+     
         <label htmlFor="date">Event Date:</label>
         <input
           type="date"
@@ -64,7 +64,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Duration input */}
+     
         <label htmlFor="duration">Event Duration:</label>
         <input
           type="text"
@@ -74,7 +74,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Type input */}
+     
         <label htmlFor="type">Event Type:</label>
         <input
           type="text"
@@ -84,7 +84,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Place input */}
+      
         <label htmlFor="place">Event Place:</label>
         <input
           type="text"
@@ -94,7 +94,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Description input */}
+     
         <label htmlFor="description">Event Description:</label>
         <input
           type="text"
@@ -104,7 +104,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Language input */}
+    
         <label htmlFor="language">Event Language:</label>
         <input
           type="text"
@@ -114,7 +114,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Gender input */}
+      
         <label htmlFor="gender">Event Gender:</label>
         <input
           type="text"
@@ -124,7 +124,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Price Type input */}
+       
         <label htmlFor="price_type">Event Price Type:</label>
         <input
           type="text"
@@ -134,7 +134,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Price input */}
+       
         <label htmlFor="price">Event Price:</label>
         <input
           type="number"
@@ -144,7 +144,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Min Age input */}
+     
         <label htmlFor="min_age">Event Min Age:</label>
         <input
           type="number"
@@ -154,7 +154,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Max Age input */}
+        
         <label htmlFor="max_age">Event Max Age:</label>
         <input
           type="number"
@@ -164,7 +164,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Min People input */}
+        
         <label htmlFor="min_people">Event Min People:</label>
         <input
           type="number"
@@ -174,7 +174,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Max People input */}
+        
         <label htmlFor="max_people">Event Max People:</label>
         <input
           type="number"
@@ -184,7 +184,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Lgtbi input */}
+        
         <label htmlFor="lgtbi">Event Lgtbi:</label>
         <input
           type="checkbox"
@@ -194,7 +194,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Pet input */}
+        
         <label htmlFor="pet_friendly">Event Pet:</label>
         <input
           type="checkbox"
@@ -204,7 +204,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Kids input */}
+        
         <label htmlFor="kid_friendly">Event Kids:</label>
         <input
           type="checkbox"
@@ -214,7 +214,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event UserId input */}
+        
         <label htmlFor="user_id">Event UserId:</label>
         <input
           type="text"
@@ -224,7 +224,7 @@ const EditEvent = ({ event }) => {
           onChange={handleInputChange}
         />       
 
-        {/* Submit button */}
+        
         <button type="submit">
           Update Event
         </button>

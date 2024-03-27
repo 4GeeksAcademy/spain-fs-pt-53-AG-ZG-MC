@@ -19,10 +19,10 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+    
 
     try {
-      // Call the action to create a user from the context
+      
       await actions.handleCreateUser(formData.first_name,
         formData.last_name,
         formData.username,
@@ -30,7 +30,7 @@ const RegistrationForm = () => {
         formData.password,
         formData.confirmPassword);
 
-      // Reset form fields
+      
       setFormData({
         first_name: '',
         last_name: '',

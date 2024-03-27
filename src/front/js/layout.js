@@ -33,7 +33,7 @@ const Layout = () => {
                     <Navbar />
                     <Header />
                     <Routes>
-                        {/* Pages */}
+                        
                         <Route exact path="/" element={<Home />} />
                         <Route exact path="/login" element={<Login />} /> 
                         <Route exact path="/reset-password/:token" element={<PasswordResetPage />} />

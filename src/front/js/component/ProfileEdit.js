@@ -19,13 +19,13 @@ const ProfileEdit = ({ user }) => {
     }));
   };
 
-  // Function to handle event update
+  
   const handleUpdateUser = async () => {
     try {
       await actions.editUserProfile(userData);
-      console.log('Evento editado exitosamente');
+      
     } catch (error) {
-      console.error('Error al editar el evento:', error);
+      
     }
   };
 
@@ -33,7 +33,7 @@ const ProfileEdit = ({ user }) => {
     <div>
       <h2 className="EditProfileText">Edit User</h2>
       <form onSubmit={handleUpdateUser}>
-        {/* User Name input */}
+       
         <label htmlFor="username">Name:</label>
         <input
           type="text"
@@ -43,7 +43,7 @@ const ProfileEdit = ({ user }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Duration input */}
+     
         <label htmlFor="email">Email:</label>
         <input
           type="text"
@@ -53,7 +53,7 @@ const ProfileEdit = ({ user }) => {
           onChange={handleInputChange}
         />
 
-        {/* Event Type input */}
+     
         <label htmlFor="first_name">First name:</label>
         <input
           type="text"
@@ -61,10 +61,10 @@ const ProfileEdit = ({ user }) => {
           name="first_name"
           value={userData.first_name}
           onChange={handleInputChange}
-          // readOnly
+          
         />
 
-        {/* Event Place input */}
+       
         <label htmlFor="last_name">Last name:</label>
         <input
           type="text"
@@ -72,10 +72,9 @@ const ProfileEdit = ({ user }) => {
           name="last_name"
           value={userData.last_name}
           onChange={handleInputChange}
-          // readOnly
+          
         />
 
-        {/* Submit button */}
         <button className="EditButton" type="submit">
           Update Profile
         </button>

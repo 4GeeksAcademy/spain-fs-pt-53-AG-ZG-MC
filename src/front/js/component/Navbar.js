@@ -19,7 +19,7 @@ const Navbar = () => {
     
     <div>
       {!store.session.isLoggedIn ? (
-        // Si el usuario no está loggeado, mostrar componentes para no loggeado
+        
         <>
         <div className="navAbsolute">
           <div id="webHeader2">
@@ -46,7 +46,7 @@ const Navbar = () => {
           </div>
         </>
       ) : (
-        // Si el usuario está loggeado, mostrar componentes para loggeado
+        
         <>
         <div className='navAbsolute'>
         <div id="webHeader2">
