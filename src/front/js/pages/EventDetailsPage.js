@@ -9,7 +9,7 @@ const EventDetailsPage = () => {
   const { eventDetails, user } = store
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  console.log("User: ", user);
+  
   const { signedup_events, id } = user || {};
 
   useEffect(() => {
@@ -19,15 +19,15 @@ const EventDetailsPage = () => {
   useEffect(() => {
     actions.fetchEventDetails(eventId)
       .then(eventData => {
-        console.log('Event fetched:', eventData);
+        
       })
       .catch(error => console.error('Error fetching event:', error));
   }, [eventId]);
 
-  // Función para manejar la inscripción en el evento
+  
   const handleSignUp = async () => {
     try {
-      console.log('Starting handleSignUp...');
+      
       if (!isLoggedIn) {
         alert('You need to log in first.');
         return;
@@ -38,12 +38,12 @@ const EventDetailsPage = () => {
         await actions.signUpForEvent(eventId, id);
       }
       await actions.fetchUserProfile();
-      console.log('Signed up for event successfully');
+      
     } catch (error) {
       console.error('Error signing up for the event', error);
     }
   };
-  console.log("Signedup Events: ", signedup_events)
+  
 
   const whatsappMessage = `¡Check out this event!! ${window.location.href}`;
 

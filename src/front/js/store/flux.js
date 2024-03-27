@@ -41,7 +41,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					console.log("User created successfully:", data);
+					
 
 				} catch (error) {
 					console.error("Error creating user", error);
@@ -56,7 +56,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch users');
 					}
 					const data = await response.json();
-					// console.log("Data from fetchAllUsers:", data);
+					
 
 					setStore({
 						users: data
@@ -109,7 +109,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					console.log('User profile updated successfully:', data);
+					
 
 					return data; 
 				} catch (error) {
@@ -150,7 +150,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					localStorage.setItem("access_token", data.token)
 
-					console.log('Login successful. Data:', data);
+					
 
 					setStore({session: {
 						isLoggedIn: true,
@@ -179,7 +179,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					localStorage.removeItem('access_token');
 
-					console.log('Logout successful.');
+					
 					setStore({session: {
 						isLoggedIn: false,
 						username: null,
@@ -249,7 +249,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					console.log("Event created successfully:", data);
+					
 
 					setStore(prevState => {
 						return { ...prevState, events: [...prevState.events, data] };
@@ -277,7 +277,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  }
 			  
 				  const data = await response.json();
-				  console.log("Event updated successfully:", data);
+				  
 			  
 				  return data; 
 				} catch (error) {
@@ -299,7 +299,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			signUpForEvent: async (eventId, userId) => {
 				try {
-				  console.log('Signing up for event. Event ID:', eventId, 'User ID:', userId);
+				  
 				  const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/signup`, {
 					method: 'POST',
 					headers: {
@@ -313,7 +313,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw new Error('Failed to sign up for the event');
 				  }
 			  
-				  console.log('Signed up for event successfully');
+				  
 			  
 				} catch (error) {
 				  console.error('Error signing up for the event', error);
@@ -333,7 +333,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (!response.ok) {
 						throw new Error('Failed to cancel assistance for the event');
 					}
-					console.log(`Canceled assistance for event ${eventId}`);
+					
 				} catch (error) {
 					console.error('Error canceling assistance for the event', error);
 					throw error;
@@ -377,7 +377,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch event attendees');
 					}
 					const data = await response.json();
-					console.log(`Attendees for event ${eventId}:`, data);
+					
 					return data;
 				} catch (error) {
 					console.error("Error fetching attendees count", error);
@@ -406,7 +406,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					console.log("Data from fetchAllEvents:", data);
+					
 
 					setStore({
 						events: data.events || [],      
@@ -424,20 +424,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 			deleteUser: async () => {
 				const actions = getActions();
 				try {
-					// Obtener el usuario actualmente autenticado
+					
 					const userProfile = await actions.fetchUserProfile();
 					if (!userProfile) {
 					throw new Error('User profile not found');
 					}
 				  
-					// Eliminar todos los eventos asociados al usuario si existen
+				
 					if (userProfile.events !== undefined) {
 					for (const event of userProfile.events) {
 						await actions.deleteEvent(event.id);
 					}
 				}
 				  
-				// Después de eliminar los eventos, eliminar el usuario
+				
 				const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 					method: 'DELETE',
 					headers: {
@@ -449,7 +449,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw new Error('Failed to delete user');
 				}
 				
-				// Actualizar el estado de la sesión para reflejar que el usuario ya no está autenticado
+				
 				setStore({
 					session: {
 						isLoggedIn: false,
@@ -458,10 +458,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				});
 				
-				// Limpiar el token de acceso del almacenamiento local
+				
 				localStorage.removeItem("access_token");
 			  
-				console.log('User deleted successfully');
+				
 				} catch (error) {
 				console.error('Error deleting user:', error);
 				throw error;
@@ -481,7 +481,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to delete event');
 					}
 
-					console.log('Event deleted successfully');
+					
 
 				} catch (error) {
 					console.error('Error deleting event:', error);

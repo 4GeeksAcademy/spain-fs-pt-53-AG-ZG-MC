@@ -347,6 +347,7 @@ li{
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    margin: 5px;
 }
 .profileButtons{
     font-family: "Montserrat", sans-serif;
