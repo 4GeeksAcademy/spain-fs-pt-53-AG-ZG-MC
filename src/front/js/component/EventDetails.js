@@ -1,7 +1,7 @@
 import React from "react";
 import WeatherForecast from "./WeatherForecast";
 import './../../styles/registrationForm.css';
-import EventImage from './../../img/evento1.jpeg';
+import EventImage from './../../img/evento1.webp';
 
 const EventDetails = ({ event }) => {
   

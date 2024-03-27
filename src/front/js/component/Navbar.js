@@ -6,7 +6,7 @@ import RegistrationForm from './RegistrationForm';
 import CreateEventPage from '../pages/CreateEventPage';
 import UserProfileMine from '../pages/UserProfileMine';
 import { Link } from 'react-router-dom';
-import LOGO from './../../img/VIBING.png';
+import LOGO from './../../img/VIBING.webp';
 
 const Navbar = () => {
   const { store } = useContext(Context);
