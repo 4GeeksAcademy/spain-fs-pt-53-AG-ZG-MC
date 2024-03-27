@@ -1,22 +1,22 @@
 import React, { useContext, useState } from "react";
 import { Context } from '../store/appContext';
-
+import { useNavigate } from 'react-router-dom';
   
 const CreateEvent = () => {
   const { actions, store } = useContext(Context); 
-
+  const navigate = useNavigate();
   const defaultLocation = "Barcelona";
 
   const [eventData, setEventData] = useState({
     name: "",
     date: "",
     duration: "",
-    type: "",
+    type: "nature",
     place: defaultLocation,
     description: "",
-    language: "",
-    gender: "",
-    price_type: "",
+    language: "english",
+    gender: "all_genders",
+    price_type: "free",
     price: "",
     min_age: "",
     max_age: "",
@@ -48,12 +48,12 @@ const CreateEvent = () => {
         name: "",
         date: "",
         duration: "",
-        type: "",
+        type: "nature",
         place: defaultLocation,
         description: "",
-        language: "",
-        gender: "",
-        price_type: "",
+        language: "english",
+        gender: "all_genders",
+        price_type: "free",
         price: "",
         min_age: "",
         max_age: "",
@@ -64,7 +64,7 @@ const CreateEvent = () => {
         kid_friendly: false,
       });
 
-      // await actions.fetchAllEvents();
+      navigate('/events');
     } catch (error) {
       console.error('Error al crear el evento:', error);
     }
