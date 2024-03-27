@@ -23,7 +23,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     const signedupEventsWithDetails = signedup_events.map(signup => {
-      const eventDetails = events.events.find(event => event.id === signup.event_id);
+      const eventDetails = events.find(event => event.id === signup.event_id);
       return { ...signup, ...eventDetails };
     });
     setMySignedupEvents(signedupEventsWithDetails);
@@ -32,7 +32,7 @@ const MyEvents = () => {
   useEffect(() => {
     setMyCreatedEvents(created_events);
     const signedupEventsWithDetails = signedup_events.map(signup => {
-      const eventDetails = events.events.find(event => event.id === signup.event_id);
+      const eventDetails = events.find(event => event.id === signup.event_id);
       return { ...signup, ...eventDetails };
     });
     setMySignedupEvents(signedupEventsWithDetails);
@@ -84,7 +84,7 @@ const MyEvents = () => {
         {myCreatedEvents.length === 0 ? (
           <p>No events created yet.</p>
         ) : (
-          <ul>
+          <ul className='MyEventsUlFlex'>
             {myCreatedEvents.map(event => (
               <li className='eventEditProfile bg-w' key={event.id}>
                 <div className='TextProfileEvent'>{event.name}</div>
@@ -110,7 +110,7 @@ const MyEvents = () => {
         {mySignedupEvents.length === 0 ? (
           <p>No events signed up yet.</p>
         ) : (
-          <ul>
+          <ul className='MyEventsUlFlex'>
             {mySignedupEvents.map(event => (
               <li className='eventEditProfile bg-w' key={event.id}>
                 <div className='TextProfileEvent'>{event.name}</div>
