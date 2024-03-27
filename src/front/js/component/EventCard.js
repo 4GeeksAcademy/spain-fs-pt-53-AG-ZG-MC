@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import EventImage from './../../img/evento1.jpeg';
+import EventImage from './../../img/evento1.webp';
 
 const EventCard = ({ event }) => {
     if (!event) {

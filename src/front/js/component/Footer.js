@@ -1,5 +1,5 @@
 import React from 'react';
-import LOGO from './../../img/VIBING.png';
+import LOGO from './../../img/VIBING.webp';
 
 
 const Footer = () => {
