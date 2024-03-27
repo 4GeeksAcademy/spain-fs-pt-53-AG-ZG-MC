@@ -4,7 +4,7 @@ import './../../styles/registrationForm.css';
 import EventImage from './../../img/evento1.jpeg';
 
 const EventDetails = ({ event }) => {
-  console.log("Event Details:", event)
+  
 
   if (!event) {
     return null; 

@@ -68,7 +68,7 @@ const MyEvents = () => {
     }
   };
 
-  //const eventDateFormatted = new Date(date).toISOString().split('T')[0];
+ 
 
   return (
     <div className="my-events">

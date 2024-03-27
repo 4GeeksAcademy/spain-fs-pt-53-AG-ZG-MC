@@ -29,21 +29,21 @@ const CreateEvent = () => {
 
   const handleCreateEvent = async () => {
     try {
-      // Verifica si hay un usuario autenticado
+      
       if (!store.session.isLoggedIn) {
         throw new Error("No user authenticated");
       }
 
-      // Agrega el ID del usuario al evento
+      
       const eventDataWithUserId = {
         ...eventData,
         user_id: store.user.id
       };
-      // Envía el evento con el ID del usuario al backend
+      
       await actions.createEvent(eventDataWithUserId);
 
-      console.log('Evento creado exitosamente');
-      // Limpiar los campos después de la creación del evento
+      
+      
       setEventData({
         name: "",
         date: "",
@@ -85,7 +85,7 @@ const CreateEvent = () => {
       <div className="tittleCenteredE"><h2 className="tittleHeaderWrap">Create Event</h2></div>
       <div>
       <form className="filterContainerWrap2">
-        {/* Event Name input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="name">Title*</label>
         <input
@@ -96,7 +96,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Date input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="date">Date*</label>
         <input
@@ -107,7 +107,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Duration input */}
+      
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="duration">Duration*</label>
         <input
@@ -118,7 +118,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Type input SECTION */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="type">Type*</label>
         <select
@@ -136,7 +136,7 @@ const CreateEvent = () => {
           <option value="sport">Sport</option>
         </select>
         </div>
-        {/* Event Place input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="place">Place*</label>
         <input
@@ -147,7 +147,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Description input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="description">Description*</label>
         <input
@@ -158,7 +158,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Language input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="language">Language</label>
         <select
@@ -175,7 +175,7 @@ const CreateEvent = () => {
           <option value="french">French</option>
         </select>
         </div>
-        {/* Event Gender input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="gender">Gender*</label>
         <select
@@ -190,7 +190,7 @@ const CreateEvent = () => {
           <option value="queer_only">Queer only</option>
         </select>
         </div>
-        {/* Event Price Type input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="price_type">Price Type*</label>
         <select
@@ -204,7 +204,7 @@ const CreateEvent = () => {
           <option value="paid">Paid</option>
         </select>  
         </div>
-        {/* Event Price input */}
+      
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="price">Price</label>
         <input
@@ -215,7 +215,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Min Age input */}
+       
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="min_age">Min Age</label>
         <input
@@ -226,7 +226,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Max Age input */}
+        
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="max_age">Max Age</label>
         <input
@@ -237,7 +237,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Min People input */}
+       
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="min_people">Min People</label>
         <input
@@ -248,7 +248,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Max People input */}
+        
         <div className="filterContainerR">
         <label className="labelSpace" htmlFor="max_people">Max People</label>
         <input
@@ -259,7 +259,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Lgtbi input */}
+       
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="lgtbi">LGTBI</label>
         <input
@@ -270,7 +270,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Pet input */}
+       
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="pet_friendly">Pet friendly</label>
         <input
@@ -281,7 +281,7 @@ const CreateEvent = () => {
           onChange={handleInputChange}
         />
         </div>
-        {/* Event Kids input */}
+      
         <div className="filterContainerE">
         <label className="labelSpace" htmlFor="kid_friendly">Kids friendly</label>
         <input
@@ -304,7 +304,7 @@ const CreateEvent = () => {
         ></iframe>
         </div>
         
-        {/* Submit button */}
+        
         <div className="filterButtonContainer">
         <button className="showFilterButton" type="button" onClick={handleCreateEvent}>
           Create Event
