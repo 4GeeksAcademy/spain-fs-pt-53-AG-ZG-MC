@@ -1,7 +1,7 @@
 import React from 'react';
-import Hero1 from './../../img/HERO1.jpg';
-import Hero2 from './../../img/HERO2.jpg';
-import Hero3 from './../../img/HERO3.jpg';
+import Hero1 from './../../img/HERO1.webp';
+import Hero2 from './../../img/HERO2.webp';
+import Hero3 from './../../img/HERO3.webp';
 
 
 const HeroSection = () => {
