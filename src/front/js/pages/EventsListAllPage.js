@@ -6,9 +6,11 @@ import EventSearchBar from '../component/EventSearchBar';
 
 const EventsListAll = () => {
   const { store } = useContext(Context);
-  const { events } = store
+  const { events } = store;
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  console.log(store);
 
   useEffect(() => {
     fetchEvents();
@@ -18,9 +20,9 @@ const EventsListAll = () => {
     setLoading(false);
   }, [filteredEvents]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (page = 1) => {
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/events`);
+      const response = await fetch(`${process.env.BACKEND_URL}/api/events?page=${page}`);
       if (!response.ok) {
         throw new Error('Failed to fetch events');
       }
@@ -36,7 +38,7 @@ const EventsListAll = () => {
   const handleFilterClick = (filters) => {
     setFilteredEvents(events.events);
   };
-  
+
   return (
     <div>
       <div>
@@ -48,24 +50,34 @@ const EventsListAll = () => {
       </div>
 
       <div>
-        {loading ? ( 
+        {loading ? (
           <p>Loading...</p>
         ) : (
           <div className='sectionSpaceList'>
-          <div className='centeredWebContent'>
-          <div className='tittleCentered'>
-            <h1 className='tittleHeaderWrap'>All Events</h1>
-          </div>
-          <div className="event-list miniCardSectionWrapList">
-            {filteredEvents.length > 0 ? (
-              filteredEvents.map(event => (
-                <EventCard key={event.id} event={event} />
-              ))
-            ) : (
-              <p>No events found.</p>
-            )}
-          </div>
-          </div>
+            <div className='centeredWebContent'>
+              <div className='tittleCentered'>
+                <h1 className='tittleHeaderWrap'>All Events</h1>
+              </div>
+              <div className="event-list miniCardSectionWrapList">
+                {filteredEvents.length > 0 ? (
+                  filteredEvents.map(event => (
+                    <EventCard key={event.id} event={event} />
+                  ))
+                ) : (
+                  <p>No events found.</p>
+                )}
+              </div>
+              <div className="pagination-buttons">
+                <button
+                  onClick={() => fetchEvents(store.prevPage)}
+                >
+                  Previous Page
+                </button>
+                {store.nextPage && (
+                  <button onClick={() => fetchEvents(store.nextPage)}>Next Page</button>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -75,4 +87,3 @@ const EventsListAll = () => {
 };
 
 export default EventsListAll;
-

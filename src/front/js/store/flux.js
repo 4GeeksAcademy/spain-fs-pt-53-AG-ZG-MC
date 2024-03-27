@@ -406,10 +406,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error('Failed to fetch events');
 					}
 					const data = await response.json();
-					console.log("Data from fetchAllEvents:", data); 
+					console.log("Data from fetchAllEvents:", data);
 
 					setStore({
-						events: data
+						events: data.events || [],      
+						totalEvents: data.total_events || 0,
+						totalPages: data.total_pages || 0,
+						currentPage: data.current_page || 1,
+						nextPage: data.next_page || null,
+						prevPage: data.prev_page || null
 					});
 				} catch (error) {
 					console.error('Error fetching events', error);
