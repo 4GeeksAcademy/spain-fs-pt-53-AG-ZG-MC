@@ -67,14 +67,14 @@ const EventsListAll = () => {
                   <p>No events found.</p>
                 )}
               </div>
-              <div className="pagination-buttons">
-                <button
+              <div className="pagination-buttons paginationButtonContainer">
+                <button className='paginationButtons'
                   onClick={() => fetchEvents(store.prevPage)}
                 >
                   Previous Page
                 </button>
                 {store.nextPage && (
-                  <button onClick={() => fetchEvents(store.nextPage)}>Next Page</button>
+                  <button className='paginationButtons' onClick={() => fetchEvents(store.nextPage)}>Next Page</button>
                 )}
               </div>
             </div>

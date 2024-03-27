@@ -184,3 +184,21 @@
     align-items: center;
     background-color: transparent;
 }
+.paginationButtonContainer{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.paginationButtons{
+    
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #FFCA7A;
+    border-color: #FFCA7A;
+    padding: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+}

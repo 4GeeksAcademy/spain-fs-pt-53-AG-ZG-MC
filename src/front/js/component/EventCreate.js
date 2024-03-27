@@ -1,22 +1,22 @@
 import React, { useContext, useState } from "react";
 import { Context } from '../store/appContext';
-
+import { useNavigate } from 'react-router-dom';
   
 const CreateEvent = () => {
   const { actions, store } = useContext(Context); 
-
+  const navigate = useNavigate();
   const defaultLocation = "Barcelona";
 
   const [eventData, setEventData] = useState({
     name: "",
     date: "",
     duration: "",
-    type: "",
+    type: "nature",
     place: defaultLocation,
     description: "",
-    language: "",
-    gender: "",
-    price_type: "",
+    language: "english",
+    gender: "all_genders",
+    price_type: "free",
     price: "",
     min_age: "",
     max_age: "",
@@ -48,12 +48,12 @@ const CreateEvent = () => {
         name: "",
         date: "",
         duration: "",
-        type: "",
+        type: "nature",
         place: defaultLocation,
         description: "",
-        language: "",
-        gender: "",
-        price_type: "",
+        language: "english",
+        gender: "all_genders",
+        price_type: "free",
         price: "",
         min_age: "",
         max_age: "",
@@ -64,7 +64,7 @@ const CreateEvent = () => {
         kid_friendly: false,
       });
 
-      // await actions.fetchAllEvents();
+      navigate('/events');
     } catch (error) {
       console.error('Error al crear el evento:', error);
     }
@@ -87,7 +87,7 @@ const CreateEvent = () => {
       <form className="filterContainerWrap2">
         {/* Event Name input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="name">Title</label>
+        <label className="labelSpace" htmlFor="name">Title*</label>
         <input
           type="text"
           id="name"
@@ -98,7 +98,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Date input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="date">Date</label>
+        <label className="labelSpace" htmlFor="date">Date*</label>
         <input
           type="date"
           id="date"
@@ -109,7 +109,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Duration input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="duration">Duration</label>
+        <label className="labelSpace" htmlFor="duration">Duration*</label>
         <input
           type="text"
           id="duration"
@@ -120,7 +120,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Type input SECTION */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="type">Type</label>
+        <label className="labelSpace" htmlFor="type">Type*</label>
         <select
           type="text"
           id="type"
@@ -138,7 +138,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Place input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="place">Place</label>
+        <label className="labelSpace" htmlFor="place">Place*</label>
         <input
           type="text"
           id="place"
@@ -149,7 +149,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Description input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="description">Description</label>
+        <label className="labelSpace" htmlFor="description">Description*</label>
         <input
           type="text"
           id="description"
@@ -177,7 +177,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Gender input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="gender">Gender</label>
+        <label className="labelSpace" htmlFor="gender">Gender*</label>
         <select
           type="text"
           id="gender"
@@ -192,7 +192,7 @@ const CreateEvent = () => {
         </div>
         {/* Event Price Type input */}
         <div className="filterContainerE">
-        <label className="labelSpace" htmlFor="price_type">Price Type</label>
+        <label className="labelSpace" htmlFor="price_type">Price Type*</label>
         <select
           type="text"
           id="price_type"
