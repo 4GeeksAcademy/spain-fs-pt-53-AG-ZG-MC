@@ -366,24 +366,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getAttendeesCount: async (eventId) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to fetch event attendees');
-					}
-					const data = await response.json();
-					
-					return data;
-				} catch (error) {
-					console.error("Error fetching attendees count", error);
-					throw error; 
-				}
-			},
+			
 
 			fetchEventRecommended: async () => {
 				try {
@@ -486,110 +469,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.error('Error deleting event:', error);
 					throw error;
-				}
-			},
-
-			getEventsByUser: async () => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events`, {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to fetch events by user');
-					}
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error fetching events by user:", error);
-					throw error;
-				}
-			},
-
-			getUsersByEvent: async (eventId) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/${eventId}/users`, {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to fetch users by event');
-					}
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error fetching users by event:", error);
-					throw error;
-				}
-			},
-
-			addEventToFavorites: async (eventId) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
-						method: "POST",
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to add event to favorites');
-					}
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error adding event to favorites:", error);
-					throw error;
-				}
-			},
-
-			removeEventFromFavorites: async (eventId) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/events/${eventId}/favorite`, {
-						method: "DELETE",
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to remove event from favorites');
-					}
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error removing event from favorites:", error);
-					throw error;
-				}
-			},
-
-			getUserFavoriteEvents: async () => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/users/favorite_event`, {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
-						}
-					});
-					if (!response.ok) {
-						throw new Error('Failed to fetch user favorite events');
-					}
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error fetching user favorite events:", error);
-					throw error;
-				}
-			},
-
-			filterEvents: async (filters) => {
-				try {
-					const queryString = new URLSearchParams(filters).toString();
-					const response = await fetch(`${process.env.BACKEND_URL}/api/events/filter?${queryString}`);
-					const data = await response.json();
-					return data;
-				} catch (error) {
-					console.error("Error filtering events:", error);
-					throw new Error("Error filtering events");
 				}
 			},
 		},
