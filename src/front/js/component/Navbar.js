@@ -1,10 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 import Logout from './Logout';
-import Login from './Login';
-import RegistrationForm from './RegistrationForm';
-import CreateEventPage from '../pages/CreateEventPage';
-import UserProfileMine from '../pages/UserProfileMine';
 import { Link } from 'react-router-dom';
 import LOGO from './../../img/VIBING.webp';
 

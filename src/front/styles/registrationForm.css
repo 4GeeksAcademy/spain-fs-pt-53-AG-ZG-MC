@@ -362,7 +362,8 @@ margin:0
 .ImgEventDetail {
 width:300px;
 height:450px;
-margin-right:10px
+margin-right:10px;
+border-radius: 10px;
 }
 
 .WrapDivs {
@@ -435,12 +436,23 @@ text-decoration:none
 }
 
 .WeatherBox {
-width:400px;
+width:350px;
 display:flex;
-flex-direction:column;
-justify-content:center
+flex-direction:row;
+flex-wrap: wrap;
+justify-content: space-between;
 }
 
 .WeatherLine {
-width:100%!important
+width: 150px!important
+}
+.TittleEventDetail{
+    
+        font-family:"Montserrat",sans-serif;
+        font-optical-sizing:auto;
+        font-size:24px;
+        font-weight:600;
+        font-style:normal;
+        color:#6F5149
+
 }
